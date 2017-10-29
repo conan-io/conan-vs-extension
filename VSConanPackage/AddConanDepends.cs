@@ -174,7 +174,10 @@ namespace VSConanPackage
 
             foreach (var cfg in vcProject.Configurations)
             {
-                var tool = cfg.Tools("VCCLCompilerTool");
+                var tools = cfg.Tools as IVCCollection;
+                var tool = tools.Item("VCCLCompilerTool") as VCCLCompilerTool;
+
+                // var tool = cfg.Tools("VCCLCompilerTool");
                 string runTime = "MT";
                 switch (tool.RuntimeLibrary)
                 {
