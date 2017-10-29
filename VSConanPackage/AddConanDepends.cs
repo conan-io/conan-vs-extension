@@ -90,7 +90,18 @@ namespace VSConanPackage
 
         internal static VCProject GetActiveProject(DTE dte)
         {
-           return dte.Solution.Projects.Item(0).Object as VCProject;
+            var active_projects = dte.ActiveSolutionProjects as Array;
+            if (active_projects == null || active_projects.Length == 0)
+                return null;
+            for (var i = 0; i < active_projects.Length; ++i)
+            {
+                var project = active_projects.GetValue(i) as Project;
+                var shim = project.Object;
+                if (IsCppProject(project))
+                    return shim as VCProject;
+            }
+            return null;
+           //return dte.Solution.Projects.Item(1).Object as VCProject;
             //if (!(dte.ActiveSolutionProjects is Array activeSolutionProjects) || activeSolutionProjects.Length == 0)
             //    return null;
 
@@ -163,7 +174,10 @@ namespace VSConanPackage
 
             foreach (var cfg in vcProject.Configurations)
             {
-                var tool = cfg.Tools("VCCLCompilerTool");
+                var tools = cfg.Tools as IVCCollection;
+                var tool = tools.Item("VCCLCompilerTool") as VCCLCompilerTool;
+
+                // var tool = cfg.Tools("VCCLCompilerTool");
                 string runTime = "MT";
                 switch (tool.RuntimeLibrary)
                 {
@@ -195,22 +209,22 @@ namespace VSConanPackage
 
         private void RunConan(string args)
         {
-            var process = new System.Diagnostics.Process
+            var StartInfo = new ProcessStartInfo
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "conan",
-                    Arguments = $"{args}",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true
-                }
+                FileName = "conan",
+                Arguments = $"{args}",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
             };
+            var process = System.Diagnostics.Process.Start(StartInfo);
        
             using (var reader = process.StandardOutput)
             {
                 var result = reader.ReadToEnd();
                 Console.Write(result);
             }
+            process.WaitForExit();
             
         }
 
