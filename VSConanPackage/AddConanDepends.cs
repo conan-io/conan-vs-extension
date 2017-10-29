@@ -90,7 +90,18 @@ namespace VSConanPackage
 
         internal static VCProject GetActiveProject(DTE dte)
         {
-           return dte.Solution.Projects.Item(0).Object as VCProject;
+            var active_projects = dte.ActiveSolutionProjects as Array;
+            if (active_projects == null || active_projects.Length == 0)
+                return null;
+            for (var i = 0; i < active_projects.Length; ++i)
+            {
+                var project = active_projects.GetValue(i) as Project;
+                var shim = project.Object;
+                if (IsCppProject(project))
+                    return shim as VCProject;
+            }
+            return null;
+           //return dte.Solution.Projects.Item(1).Object as VCProject;
             //if (!(dte.ActiveSolutionProjects is Array activeSolutionProjects) || activeSolutionProjects.Length == 0)
             //    return null;
 
