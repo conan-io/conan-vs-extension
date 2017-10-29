@@ -209,22 +209,22 @@ namespace VSConanPackage
 
         private void RunConan(string args)
         {
-            var process = new System.Diagnostics.Process
+            var StartInfo = new ProcessStartInfo
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = "conan",
-                    Arguments = $"{args}",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true
-                }
+                FileName = "conan",
+                Arguments = $"{args}",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
             };
+            var process = System.Diagnostics.Process.Start(StartInfo);
        
             using (var reader = process.StandardOutput)
             {
                 var result = reader.ReadToEnd();
                 Console.Write(result);
             }
+            process.WaitForExit();
             
         }
 
