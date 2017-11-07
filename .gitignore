@@ -1,1 +1,4 @@
 packages
+obj
+bin
+/.vs/VSConanPackage/v15

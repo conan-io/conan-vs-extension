@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.IO;
 using EnvDTE;
 using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
@@ -217,14 +218,23 @@ namespace VSConanPackage
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
-            var process = System.Diagnostics.Process.Start(StartInfo);
-       
-            using (var reader = process.StandardOutput)
+
+            try
             {
-                var result = reader.ReadToEnd();
-                Console.Write(result);
+                var process = System.Diagnostics.Process.Start(StartInfo);
+                using (var reader = process.StandardOutput)
+                {
+                    var result = reader.ReadToEnd();
+                    Console.Write(result);
+                }
+                process.WaitForExit();
             }
-            process.WaitForExit();
+            catch (FileNotFoundException e)
+            {
+                ErrorMessageBox("Could not locate conan on execution path.");
+            }
+
+            
             
         }
 
