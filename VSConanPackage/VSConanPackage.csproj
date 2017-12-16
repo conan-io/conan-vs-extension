@@ -55,6 +55,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AddConanDepends.cs" />
+    <Compile Include="ConanOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ConanPathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VSConanPackage.cs" />
   </ItemGroup>

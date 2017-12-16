@@ -1,10 +1,7 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following 
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
 [assembly: AssemblyTitle("VSConanPackage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -14,20 +11,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
-// Version information for an assembly consists of the following four values:
-//
-//      Major Version
-//      Minor Version 
-//      Build Number
-//      Revision
-//
-// You can specify all the values or you can default the Build and Revision Numbers 
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: InternalsVisibleTo("VSConanPackage.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001001d5ba457a5e4b9f117d44f7e6d3ea05bd76dd7a793707249af0a814cae47b7bad63944d9708d5f7abf9d19cbb0da9dc6e9b6e84f5fc6d2594791ef505cc9b85ba8efa0337076a46bc7288f3c184d7944b91da685abd8027e6bc8d165b3275ee56dbe296994d34dd026ed7ebbe95526879c9bde9b3ea05d59604197a61e9362c5")] 
