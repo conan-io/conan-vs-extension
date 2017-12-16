@@ -71,10 +71,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="index.html" />
     <Content Include="Resources\AddConanDepends.png" />
     <Content Include="Resources\VSConanPackage.ico" />
-    <Content Include="stylesheet.css" />
     <VSCTCompile Include="VSConanPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
