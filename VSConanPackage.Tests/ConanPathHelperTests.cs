@@ -7,7 +7,7 @@ namespace VSConanPackage.Tests
     public class ConanPathHelperTests
     {
         [Fact]
-        public void ConanPathGetsDeterminedAutomatically()
+        public void ConanPathIsDeterminedAutomatically()
         {
             var directory = CreateTempDirectory();
             const string extension = ".cmd";
@@ -17,6 +17,23 @@ namespace VSConanPackage.Tests
             Environment.SetEnvironmentVariable("PATHEXT", extension);
 
             Assert.Equal(conanShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+        }
+
+        [Fact]
+        public void PathDeterminerRespectPathExtOrder()
+        {
+            var directory = CreateTempDirectory();
+            var comShim = CreateTempFile(directory, "conan.com");
+            CreateTempFile(directory, "conan.exe");
+            var batShim = CreateTempFile(directory, "conan.bat");
+
+            Environment.SetEnvironmentVariable("PATH", directory);
+
+            Environment.SetEnvironmentVariable("PATHEXT", ".COM;.EXE;.BAT");
+            Assert.Equal(comShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+
+            Environment.SetEnvironmentVariable("PATHEXT", ".BAT;.EXE;.COM");
+            Assert.Equal(batShim, ConanPathHelper.DetermineConanPathFromEnvironment());
         }
 
         private static string CreateTempDirectory()
