@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
@@ -143,6 +143,15 @@ namespace VSConanPackage
                     OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST) == DialogResult.Cancel)
                 return;
 
+            var conanPath = package.GetConanExecutablePath();
+            if (conanPath == null)
+            {
+                ErrorMessageBox(
+                    "Conan executable path is not set and Conan executable wasn't found automatically. " +
+                    "Please set it up in the Tools → Settings → Conan menu.");
+                return;
+            }
+
             // I think you will like the visual_studio_multi generator that has been contributed to the source code, 
             // is already merged to develop and will be in next conan 0.28 release: #1831
 
@@ -201,18 +210,15 @@ namespace VSConanPackage
 
                 string args = $"install . -g visual_studio_multi -s arch={platform} -s build_type={cfgName} -s compiler=\"Visual Studio\" -s compiler.version=14 -s compiler.runtime={runTime} --build missing --update";
 
-                RunConan(args);
+                RunConan(conanPath, args);
             }
-            
-
-
         }
 
-        private void RunConan(string args)
+        private void RunConan(string conanPath, string args)
         {
             var StartInfo = new ProcessStartInfo
             {
-                FileName = "conan",
+                FileName = conanPath,
                 Arguments = $"{args}",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
