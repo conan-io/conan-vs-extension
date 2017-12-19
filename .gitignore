@@ -1,4 +1,7 @@
-packages
-obj
-bin
-/.vs/VSConanPackage/v15
+/.vs/
+/packages/
+
+obj/
+bin/
+
+*.user

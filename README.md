@@ -26,6 +26,11 @@ detected automatically).
 After that, use the "Tools → Invoke AddConanDepends" command. It should invoke
 the `conan build` command for the project currently loaded into the IDE.
 
+### Using the tool window
+
+To show the plugin tool window, use the "View → Conan Package Management" menu
+item.
+
 Build
 -----
 

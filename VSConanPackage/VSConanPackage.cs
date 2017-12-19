@@ -1,14 +1,7 @@
-using System;
-using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
+using Conan.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
 
 namespace VSConanPackage
 {
@@ -35,6 +28,7 @@ namespace VSConanPackage
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
+    [ProvideToolWindow(typeof(PackageListToolWindow))]
     public sealed class VSConanPackage : Package
     {
         /// <summary>
@@ -63,7 +57,7 @@ namespace VSConanPackage
         {
             base.Initialize();
             AddConanDepends.Initialize(this);
-            // we should have other functions to make conan life easier and add them here...
+            ShowPackageListCommand.Initialize(this);
         }
 
         #endregion
