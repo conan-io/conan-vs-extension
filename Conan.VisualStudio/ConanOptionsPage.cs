@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
 
-namespace VSConanPackage
+namespace Conan.VisualStudio
 {
     public class ConanOptionsPage : DialogPage
     {

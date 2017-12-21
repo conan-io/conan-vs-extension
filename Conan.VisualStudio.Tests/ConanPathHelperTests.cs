@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Xunit;
 
-namespace VSConanPackage.Tests
+namespace Conan.VisualStudio.Tests
 {
     public class ConanPathHelperTests
     {

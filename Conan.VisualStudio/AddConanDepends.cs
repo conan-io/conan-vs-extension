@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 
-namespace VSConanPackage
+namespace Conan.VisualStudio
 {
     /// <summary>
     /// Command handler

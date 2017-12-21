@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.Shell;
 
-namespace VSConanPackage
+namespace Conan.VisualStudio
 {
     internal static class PackageExtensions
     {

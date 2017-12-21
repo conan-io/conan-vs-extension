@@ -23,8 +23,8 @@
     <ProjectGuid>{6FBEBC9C-6E86-4588-BCDA-83AC909C7EAC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VSConanPackage</RootNamespace>
-    <AssemblyName>VSConanPackage</AssemblyName>
+    <RootNamespace>Conan.VisualStudio</RootNamespace>
+    <AssemblyName>Conan.VisualStudio</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>

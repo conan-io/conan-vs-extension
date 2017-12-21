@@ -1,9 +1,9 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("VSConanPackage.Tests")]
-[assembly: AssemblyProduct("VSConanPackage.Tests")]
-[assembly: AssemblyCopyright("Copyright © VSConanPackage developers 2017")]
+[assembly: AssemblyTitle("Conan.VisualStudio.Tests")]
+[assembly: AssemblyProduct("Conan.VisualStudio.Tests")]
+[assembly: AssemblyCopyright("Copyright © Conan.VisualStudio developers 2017")]
 
 [assembly: ComVisible(false)]
 

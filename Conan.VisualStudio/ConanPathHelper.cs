@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace VSConanPackage
+namespace Conan.VisualStudio
 {
-    internal class ConanPathHelper
+    internal static class ConanPathHelper
     {
         public static string DetermineConanPathFromEnvironment()
         {
