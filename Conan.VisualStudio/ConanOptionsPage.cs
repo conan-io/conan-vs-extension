@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Shell;
 
 namespace Conan.VisualStudio

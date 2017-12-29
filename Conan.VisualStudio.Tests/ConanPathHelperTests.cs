@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Conan.VisualStudio.Core;
 using Xunit;
 
 namespace Conan.VisualStudio.Tests

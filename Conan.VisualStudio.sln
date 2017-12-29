@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio", "Conan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.Tests", "Conan.VisualStudio.Tests\Conan.VisualStudio.Tests.csproj", "{95165D2F-2143-4055-A215-90352061DCB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.Core", "Conan.VisualStudio.Core\Conan.VisualStudio.Core.csproj", "{8F310C87-5446-4EDF-BFAE-93F457BD00A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{95165D2F-2143-4055-A215-90352061DCB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95165D2F-2143-4055-A215-90352061DCB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95165D2F-2143-4055-A215-90352061DCB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F310C87-5446-4EDF-BFAE-93F457BD00A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F310C87-5446-4EDF-BFAE-93F457BD00A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F310C87-5446-4EDF-BFAE-93F457BD00A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F310C87-5446-4EDF-BFAE-93F457BD00A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
