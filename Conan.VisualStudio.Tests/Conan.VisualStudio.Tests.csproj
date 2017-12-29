@@ -62,9 +62,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConanPathHelperTests.cs" />
+    <Compile Include="ConanTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="conan-shim.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
