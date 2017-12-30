@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace Conan.VisualStudio.Core
 {
-    public class Conan
+    public class ConanRunner
     {
         private readonly string _executablePath;
 
-        public Conan(string executablePath) =>
+        public ConanRunner(string executablePath) =>
             _executablePath = executablePath;
 
         public Task<Process> Install(ConanProject project)

@@ -65,6 +65,7 @@
     <Compile Include="PackageListControl.xaml.cs">
       <DependentUpon>PackageListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VcProjectService.cs" />
     <Compile Include="VSConanPackage.cs" />
   </ItemGroup>
   <ItemGroup>

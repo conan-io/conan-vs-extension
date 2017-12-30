@@ -1,12 +1,13 @@
 using System;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
+using Conan.VisualStudio.Core;
 using EnvDTE;
 using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
+using Task = System.Threading.Tasks.Task;
 
 namespace Conan.VisualStudio
 {
@@ -123,7 +124,7 @@ namespace Conan.VisualStudio
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-        private void MenuItemCallback(object sender, EventArgs e)
+        private async void MenuItemCallback(object sender, EventArgs e)
         {
             VCProject vcProject = GetActiveProject();
             if (vcProject == null)//!IsCppProject(project))
@@ -131,9 +132,6 @@ namespace Conan.VisualStudio
                 ErrorMessageBox("A C++ project with a conan file must be selected.");
                 return;
             }
-           // var vcProject = project as VCProject;
-            
-            
 
             if (VsShellUtilities.ShowMessageBox(this.ServiceProvider,
                     string.Format("Process conanbuild.txt for '{0}'?\n", vcProject.Name),
@@ -152,96 +150,31 @@ namespace Conan.VisualStudio
                 return;
             }
 
-            // I think you will like the visual_studio_multi generator that has been contributed to the source code, 
-            // is already merged to develop and will be in next conan 0.28 release: #1831
-
-            // It automates further the creation and loading of the conanbuildinfo.props for all 4 configurations.
-
-            // conan install -s .... commands are invoked to download the deps if they are not yet installed on the system
-
-            // include property files in project for each configuration
-
-            // -As some kind of "pre-build" task:
-            //---Create a unique hidden temp directory under ".vs"
-            // CC: call it conan_packages
-            //  subdirs unique?
-            //var tempDir = VCConfiguration.Evaluate("$(IntDir)\\ConanDeps");
-            var tempDir = System.IO.Path.GetTempPath();
-            tempDir = System.IO.Path.Combine(tempDir, "conan_deps", vcProject.Name);
-            var dirInfo = System.IO.Directory.CreateDirectory(tempDir);
-            //    ------Use the current project settings like release - x64 for the name
-            //---Run the "conan install . " with the output going to the temp directory
-            //-- - Load the generated props file into the active project
-
-            // should probably figure out the configurations
-            //var archs = vcProject.ConfigurationManager.PlatformNames as Array;
-            //var buildTypes = project.ConfigurationManager.ConfigurationRowNames as Array;
-            //if (archs is null || buildTypes is null)
-            //{
-            //    ErrorMessageBox("No valid build definitions in configuration manager.");
-            //    return;
-            //}
-
-            foreach (var cfg in vcProject.Configurations)
+            var conan = new ConanRunner(conanPath);
+            var projects = VcProjectService.ExtractConfigurations(vcProject);
+            foreach (var project in projects)
             {
-                var tools = cfg.Tools as IVCCollection;
-                var tool = tools.Item("VCCLCompilerTool") as VCCLCompilerTool;
-
-                // var tool = cfg.Tools("VCCLCompilerTool");
-                string runTime = "MT";
-                switch (tool.RuntimeLibrary)
-                {
-                    case runtimeLibraryOption.rtMultiThreadedDLL:
-                        runTime = "MD";
-                        break;
-                    case runtimeLibraryOption.rtMultiThreadedDebug:
-                        runTime = "MTd";
-                        break;
-                    case runtimeLibraryOption.rtMultiThreadedDebugDLL:
-                        runTime = "MDd";
-                        break;
-                    default:
-                            runTime = "MT";
-                            break;
-                }
-
-                var platform = cfg.Platform.Name; // hopefully just x86 or x64
-                var cfgName = cfg.ConfigurationName; // hopefully Debug or Release
-
-                string args = $"install . -g visual_studio_multi -s arch={platform} -s build_type={cfgName} -s compiler=\"Visual Studio\" -s compiler.version=14 -s compiler.runtime={runTime} --build missing --update";
-
-                RunConan(conanPath, args);
+                await InstallDependencies(conan, project);
             }
         }
 
-        private void RunConan(string conanPath, string args)
+        private async Task InstallDependencies(ConanRunner conan, ConanProject project)
         {
-            var StartInfo = new ProcessStartInfo
-            {
-                FileName = conanPath,
-                Arguments = $"{args}",
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
-
             try
             {
-                var process = System.Diagnostics.Process.Start(StartInfo);
+                var process = await conan.Install(project);
                 using (var reader = process.StandardOutput)
                 {
                     var result = reader.ReadToEnd();
                     Console.Write(result);
                 }
+
                 process.WaitForExit();
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 ErrorMessageBox("Could not locate conan on execution path.");
             }
-
-            
-            
         }
 
         private void ErrorMessageBox(string errorMessage)

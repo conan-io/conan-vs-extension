@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Conan.VisualStudio.Tests
 {
-    public class ConanTests
+    public class ConanRunnerTests
     {
         [Fact]
         public async Task GeneratorShouldBeInvokedProperly()
         {
             var assemblyDirectory = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
             var conanPath = Path.Combine(assemblyDirectory, "conan-shim.cmd");
-            var conan = new Core.Conan(conanPath);
+            var conan = new ConanRunner(conanPath);
             var project = new ConanProject
             {
                 Path = ".",
