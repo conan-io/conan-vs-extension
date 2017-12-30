@@ -20,6 +20,7 @@ namespace Conan.VisualStudio
             switch (platformName)
             {
                 case "Win32": return "x86";
+                case "x64": return "x86_64";
                 default: throw new NotSupportedException($"Platform {platformName} is not supported by the Conan plugin");
             }
         }

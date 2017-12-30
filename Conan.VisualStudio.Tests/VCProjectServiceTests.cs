@@ -7,8 +7,11 @@ namespace Conan.VisualStudio.Tests
     public class VcProjectServiceTests
     {
         [Fact]
-        public void GetArchitrectureSupportsTheNecessaryArchitectures() =>
+        public void GetArchitrectureSupportsTheNecessaryArchitectures()
+        {
             Assert.Equal("x86", VcProjectService.GetArchitecture("Win32"));
+            Assert.Equal("x86_64", VcProjectService.GetArchitecture("x64"));
+        }
 
         [Fact]
         public void GetBuildTypeReturnsItsArgument()
