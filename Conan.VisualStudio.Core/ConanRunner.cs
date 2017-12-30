@@ -40,6 +40,7 @@ namespace Conan.VisualStudio.Core
                 FileName = _executablePath,
                 Arguments = arguments,
                 UseShellExecute = false,
+                WorkingDirectory = path,
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
