@@ -18,22 +18,21 @@ namespace Conan.VisualStudio.Core
 
             var path = project.Path;
             const string generatorName = "visual_studio_multi";
-            var properties = new[]
+            var settingValues = new[]
             {
-                ("arch", project.Architecture),
-                ("build_type", project.BuildType),
-                ("compiler", project.Compiler),
-                ("compiler.runtime", project.CompilerRuntime),
                 ("compiler.version", project.CompilerVersion)
             };
             const string options = "--build missing --update";
 
-            var propertiesString = string.Join(" ", properties.Select(pair =>
+            var settings = string.Join(" ", settingValues.Select(pair =>
             {
                 var (key, value) = pair;
                 return ProcessArgument(key, value);
             }));
-            var arguments = $"install {Escape(path)} -g {generatorName} {propertiesString} {options}";
+            var arguments = $"install {Escape(path)} " +
+                            $"-g {generatorName} " +
+                            $"--install-folder {Escape(project.InstallPath)} " +
+                            $"{settings} {options}";
 
             var startInfo = new ProcessStartInfo
             {

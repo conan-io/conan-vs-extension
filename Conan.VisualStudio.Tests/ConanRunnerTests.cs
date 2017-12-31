@@ -18,22 +18,16 @@ namespace Conan.VisualStudio.Tests
             var project = new ConanProject
             {
                 Path = ".",
+                InstallPath = "./conan",
                 Compiler = "Visual Studio",
-                CompilerVersion = "15",
-                Architecture = "x86_64",
-                BuildType = "Debug",
-                CompilerRuntime = "MD"
+                CompilerVersion = "15"
             };
             using (var process = await conan.Install(project))
             {
-                var arguments = process.StartInfo.Arguments;
                 Assert.Equal("install . -g visual_studio_multi " +
-                             "-s arch=x86_64 " +
-                             "-s build_type=Debug " +
-                             "-s compiler=\"Visual Studio\" " +
-                             "-s compiler.runtime=MD " +
+                             "--install-folder ./conan " +
                              "-s compiler.version=15 " +
-                             "--build missing --update", arguments);
+                             "--build missing --update", process.StartInfo.Arguments);
             }
         }
     }
