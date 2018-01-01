@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.Design;
 using System.IO;
 using Conan.VisualStudio.Core;
-using EnvDTE;
 using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -83,40 +82,6 @@ namespace Conan.VisualStudio
             Instance = new AddConanDepends(package);
         }
 
-        internal static VCProject GetActiveProject()
-        {
-            var dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
-
-            return GetActiveProject(dte);
-        }
-
-        internal static VCProject GetActiveProject(DTE dte)
-        {
-            var active_projects = dte.ActiveSolutionProjects as Array;
-            if (active_projects == null || active_projects.Length == 0)
-                return null;
-            for (var i = 0; i < active_projects.Length; ++i)
-            {
-                var project = active_projects.GetValue(i) as Project;
-                var shim = project.Object;
-                if (IsCppProject(project))
-                    return shim as VCProject;
-            }
-            return null;
-           //return dte.Solution.Projects.Item(1).Object as VCProject;
-            //if (!(dte.ActiveSolutionProjects is Array activeSolutionProjects) || activeSolutionProjects.Length == 0)
-            //    return null;
-
-            //return activeSolutionProjects.GetValue(0) as VCProject;
-        }
-
-        private static bool IsCppProject(Project project)
-        {
-            return project != null
-                   && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
-                       || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
-        }
-
         /// <summary>
         /// This function is the callback used to execute the command when the menu item is clicked.
         /// See the constructor to see how the menu item is associated with this function using
@@ -126,8 +91,8 @@ namespace Conan.VisualStudio
         /// <param name="e">Event args.</param>
         private async void MenuItemCallback(object sender, EventArgs e)
         {
-            VCProject vcProject = GetActiveProject();
-            if (vcProject == null)//!IsCppProject(project))
+            VCProject vcProject = VcProjectService.GetActiveProject();
+            if (vcProject == null)
             {
                 ErrorMessageBox("A C++ project with a conan file must be selected.");
                 return;

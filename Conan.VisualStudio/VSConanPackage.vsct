@@ -61,9 +61,16 @@
       </Button>
       <Button guid="guidVSConanPackageCmdSet" id="cmdidPackageListToolWindowCommand" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
-        <Icon guid="guidImages" id="showPackageList" />
+        <Icon guid="guidImages" id="conanIcon" />
         <Strings>
           <ButtonText>Conan Package Management</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVSConanPackageCmdSet" id="cmdidIntegrateIntoProjectCommand" priority="0x0100" type="Button">
+        <Parent guid="guidVSConanPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="conanIcon" />
+        <Strings>
+          <ButtonText>Integrate into project</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -75,7 +82,7 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Conan.VisualStudio.png" usedList="bmpPic1, showPackageList" />
+      <Bitmap guid="guidImages" href="Resources\Conan.VisualStudio.png" usedList="bmpPic1, conanIcon" />
     </Bitmaps>
   </Commands>
 
@@ -88,11 +95,12 @@
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="AddConanDependsId" value="0x0100" />
       <IDSymbol value="4129" name="cmdidPackageListToolWindowCommand" />
+      <IDSymbol value="4130" name="cmdidIntegrateIntoProjectCommand" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{96b705f3-a54e-4748-86e2-ae8eb2e35169}">
       <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="showPackageList" value="2" />
+      <IDSymbol name="conanIcon" value="2" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

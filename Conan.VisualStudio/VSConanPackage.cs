@@ -57,6 +57,7 @@ namespace Conan.VisualStudio
             base.Initialize();
             AddConanDepends.Initialize(this);
             ShowPackageListCommand.Initialize(this);
+            IntegrateIntoProjectCommand.Initialize(this);
         }
 
         #endregion

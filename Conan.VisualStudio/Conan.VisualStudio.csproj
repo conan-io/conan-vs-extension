@@ -55,6 +55,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AddConanDepends.cs" />
+    <Compile Include="IntegrateIntoProjectCommand.cs" />
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -195,6 +196,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
