@@ -52,7 +52,7 @@ command. It will automatically add the corresponding `<Import>` item into the
 
 ### Building without Visual Studio
 
-If you need to build the generated project without Visual Studio (e.g. on the
+If you need to build the generated project without Visual Studio (e.g. on a
 build server machine), execute the following terminal commands:
 
 ```console
@@ -68,8 +68,8 @@ dependencies, because it'll be able to use the Conan-generated
 Build
 -----
 
-To build the Conan Visual Studio plugin, either build it using Visual Studio or
-with MSBuild:
+To build the Conan Visual Studio plugin, either with Visual Studio (nothing
+unusual here), or use MSBuild:
 
 ```console
 $ msbuild /p:DeployExtension=false
