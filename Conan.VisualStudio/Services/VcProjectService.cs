@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using Task = System.Threading.Tasks.Task;
 
-namespace Conan.VisualStudio
+namespace Conan.VisualStudio.Services
 {
     internal static class VcProjectService
     {

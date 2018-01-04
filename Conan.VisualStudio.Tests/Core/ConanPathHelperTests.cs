@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Xunit;
 
-namespace Conan.VisualStudio.Tests
+namespace Conan.VisualStudio.Tests.Core
 {
     public class ConanPathHelperTests
     {

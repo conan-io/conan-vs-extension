@@ -54,19 +54,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AddConanDepends.cs" />
-    <Compile Include="IntegrateIntoProjectCommand.cs" />
+    <Compile Include="Menu\AddConanDepends.cs" />
+    <Compile Include="Menu\IntegrateIntoProjectCommand.cs" />
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PackageExtensions.cs" />
+    <Compile Include="Menu\MenuCommandBase.cs" />
+    <Compile Include="Extensions\PackageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PackageListToolWindow.cs" />
-    <Compile Include="ShowPackageListCommand.cs" />
+    <Compile Include="Menu\ShowPackageListCommand.cs" />
     <Compile Include="PackageListControl.xaml.cs">
       <DependentUpon>PackageListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VcProjectService.cs" />
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\VcDialogService.cs" />
+    <Compile Include="Services\VcProjectService.cs" />
     <Compile Include="VSConanPackage.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,10 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
+using Conan.VisualStudio.Services;
 using Xunit;
 
-namespace Conan.VisualStudio.Tests
+namespace Conan.VisualStudio.Tests.Services
 {
     public class VcProjectServiceTests
     {
