@@ -34,6 +34,11 @@ namespace Conan.VisualStudio
         public static async Task<ConanProject> ExtractConanConfiguration(VCProject project)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(project.ProjectDirectory);
+            if (projectPath == null)
+            {
+                throw new Exception($"Cannot find conanfile in any of parents of {project.ProjectDirectory}");
+            }
+
             var installPath = Path.Combine(projectPath, "conan");
             return new ConanProject
             {
