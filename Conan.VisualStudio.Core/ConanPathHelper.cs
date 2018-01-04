@@ -34,17 +34,15 @@ namespace Conan.VisualStudio.Core
         /// <returns>Path to the nearest parent directory containing any type of conanfile.</returns>
         public static Task<string> GetNearestConanfilePath(string path) => Task.Run(() =>
         {
-            var root = Path.GetPathRoot(path);
-            while (path != root
-                   && !File.Exists(Path.Combine(path, "conanfile.py"))
-                   && !File.Exists(Path.Combine(path, "conanfile.txt")))
+            while (path != null)
             {
-                var parent = Directory.GetParent(path);
-                path = parent.FullName;
-                if (path == root)
+                if (File.Exists(Path.Combine(path, "conanfile.py"))
+                    || File.Exists(Path.Combine(path, "conanfile.txt")))
                 {
-                    return null;
+                    break;
                 }
+
+                path = Directory.GetParent(path)?.FullName;
             }
 
             return path;

@@ -68,6 +68,17 @@ namespace Conan.VisualStudio.Tests
             Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(subdir));
         }
 
+        [Fact(Skip = "Manual test only; leaves traces at the disk root")]
+        public async Task GetNearestConanfilePathWorksForDiskRoot()
+        {
+            var dir = CreateTempDirectory();
+            var root = Path.GetPathRoot(dir);
+
+            CreateTempFile(root, "conanfile.txt");
+            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(dir));
+            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(root));
+        }
+
         private static string CreateTempDirectory()
         {
             var path = Path.GetTempFileName();
