@@ -31,8 +31,8 @@ To set the Conan executable location, enter "Tools → Options" menu and select
 
 The plugin will install the dependencies using the `conan install` command. To
 do that, ensure that your `conanfile.txt` is placed in the same directory as
-your project file, and then invoke the "Tools → Invoke AddConanDepends" menu
-command.
+your project file or in any of its' parent directories, and then invoke the
+"Tools → Invoke AddConanDepends" menu command.
 
 !["Invoke AddConanDepends" menu item screenshot][screenshot-addconandepends]
 
@@ -56,7 +56,7 @@ If you need to build the generated project without Visual Studio (e.g. on a
 build server machine), execute the following terminal commands:
 
 ```console
-$ cd [directory with vcxproj]
+$ cd [directory with conanfile]
 $ conan install . -g visual_studio_multi --install-folder ./conan -s compiler.version=15 --build missing --update
 $ msbuild [usual params here]
 ```

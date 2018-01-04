@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Conan.VisualStudio.Core;
 using EnvDTE;
@@ -30,13 +31,18 @@ namespace Conan.VisualStudio
             return projects.Cast<Project>().Where(IsCppProject).Select(p => p.Object).OfType<VCProject>().FirstOrDefault();
         }
 
-        public static ConanProject ExtractConanConfiguration(VCProject project) => new ConanProject
+        public static async Task<ConanProject> ExtractConanConfiguration(VCProject project)
         {
-            Path = project.ProjectDirectory,
-            InstallPath = Path.Combine(project.ProjectDirectory, "conan"),
-            Compiler = "Visual Studio",
-            CompilerVersion = "15"
-        };
+            var projectPath = await ConanPathHelper.GetNearestConanfilePath(project.ProjectDirectory);
+            var installPath = Path.Combine(projectPath, "conan");
+            return new ConanProject
+            {
+                Path = projectPath,
+                InstallPath = installPath,
+                Compiler = "Visual Studio",
+                CompilerVersion = "15"
+            };
+        }
 
         public static Task AddPropsImport(string projectPath, string propFilePath) => Task.Run(() =>
         {

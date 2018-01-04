@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Conan.VisualStudio.Core
 {
@@ -26,5 +27,27 @@ namespace Conan.VisualStudio.Core
 
             return null;
         }
+
+        /// <summary>
+        /// Searches for either conanfile.txt or conanfile.py in the directory or any of its' parent paths.
+        /// </summary>
+        /// <returns>Path to the nearest parent directory containing any type of conanfile.</returns>
+        public static Task<string> GetNearestConanfilePath(string path) => Task.Run(() =>
+        {
+            var root = Path.GetPathRoot(path);
+            while (path != root
+                   && !File.Exists(Path.Combine(path, "conanfile.py"))
+                   && !File.Exists(Path.Combine(path, "conanfile.txt")))
+            {
+                var parent = Directory.GetParent(path);
+                path = parent.FullName;
+                if (path == root)
+                {
+                    return null;
+                }
+            }
+
+            return path;
+        });
     }
 }

@@ -116,7 +116,7 @@ namespace Conan.VisualStudio
             }
 
             var conan = new ConanRunner(conanPath);
-            var project = VcProjectService.ExtractConanConfiguration(vcProject);
+            var project = await VcProjectService.ExtractConanConfiguration(vcProject);
             await InstallDependencies(conan, project);
         }
 

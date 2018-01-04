@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Xunit;
 
@@ -35,6 +36,36 @@ namespace Conan.VisualStudio.Tests
 
             Environment.SetEnvironmentVariable("PATHEXT", ".BAT;.EXE;.COM");
             Assert.Equal(batShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+        }
+
+        [Fact]
+        public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfile()
+        {
+            var dir = CreateTempDirectory();
+            Assert.Null(await ConanPathHelper.GetNearestConanfilePath(dir));
+        }
+
+        [Fact]
+        public async Task GetNearestConanfilePathReturnsCurrentPathIfValid()
+        {
+            var dir = CreateTempDirectory();
+            var conanfile = CreateTempFile(dir, "conanfile.txt");
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
+
+            File.Delete(conanfile);
+            CreateTempFile(dir, "conanfile.py");
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
+        }
+
+        [Fact]
+        public async Task GetNearestConanfilePathReturnsParentPathIfValid()
+        {
+            var dir = CreateTempDirectory();
+            var subdir = Path.Combine(dir, "test");
+            Directory.CreateDirectory(subdir);
+
+            CreateTempFile(dir, "conanfile.txt");
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(subdir));
         }
 
         private static string CreateTempDirectory()
