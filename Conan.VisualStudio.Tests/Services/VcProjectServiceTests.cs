@@ -26,7 +26,7 @@ namespace Conan.VisualStudio.Tests.Services
             File.WriteAllText(path, projectText);
 
             const string propFilePath = @"foo\bar.props";
-            await VcProjectService.AddPropsImport(path, propFilePath);
+            await new VcProjectService().AddPropsImport(path, propFilePath);
 
             var document = XDocument.Load(path);
             XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";

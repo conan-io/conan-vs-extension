@@ -11,15 +11,20 @@ namespace Conan.VisualStudio.Menu
     {
         protected override int CommandId => 4130;
 
-        public IntegrateIntoProjectCommand(IMenuCommandService commandService, IDialogService dialogService)
-            : base(commandService, dialogService)
+        private readonly IVcProjectService _vcProjectService;
+
+        public IntegrateIntoProjectCommand(
+            IMenuCommandService commandService,
+            IDialogService dialogService,
+            IVcProjectService vcProjectService) : base(commandService, dialogService)
         {
+            _vcProjectService = vcProjectService;
         }
 
-        protected override Task MenuItemCallback()
+        protected internal override Task MenuItemCallback()
         {
-            var project = VcProjectService.GetActiveProject();
-            return VcProjectService.AddPropsImport(project.ProjectFile, @"conan\conanbuildinfo_multi.props");
+            var project = _vcProjectService.GetActiveProject();
+            return _vcProjectService.AddPropsImport(project.ProjectFile, @"conan\conanbuildinfo_multi.props");
         }
     }
 }

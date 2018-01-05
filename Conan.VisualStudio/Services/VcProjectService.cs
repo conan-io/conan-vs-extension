@@ -12,9 +12,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Conan.VisualStudio.Services
 {
-    internal static class VcProjectService
+    internal class VcProjectService : IVcProjectService
     {
-        public static VCProject GetActiveProject()
+        public VCProject GetActiveProject()
         {
             var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
             return GetActiveProject(dte);
@@ -31,7 +31,7 @@ namespace Conan.VisualStudio.Services
             return projects.Cast<Project>().Where(IsCppProject).Select(p => p.Object).OfType<VCProject>().FirstOrDefault();
         }
 
-        public static async Task<ConanProject> ExtractConanConfiguration(VCProject project)
+        public async Task<ConanProject> ExtractConanConfiguration(VCProject project)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(project.ProjectDirectory);
             if (projectPath == null)
@@ -44,12 +44,11 @@ namespace Conan.VisualStudio.Services
             {
                 Path = projectPath,
                 InstallPath = installPath,
-                Compiler = "Visual Studio",
                 CompilerVersion = "15"
             };
         }
 
-        public static Task AddPropsImport(string projectPath, string propFilePath) => Task.Run(() =>
+        public Task AddPropsImport(string projectPath, string propFilePath) => Task.Run(() =>
         {
             var xml = XDocument.Load(projectPath);
             var project = xml.Root;

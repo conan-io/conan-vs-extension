@@ -19,7 +19,7 @@ namespace Conan.VisualStudio.Menu
             InitializeMenuItem(commandService);
         }
 
-        protected abstract System.Threading.Tasks.Task MenuItemCallback();
+        protected internal abstract System.Threading.Tasks.Task MenuItemCallback();
 
         private void InitializeMenuItem(IMenuCommandService commandService)
         {

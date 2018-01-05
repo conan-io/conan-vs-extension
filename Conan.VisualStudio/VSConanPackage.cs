@@ -32,12 +32,14 @@ namespace Conan.VisualStudio
         {
             base.Initialize();
 
-            var dialogService = new VcDialogService(this);
+            var dialogService = new VisualStudioDialogService(this);
             var commandService = GetService<IMenuCommandService>();
+            var projectService = new VcProjectService();
+            var settingsService = new VisualStudioSettingsService(this);
 
-            _addConanDepends = new AddConanDepends(this, commandService, dialogService);
+            _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService);
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
-            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService);
+            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService);
         }
 
         private T GetService<T>() where T : class =>

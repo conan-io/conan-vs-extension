@@ -16,7 +16,7 @@ namespace Conan.VisualStudio.Menu
         public ShowPackageListCommand(Package package, IMenuCommandService commandService, IDialogService dialogService)
             : base(commandService, dialogService) => _package = package;
 
-        protected override Task MenuItemCallback()
+        protected internal override Task MenuItemCallback()
         {
             var window = _package.FindToolWindow(typeof(PackageListToolWindow), 0, create: true);
             if (window?.Frame == null)

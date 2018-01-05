@@ -11,9 +11,9 @@ namespace Conan.VisualStudio.Tests.Core
         [Fact]
         public void ConanPathIsDeterminedAutomatically()
         {
-            var directory = CreateTempDirectory();
+            var directory = FileSystemUtils.CreateTempDirectory();
             const string extension = ".cmd";
-            var conanShim = CreateTempFile(directory, "conan" + extension);
+            var conanShim = FileSystemUtils.CreateTempFile(directory, "conan" + extension);
 
             Environment.SetEnvironmentVariable("PATH", directory);
             Environment.SetEnvironmentVariable("PATHEXT", extension);
@@ -24,10 +24,10 @@ namespace Conan.VisualStudio.Tests.Core
         [Fact]
         public void PathDeterminerRespectPathExtOrder()
         {
-            var directory = CreateTempDirectory();
-            var comShim = CreateTempFile(directory, "conan.com");
-            CreateTempFile(directory, "conan.exe");
-            var batShim = CreateTempFile(directory, "conan.bat");
+            var directory = FileSystemUtils.CreateTempDirectory();
+            var comShim = FileSystemUtils.CreateTempFile(directory, "conan.com");
+            FileSystemUtils.CreateTempFile(directory, "conan.exe");
+            var batShim = FileSystemUtils.CreateTempFile(directory, "conan.bat");
 
             Environment.SetEnvironmentVariable("PATH", directory);
 
@@ -41,57 +41,42 @@ namespace Conan.VisualStudio.Tests.Core
         [Fact]
         public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfile()
         {
-            var dir = CreateTempDirectory();
+            var dir = FileSystemUtils.CreateTempDirectory();
             Assert.Null(await ConanPathHelper.GetNearestConanfilePath(dir));
         }
 
         [Fact]
         public async Task GetNearestConanfilePathReturnsCurrentPathIfValid()
         {
-            var dir = CreateTempDirectory();
-            var conanfile = CreateTempFile(dir, "conanfile.txt");
+            var dir = FileSystemUtils.CreateTempDirectory();
+            var conanfile = FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
             Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
 
             File.Delete(conanfile);
-            CreateTempFile(dir, "conanfile.py");
+            FileSystemUtils.CreateTempFile(dir, "conanfile.py");
             Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
         }
 
         [Fact]
         public async Task GetNearestConanfilePathReturnsParentPathIfValid()
         {
-            var dir = CreateTempDirectory();
+            var dir = FileSystemUtils.CreateTempDirectory();
             var subdir = Path.Combine(dir, "test");
             Directory.CreateDirectory(subdir);
 
-            CreateTempFile(dir, "conanfile.txt");
+            FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
             Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(subdir));
         }
 
         [Fact(Skip = "Manual test only; leaves traces at the disk root")]
         public async Task GetNearestConanfilePathWorksForDiskRoot()
         {
-            var dir = CreateTempDirectory();
+            var dir = FileSystemUtils.CreateTempDirectory();
             var root = Path.GetPathRoot(dir);
 
-            CreateTempFile(root, "conanfile.txt");
+            FileSystemUtils.CreateTempFile(root, "conanfile.txt");
             Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(dir));
             Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(root));
-        }
-
-        private static string CreateTempDirectory()
-        {
-            var path = Path.GetTempFileName();
-            File.Delete(path);
-            Directory.CreateDirectory(path);
-            return path;
-        }
-
-        private static string CreateTempFile(string directory, string name)
-        {
-            var path = Path.Combine(directory, name);
-            File.Create(path).Close();
-            return path;
         }
     }
 }

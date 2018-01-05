@@ -4,8 +4,6 @@ namespace Conan.VisualStudio.Core
     {
         public string Path { get; set; }
         public string InstallPath { get; set; }
-
-        public string Compiler { get; set; }
         public string CompilerVersion { get; set; }
     }
 }
