@@ -40,6 +40,9 @@ It will call `conan install --build missing --update` using the
 [`visual_studio_multi` generator][visual_studio_multi]. After that, you'll need
 to integrate the resulting property files into your Visual Studio project.
 
+If you need any diagnostic information, please look for `conan/conan.log` file
+in the directory with your conanfile.
+
 ### Integration with project
 
 The [`visual_studio_multi` generator][visual_studio_multi] creates the
