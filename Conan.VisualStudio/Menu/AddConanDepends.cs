@@ -58,6 +58,8 @@ namespace Conan.VisualStudio.Menu
             try
             {
                 var process = await conan.Install(project);
+
+                await Task.Run(() => Directory.CreateDirectory(project.InstallPath));
                 var logFilePath = Path.Combine(project.InstallPath, "conan.log");
 
                 using (var reader = process.StandardOutput)
