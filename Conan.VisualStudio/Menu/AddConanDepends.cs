@@ -62,14 +62,19 @@ namespace Conan.VisualStudio.Menu
                 await Task.Run(() => Directory.CreateDirectory(project.InstallPath));
                 var logFilePath = Path.Combine(project.InstallPath, "conan.log");
 
-                using (var reader = process.StandardOutput)
-                using (var logFile = File.Open(logFilePath, FileMode.Create))
+                using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                 using (var logStream = new StreamWriter(logFile))
                 {
-                    string line;
-                    while ((line = await reader.ReadLineAsync()) != null)
+                    await logStream.WriteLineAsync(
+                        $"Calling process '{process.StartInfo.FileName}'" +
+                        $" with arguments '{process.StartInfo.Arguments}'");
+                    using (var reader = process.StandardOutput)
                     {
-                        await logStream.WriteLineAsync(line);
+                        string line;
+                        while ((line = await reader.ReadLineAsync()) != null)
+                        {
+                            await logStream.WriteLineAsync(line);
+                        }
                     }
                 }
 

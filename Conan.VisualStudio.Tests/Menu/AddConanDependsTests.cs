@@ -58,7 +58,7 @@ namespace Conan.VisualStudio.Tests.Menu
                 x => x.ShowPluginError(
                     $"Conan has returned exit code {exitCode}. Please check file '{logFilePath}' for details."));
             var logContent = File.ReadAllText(Path.Combine(directory, "conan.log"));
-            Assert.Equal($"conan-shim-error{Environment.NewLine}", logContent);
+            Assert.NotEmpty(logContent);
         }
 
         [Fact]
