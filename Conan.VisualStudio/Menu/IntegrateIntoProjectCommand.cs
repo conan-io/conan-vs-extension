@@ -1,5 +1,7 @@
 using System.ComponentModel.Design;
+using System.IO;
 using System.Threading.Tasks;
+using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
 
 namespace Conan.VisualStudio.Menu
@@ -21,10 +23,14 @@ namespace Conan.VisualStudio.Menu
             _vcProjectService = vcProjectService;
         }
 
-        protected internal override Task MenuItemCallback()
+        protected internal override async Task MenuItemCallback()
         {
             var project = _vcProjectService.GetActiveProject();
-            return _vcProjectService.AddPropsImport(project.ProjectFile, @"conan\conanbuildinfo_multi.props");
+            var projectDirectory = project.ProjectDirectory;
+            var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePath(projectDirectory);
+            var propFilePath = Path.Combine(conanfileDirectory, @"conan\conanbuildinfo_multi.props");
+            var relativePropFilePath = ConanPathHelper.GetRelativePath(projectDirectory, propFilePath);
+            await _vcProjectService.AddPropsImport(project.ProjectFile, relativePropFilePath);
         }
     }
 }

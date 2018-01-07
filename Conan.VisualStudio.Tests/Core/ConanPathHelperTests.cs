@@ -8,6 +8,16 @@ namespace Conan.VisualStudio.Tests.Core
 {
     public class ConanPathHelperTests
     {
+        [Theory]
+        [InlineData(@"C:\", @"C:\Program Files", "Program Files")]
+        [InlineData(@"C:\Conan", @"C:\Conan\file.txt", "file.txt")]
+        [InlineData(@"C:\Conan\", @"C:\Conan\file.txt", "file.txt")]
+        [InlineData(@"C:\Conan", @"C:\Program Files", @"..\Program Files")]
+        [InlineData(@"C:\Conan", @"D:\Program Files", @"D:\Program Files")]
+        [InlineData(@"C:\Solution\Project", @"C:\Solution\conan\conanfile.props", @"..\conan\conanfile.props")]
+        public void GetRelativePathTests(string basePath, string location, string expectedRelativePath) =>
+            Assert.Equal(expectedRelativePath, ConanPathHelper.GetRelativePath(basePath, location));
+
         [Fact]
         public void ConanPathIsDeterminedAutomatically()
         {

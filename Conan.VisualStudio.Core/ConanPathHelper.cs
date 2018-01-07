@@ -7,6 +7,23 @@ namespace Conan.VisualStudio.Core
 {
     public static class ConanPathHelper
     {
+        /// <summary>
+        /// Returns a path to <paramref name="location"/> relative to <paramref name="baseDirectory" />. If the paths
+        /// aren't related, returns an absolute path to the <paramref name="location"/>.
+        /// </summary>
+        public static string GetRelativePath(string baseDirectory, string location)
+        {
+            if (!Path.GetFullPath(baseDirectory).EndsWith(Path.DirectorySeparatorChar.ToString()))
+            {
+                baseDirectory = Path.GetFullPath(baseDirectory) + Path.DirectorySeparatorChar;
+            }
+
+            var baseUri = new Uri(baseDirectory);
+            var locationUri = new Uri(location);
+            var relativeUri = baseUri.MakeRelativeUri(locationUri);
+            return Uri.UnescapeDataString(relativeUri.ToString()).Replace('/', Path.DirectorySeparatorChar);
+        }
+
         public static string DetermineConanPathFromEnvironment()
         {
             var path = Environment.GetEnvironmentVariable("PATH") ?? "";
