@@ -11,7 +11,7 @@ namespace Conan.VisualStudio.Core
         public ConanRunner(string executablePath) =>
             _executablePath = executablePath;
 
-        public Task<Process> Install(ConanProject project)
+        public Task<Process> Install(ConanProject project, ConanConfiguration configuration)
         {
             string Escape(string arg) => arg.Contains(" ") ? $"\"{arg}\"" : arg;
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
@@ -20,11 +20,14 @@ namespace Conan.VisualStudio.Core
             const string generatorName = "visual_studio_multi";
             var settingValues = new[]
             {
-                ("compiler.version", project.CompilerVersion)
+                ("arch", configuration.Architecture),
+                ("build_type", configuration.BuildType),
+                ("compiler.toolset", configuration.CompilerToolset),
+                ("compiler.version", configuration.CompilerVersion)
             };
             const string options = "--build missing --update";
 
-            var settings = string.Join(" ", settingValues.Select(pair =>
+            var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
             {
                 var (key, value) = pair;
                 return ProcessArgument(key, value);

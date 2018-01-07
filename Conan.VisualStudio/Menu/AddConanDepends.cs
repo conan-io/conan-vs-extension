@@ -49,25 +49,26 @@ namespace Conan.VisualStudio.Menu
             }
 
             var conan = new ConanRunner(conanPath);
-            var project = await _vcProjectService.ExtractConanConfiguration(vcProject);
+            var project = await _vcProjectService.ExtractConanProject(vcProject);
             await InstallDependencies(conan, project);
         }
 
         private async Task InstallDependencies(ConanRunner conan, ConanProject project)
         {
-            try
+            var installPath = project.InstallPath;
+            await Task.Run(() => Directory.CreateDirectory(installPath));
+            var logFilePath = Path.Combine(installPath, "conan.log");
+
+            using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var logStream = new StreamWriter(logFile))
             {
-                var process = await conan.Install(project);
-
-                await Task.Run(() => Directory.CreateDirectory(project.InstallPath));
-                var logFilePath = Path.Combine(project.InstallPath, "conan.log");
-
-                using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                using (var logStream = new StreamWriter(logFile))
+                foreach (var configuration in project.Configurations)
                 {
+                    var process = await conan.Install(project, configuration);
+
                     await logStream.WriteLineAsync(
-                        $"Calling process '{process.StartInfo.FileName}'" +
-                        $" with arguments '{process.StartInfo.Arguments}'");
+                        $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
+                        $"with arguments '{process.StartInfo.Arguments}'");
                     using (var reader = process.StandardOutput)
                     {
                         string line;
@@ -76,22 +77,19 @@ namespace Conan.VisualStudio.Menu
                             await logStream.WriteLineAsync(line);
                         }
                     }
+
+                    var exitCode = await process.WaitForExitAsync();
+                    if (exitCode != 0)
+                    {
+                        _dialogService.ShowPluginError(
+                            $"Conan has returned exit code '{exitCode}' " +
+                            $"while processing configuration '{configuration}'. " +
+                            $"Please check file '{logFilePath}' for details.");
+                        return;
+                    }
                 }
 
-                var exitCode = await process.WaitForExitAsync();
-                if (exitCode == 0)
-                {
-                    _dialogService.ShowInfo("Conan dependencies have been installed successfully.");
-                }
-                else
-                {
-                    _dialogService.ShowPluginError(
-                        $"Conan has returned exit code {exitCode}. Please check file '{logFilePath}' for details.");
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                _dialogService.ShowPluginError("Could not locate conan on execution path.");
+                _dialogService.ShowInfo("Conan dependencies have been installed successfully.");
             }
         }
     }

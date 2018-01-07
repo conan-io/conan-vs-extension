@@ -1,6 +1,6 @@
-using System;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Menu;
@@ -15,6 +15,19 @@ namespace Conan.VisualStudio.Tests.Menu
     {
         private readonly Mock<IDialogService> _dialogService = new Mock<IDialogService>();
 
+        private static ConanProject NewTestProject(string path) => new ConanProject
+        {
+            Path = path,
+            InstallPath = Path.Combine(path, "conan"),
+            Configurations =
+            {
+                new ConanConfiguration
+                {
+                    CompilerVersion = "15"
+                }
+            }
+        };
+
         private Task RunCommand(string conanPath, ConanProject project)
         {
             var vcProject = Mock.Of<VCProject>();
@@ -25,7 +38,7 @@ namespace Conan.VisualStudio.Tests.Menu
 
             var projectService = new Mock<IVcProjectService>();
             projectService.Setup(x => x.GetActiveProject()).Returns(vcProject);
-            projectService.Setup(x => x.ExtractConanConfiguration(It.IsAny<VCProject>())).ReturnsAsync(project);
+            projectService.Setup(x => x.ExtractConanProject(It.IsAny<VCProject>())).ReturnsAsync(project);
 
             var settingsService = new Mock<ISettingsService>();
             settingsService.Setup(x => x.GetConanExecutablePath()).Returns(conanPath);
@@ -42,22 +55,19 @@ namespace Conan.VisualStudio.Tests.Menu
         public async Task AddConanDependsShowsAnErrorWindowIfConanReturnsExitCode()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
-            var project = new ConanProject
-            {
-                Path = directory,
-                InstallPath = directory,
-                CompilerVersion = "15"
-            };
+            var project = NewTestProject(directory);
 
             await RunCommand(ResourceUtils.ConanShimError, project);
 
             const int exitCode = 10;
-            var logFilePath = Path.Combine(directory, "conan.log");
+            var logFilePath = Path.Combine(directory, "conan", "conan.log");
 
             _dialogService.Verify(
                 x => x.ShowPluginError(
-                    $"Conan has returned exit code {exitCode}. Please check file '{logFilePath}' for details."));
-            var logContent = File.ReadAllText(Path.Combine(directory, "conan.log"));
+                    $"Conan has returned exit code '{exitCode}' " +
+                    $"while processing configuration '{project.Configurations.Single()}'. " +
+                    $"Please check file '{logFilePath}' for details."));
+            var logContent = File.ReadAllText(logFilePath);
             Assert.NotEmpty(logContent);
         }
 
@@ -65,13 +75,7 @@ namespace Conan.VisualStudio.Tests.Menu
         public async Task AddConanDependsSuccedsIfLogDirectoryDoesNotExists()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
-
-            var project = new ConanProject
-            {
-                Path = directory,
-                InstallPath = Path.Combine(directory, "conan"),
-                CompilerVersion = "15"
-            };
+            var project = NewTestProject(directory);
 
             await RunCommand(ResourceUtils.ConanShim, project);
 
