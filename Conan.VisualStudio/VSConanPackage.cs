@@ -34,6 +34,8 @@ namespace Conan.VisualStudio
         private IntegrateIntoProjectCommand _integrateIntoProjectCommand;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
+        private IVsSolution _solution;
+        private SolutionEventsHandler _solutionEventsHandler;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -50,9 +52,15 @@ namespace Conan.VisualStudio
             var projectService = new VcProjectService();
             var settingsService = new VisualStudioSettingsService(this);
 
+            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
+            _solutionEventsHandler = new SolutionEventsHandler(this);
+            _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
+
             _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService);
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
             _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService);
+
+            Logger.Initialize(serviceProvider, "Conan");
 
             SubscribeToEvents();
         }
