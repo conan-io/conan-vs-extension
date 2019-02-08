@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,7 +62,7 @@ namespace Conan.VisualStudio.Core
                 FileName = _executablePath,
                 Arguments = arguments,
                 UseShellExecute = false,
-                WorkingDirectory = path,
+                WorkingDirectory = Path.GetDirectoryName(path),
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
