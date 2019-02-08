@@ -2,6 +2,7 @@ using Conan.VisualStudio.Core;
 using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -102,11 +103,20 @@ namespace Conan.VisualStudio.Services
             var project = GetProject(pRealHierarchy);
             OutputActiveConfiguration(project);
 
+            var vcProject = project.Object as VCProject;
+
             Inspect(project);
 
             foreach (Property property in project.Properties)
             {
-                Logger.Log(property.Name + " = " + property.Value);
+                try
+                {
+                    Logger.Log(property.Name + " = " + property.Value);
+                }
+                catch (Exception)
+                {
+                    // Let it go, Let it go
+                }               
             }
 
             RunCsi(project);
