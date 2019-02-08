@@ -11,9 +11,11 @@ namespace Conan.VisualStudio.Core
         public ConanRunner(string executablePath) =>
             _executablePath = executablePath;
 
+        private string Escape(string arg) =>
+            arg.Contains(" ") ? $"\"{arg}\"" : arg;
+
         public Task<Process> Install(ConanProject project, ConanConfiguration configuration)
         {
-            string Escape(string arg) => arg.Contains(" ") ? $"\"{arg}\"" : arg;
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
             var path = project.Path;
@@ -36,6 +38,23 @@ namespace Conan.VisualStudio.Core
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(project.InstallPath)} " +
                             $"{settings} {options}";
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = _executablePath,
+                Arguments = arguments,
+                UseShellExecute = false,
+                WorkingDirectory = path,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+            return Task.Run(() => Process.Start(startInfo));
+        }
+
+        public Task<Process> Inspect(ConanProject project)
+        {
+            var path = project.Path;
+            var arguments = $"inspect {Escape(path)} -a name -j";
 
             var startInfo = new ProcessStartInfo
             {
