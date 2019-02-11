@@ -9,5 +9,7 @@ namespace Conan.VisualStudio.Services
         VCProject GetActiveProject();
         Task<ConanProject> ExtractConanProject(VCProject vcProject);
         Task AddPropsImport(string projectPath, string propFilePath);
+        void UnloadProject(VCProject project);
+        void ReloadProject(VCProject project);
     }
 }
