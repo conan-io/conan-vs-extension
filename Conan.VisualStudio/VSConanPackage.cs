@@ -56,7 +56,7 @@ namespace Conan.VisualStudio
             _solutionEventsHandler = new SolutionEventsHandler(this);
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
-            _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService);
+            _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService, serviceProvider);
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
             _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService);
 
