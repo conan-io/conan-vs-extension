@@ -11,13 +11,13 @@ namespace Conan.VisualStudio.Services
 {
     public class SolutionEventsHandler : IVsSolutionEvents
     {
-        private ConanRunner _conanRunner;
+        private VisualStudioSettingsService _settingsService;
+        private string _conanPath;
 
         public SolutionEventsHandler(VSConanPackage package)
         {
-            var settingsService = new VisualStudioSettingsService(package);
-            var conanPath = settingsService.GetConanExecutablePath();
-            _conanRunner = new ConanRunner(conanPath);
+            _settingsService = new VisualStudioSettingsService(package);
+            _conanPath = _settingsService.GetConanExecutablePath();  
         }
 
         /// <summary>
@@ -49,7 +49,9 @@ namespace Conan.VisualStudio.Services
                 Path = project.FileName
             };
 
-            var process = await _conanRunner.Inspect(conanProject);
+            var conanRunner = new ConanRunner(_settingsService.LoadSettingFile(conanProject), _conanPath);
+
+            var process = await conanRunner.Inspect(conanProject);
 
             Logger.Log(
                 $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +

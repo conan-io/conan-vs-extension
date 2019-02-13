@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
@@ -43,11 +44,14 @@ namespace Conan.VisualStudio.Tests.Menu
             var settingsService = new Mock<ISettingsService>();
             settingsService.Setup(x => x.GetConanExecutablePath()).Returns(conanPath);
 
+            var serviceProvider = new Mock<IServiceProvider>();
+
             var command = new AddConanDepends(
                 commandService,
                 _dialogService.Object,
                 projectService.Object,
-                settingsService.Object);
+                settingsService.Object,
+                serviceProvider.Object);
             return command.MenuItemCallback();
         }
 

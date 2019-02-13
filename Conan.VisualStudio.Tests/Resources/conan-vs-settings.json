@@ -1,0 +1,10 @@
+{
+
+    "Version": "0.1.0",
+    "ConanCommands": [
+        {
+            "Name": "install",
+            "Args": "install -test"
+        }
+    ]
+}
