@@ -7,10 +7,14 @@ namespace Conan.VisualStudio.Core
 {
     public class ConanRunner
     {
-        private readonly string _executablePath;
+        private readonly ConanSettings _conanSettings;
+        private readonly string _executablePath;      
 
-        public ConanRunner(string executablePath) =>
+        public ConanRunner(ConanSettings conanSettings, string executablePath)
+        {
+            _conanSettings = conanSettings;
             _executablePath = executablePath;
+        }
 
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
@@ -19,26 +23,36 @@ namespace Conan.VisualStudio.Core
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
-            var path = project.Path;
-            const string generatorName = "visual_studio_multi";
-            var settingValues = new[]
-            {
-                ("arch", configuration.Architecture),
-                ("build_type", configuration.BuildType),
-                ("compiler.toolset", configuration.CompilerToolset),
-                ("compiler.version", configuration.CompilerVersion)
-            };
-            const string options = "--build missing --update";
+            var path = Path.GetDirectoryName(project.Path);
 
-            var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
+            var arguments = string.Empty;
+            if (_conanSettings != null)
             {
-                var (key, value) = pair;
-                return ProcessArgument(key, value);
-            }));
-            var arguments = $"install {Escape(path)} " +
+                var installConfig = _conanSettings.ConanCommands.FirstOrDefault(c => c.Name.Equals("install"));
+                arguments = installConfig.Args;
+            }
+            else
+            {
+                const string generatorName = "visual_studio_multi";
+                var settingValues = new[]
+                {
+                    ("arch", configuration.Architecture),
+                    ("build_type", configuration.BuildType),
+                    ("compiler.toolset", configuration.CompilerToolset),
+                    ("compiler.version", configuration.CompilerVersion)
+                };
+                const string options = "--build missing --update";
+
+                var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
+                {
+                    var (key, value) = pair;
+                    return ProcessArgument(key, value);
+                }));
+                arguments = $"install {Escape(path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(project.InstallPath)} " +
                             $"{settings} {options}";
+            }
 
             var startInfo = new ProcessStartInfo
             {

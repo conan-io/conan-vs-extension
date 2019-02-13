@@ -2,14 +2,15 @@ using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
+using System;
 
 namespace Conan.VisualStudio.Services
 {
     public class InfobarService
     {
-        private ServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProvider;
 
-        public InfobarService(ServiceProvider serviceProvider)
+        public InfobarService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

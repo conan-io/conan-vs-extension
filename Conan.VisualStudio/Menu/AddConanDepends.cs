@@ -2,10 +2,9 @@ using System.ComponentModel.Design;
 using System.IO;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using Task = System.Threading.Tasks.Task;
-using Microsoft.VisualStudio.Imaging;
+using System;
 
 namespace Conan.VisualStudio.Menu
 {
@@ -17,14 +16,14 @@ namespace Conan.VisualStudio.Menu
         private readonly IDialogService _dialogService;
         private readonly IVcProjectService _vcProjectService;
         private readonly ISettingsService _settingsService;
-        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public AddConanDepends(
             IMenuCommandService commandService,
             IDialogService dialogService,
             IVcProjectService vcProjectService,
             ISettingsService settingsService,
-            ServiceProvider serviceProvider) : base(commandService, dialogService)
+            IServiceProvider serviceProvider) : base(commandService, dialogService)
         {
             _dialogService = dialogService;
             _vcProjectService = vcProjectService;
@@ -53,8 +52,8 @@ namespace Conan.VisualStudio.Menu
                 return;
             }
 
-            var conan = new ConanRunner(conanPath);
             var project = await _vcProjectService.ExtractConanProject(vcProject);
+            var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);           
 
             await InstallDependencies(conan, project);
 
