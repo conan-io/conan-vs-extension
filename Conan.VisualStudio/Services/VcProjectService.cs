@@ -38,6 +38,10 @@ namespace Conan.VisualStudio.Services
         public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
+            if (projectPath == null)
+            {
+                return null;
+            }
             var project = new ConanProject
             {
                 Path = projectPath,
