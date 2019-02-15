@@ -107,21 +107,24 @@ namespace Conan.VisualStudio.Services
             xml.Save(projectPath);
         });
 
-        public void UnloadProject(VCProject project)
+        public Guid UnloadProject(VCProject project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
             var projectGuid = new Guid(project.ProjectGUID);
 
             int hr = solution.UnloadProject(ref projectGuid, (uint)_VSProjectUnloadStatus.UNLOADSTATUS_UnloadedByUser);
             ErrorHandler.ThrowOnFailure(hr);
+
+            return projectGuid;
         }
 
-        public void ReloadProject(VCProject project)
+        public void ReloadProject(Guid projectGuid)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
-            var projectGuid = new Guid(project.ProjectGUID);
 
             int hr = solution.ReloadProject(ref projectGuid);
             ErrorHandler.ThrowOnFailure(hr);

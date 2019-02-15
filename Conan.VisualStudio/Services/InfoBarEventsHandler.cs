@@ -22,8 +22,8 @@ namespace Conan.VisualStudio.Services
 
         public void OnActionItemClicked(IVsInfoBarUIElement infoBarUIElement, IVsInfoBarActionItem actionItem)
         {
-            _vcProjectService.UnloadProject(_project);
-            _vcProjectService.ReloadProject(_project);
+            var projectGuid = _vcProjectService.UnloadProject(_project);
+            _vcProjectService.ReloadProject(projectGuid);
             ThreadHelper.ThrowIfNotOnUIThread();
             infoBarUIElement.Close();
         }
