@@ -32,7 +32,7 @@ namespace Conan.VisualStudio.Services
                     || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
 
             var projects = (object[])dte.ActiveSolutionProjects;
-            return projects.Cast<Project>().Where(IsCppProject).Select(p => p.Object).OfType<VCProject>().FirstOrDefault();
+            return projects.Cast<Project>().Where(IsCppProject).Select(p => { Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread(); return p.Object; }).OfType<VCProject>().FirstOrDefault();
         }
 
         public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject)
