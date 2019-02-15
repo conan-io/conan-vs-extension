@@ -12,7 +12,7 @@ namespace Conan.VisualStudio.Tests.Menu
     public class IntegrateIntoProjectCommandTests
     {
         [Fact]
-        public async Task IntegrateIntoProjectCommandCalculatesAProjectRelativePath()
+        public async Task IntegrateIntoProjectCommandCalculatesAProjectRelativePathAsync()
         {
             var solutionDir = FileSystemUtils.CreateTempDirectory();
             FileSystemUtils.CreateTempFile(solutionDir, "conanfile.txt");
@@ -31,9 +31,9 @@ namespace Conan.VisualStudio.Tests.Menu
                 Mock.Of<IMenuCommandService>(),
                 Mock.Of<IDialogService>(),
                 projectService.Object);
-            await command.MenuItemCallback();
+            await command.MenuItemCallbackAsync();
 
-            projectService.Verify(p => p.AddPropsImport(projectPath, @"..\conan\conanbuildinfo_multi.props"));
+            projectService.Verify(p => p.AddPropsImportAsync(projectPath, @"..\conan\conanbuildinfo_multi.props"));
         }
     }
 }

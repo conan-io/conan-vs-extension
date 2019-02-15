@@ -111,8 +111,8 @@ namespace Conan.VisualStudio.Services
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
             var projectGuid = new Guid(project.ProjectGUID);
+            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
 
             int hr = solution.UnloadProject(ref projectGuid, (uint)_VSProjectUnloadStatus.UNLOADSTATUS_UnloadedByUser);
             ErrorHandler.ThrowOnFailure(hr);

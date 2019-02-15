@@ -21,7 +21,7 @@ namespace Conan.VisualStudio.Tests.Menu
             {
             }
 
-            protected internal override Task MenuItemCallback() =>
+            protected internal override Task MenuItemCallbackAsync() =>
                 throw new Exception("Test menu command exception");
         }
 

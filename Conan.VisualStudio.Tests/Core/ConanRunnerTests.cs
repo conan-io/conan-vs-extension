@@ -10,7 +10,7 @@ namespace Conan.VisualStudio.Tests.Core
     public class ConanRunnerTests
     {
         [Fact]
-        public async Task GeneratorShouldBeInvokedProperly()
+        public async Task GeneratorShouldBeInvokedProperlyAsync()
         {
             var conan = new ConanRunner(null, ResourceUtils.ConanShim);
             var project = new ConanProject
@@ -41,7 +41,7 @@ namespace Conan.VisualStudio.Tests.Core
         }
 
         [Fact]
-        public async Task SettingsFileShouldBeParsedProperly()
+        public async Task SettingsFileShouldBeParsedProperlyAsync()
         {
             var project = new ConanProject
             {

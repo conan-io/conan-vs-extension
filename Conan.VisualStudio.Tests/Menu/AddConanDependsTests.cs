@@ -29,7 +29,7 @@ namespace Conan.VisualStudio.Tests.Menu
             }
         };
 
-        private Task RunCommand(string conanPath, ConanProject project)
+        private Task RunCommandAsync(string conanPath, ConanProject project)
         {
             var vcProject = Mock.Of<VCProject>();
             Mock.Get(vcProject).Setup(x => x.Name).Returns("TestProject");
@@ -39,7 +39,7 @@ namespace Conan.VisualStudio.Tests.Menu
 
             var projectService = new Mock<IVcProjectService>();
             projectService.Setup(x => x.GetActiveProject()).Returns(vcProject);
-            projectService.Setup(x => x.ExtractConanProject(It.IsAny<VCProject>())).ReturnsAsync(project);
+            projectService.Setup(x => x.ExtractConanProjectAsync(It.IsAny<VCProject>())).ReturnsAsync(project);
 
             var settingsService = new Mock<ISettingsService>();
             settingsService.Setup(x => x.GetConanExecutablePath()).Returns(conanPath);
@@ -52,16 +52,16 @@ namespace Conan.VisualStudio.Tests.Menu
                 projectService.Object,
                 settingsService.Object,
                 serviceProvider.Object);
-            return command.MenuItemCallback();
+            return command.MenuItemCallbackAsync();
         }
 
         [Fact]
-        public async Task AddConanDependsShowsAnErrorWindowIfConanReturnsExitCode()
+        public async Task AddConanDependsShowsAnErrorWindowIfConanReturnsExitCodeAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             var project = NewTestProject(directory);
 
-            await RunCommand(ResourceUtils.ConanShimError, project);
+            await RunCommandAsync(ResourceUtils.ConanShimError, project);
 
             const int exitCode = 10;
             var logFilePath = Path.Combine(directory, "conan", "conan.log");
@@ -76,12 +76,12 @@ namespace Conan.VisualStudio.Tests.Menu
         }
 
         [Fact]
-        public async Task AddConanDependsSuccedsIfLogDirectoryDoesNotExists()
+        public async Task AddConanDependsSuccedsIfLogDirectoryDoesNotExistsAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             var project = NewTestProject(directory);
 
-            await RunCommand(ResourceUtils.ConanShim, project);
+            await RunCommandAsync(ResourceUtils.ConanShim, project);
 
             _dialogService.Verify(x => x.ShowPluginError(It.IsAny<string>()), Times.Never);
         }
