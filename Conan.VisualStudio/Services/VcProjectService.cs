@@ -33,7 +33,7 @@ namespace Conan.VisualStudio.Services
             return projects.Cast<Project>().Where(IsCppProject).Select(p => p.Object).OfType<VCProject>().FirstOrDefault();
         }
 
-        public async Task<ConanProject> ExtractConanProject(VCProject vcProject)
+        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
             var project = new ConanProject
@@ -76,7 +76,7 @@ namespace Conan.VisualStudio.Services
             };
         }
 
-        public Task AddPropsImport(string projectPath, string propFilePath) => Task.Run(() =>
+        public Task AddPropsImportAsync(string projectPath, string propFilePath) => Task.Run(() =>
         {
             var xml = XDocument.Load(projectPath);
             var project = xml.Root;

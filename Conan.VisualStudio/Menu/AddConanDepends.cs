@@ -31,7 +31,7 @@ namespace Conan.VisualStudio.Menu
             _serviceProvider = serviceProvider;
         }
 
-        protected internal override async Task MenuItemCallback()
+        protected internal override async Task MenuItemCallbackAsync()
         {
             var vcProject = _vcProjectService.GetActiveProject();
             if (vcProject == null)
@@ -52,16 +52,17 @@ namespace Conan.VisualStudio.Menu
                 return;
             }
 
-            var project = await _vcProjectService.ExtractConanProject(vcProject);
+            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject);
             var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);           
 
-            await InstallDependencies(conan, project);
+            await InstallDependenciesAsync(conan, project);
+
 
             var infoBarService = new InfobarService(_serviceProvider);
             infoBarService.ShowInfoBar(vcProject);
         }
 
-        private async Task InstallDependencies(ConanRunner conan, ConanProject project)
+        private async Task InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
             var installPath = project.InstallPath;
             await Task.Run(() => Directory.CreateDirectory(installPath));

@@ -23,14 +23,14 @@ namespace Conan.VisualStudio.Menu
             _vcProjectService = vcProjectService;
         }
 
-        protected internal override async Task MenuItemCallback()
+        protected internal override async Task MenuItemCallbackAsync()
         {
             var project = _vcProjectService.GetActiveProject();
             var projectDirectory = project.ProjectDirectory;
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePath(projectDirectory);
             var propFilePath = Path.Combine(conanfileDirectory, @"conan\conanbuildinfo_multi.props");
             var relativePropFilePath = ConanPathHelper.GetRelativePath(projectDirectory, propFilePath);
-            await _vcProjectService.AddPropsImport(project.ProjectFile, relativePropFilePath);
+            await _vcProjectService.AddPropsImportAsync(project.ProjectFile, relativePropFilePath);
         }
     }
 }

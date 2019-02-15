@@ -42,7 +42,7 @@ namespace Conan.VisualStudio.Services
             Logger.Log(output);
         }
 
-        private async void Inspect(EnvDTE.Project project)
+        private async System.Threading.Tasks.Task InspectAsync(EnvDTE.Project project)
         {
             var conanProject = new ConanProject
             {
@@ -107,7 +107,12 @@ namespace Conan.VisualStudio.Services
 
             var vcProject = project.Object as VCProject;
 
-            Inspect(project);
+            ThreadHelper.JoinableTaskFactory.RunAsync(
+                async delegate
+                {
+                    await InspectAsync(project);
+                }
+            );
 
             foreach (Property property in project.Properties)
             {

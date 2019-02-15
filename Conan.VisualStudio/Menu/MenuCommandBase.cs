@@ -19,7 +19,7 @@ namespace Conan.VisualStudio.Menu
             InitializeMenuItem(commandService);
         }
 
-        protected internal abstract System.Threading.Tasks.Task MenuItemCallback();
+        protected internal abstract System.Threading.Tasks.Task MenuItemCallbackAsync();
 
         private void InitializeMenuItem(IMenuCommandService commandService)
         {
@@ -28,7 +28,7 @@ namespace Conan.VisualStudio.Menu
             {
                 try
                 {
-                    await MenuItemCallback();
+                    await MenuItemCallbackAsync();
                 }
                 catch (Exception exception)
                 {
