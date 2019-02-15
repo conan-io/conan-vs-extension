@@ -1,7 +1,10 @@
 using Conan.VisualStudio.Core;
 using EnvDTE;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Diagnostics;
@@ -16,6 +19,8 @@ namespace Conan.VisualStudio.Services
 
         public SolutionEventsHandler(VSConanPackage package)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             _settingsService = new VisualStudioSettingsService(package);
             _conanPath = _settingsService.GetConanExecutablePath();  
         }
@@ -27,6 +32,7 @@ namespace Conan.VisualStudio.Services
         /// <returns></returns>
         private EnvDTE.Project GetProject(IVsHierarchy pHierarchy)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             pHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object objProj);
             return objProj as EnvDTE.Project;
         }
@@ -37,6 +43,7 @@ namespace Conan.VisualStudio.Services
         /// <param name="project">EnvDTE Project</param>
         private void OutputActiveConfiguration(EnvDTE.Project project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var config = project.ConfigurationManager.ActiveConfiguration;
             var output = "Loaded project '" + project.Name + "': '" + config.PlatformName + "' - '" + config.ConfigurationName + "'";
             Logger.Log(output);
@@ -44,10 +51,14 @@ namespace Conan.VisualStudio.Services
 
         private async System.Threading.Tasks.Task InspectAsync(EnvDTE.Project project)
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             var conanProject = new ConanProject
             {
                 Path = project.FileName
             };
+
+            await TaskScheduler.Default;
 
             var conanRunner = new ConanRunner(_settingsService.LoadSettingFile(conanProject), _conanPath);
 
@@ -68,6 +79,8 @@ namespace Conan.VisualStudio.Services
 
         private void RunCsi(Project project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var vsPath = Path.GetDirectoryName(project.DTE.FullName);
             var projectDir = Path.GetDirectoryName(project.FileName);
             var csi = Path.Combine(vsPath, "..\\..\\MSBuild\\15.0\\Bin\\Roslyn\\csi.exe");
@@ -104,6 +117,8 @@ namespace Conan.VisualStudio.Services
         {
             var project = GetProject(pRealHierarchy);
             OutputActiveConfiguration(project);
+
+            ThreadHelper.ThrowIfNotOnUIThread();
 
             var vcProject = project.Object as VCProject;
 

@@ -39,6 +39,8 @@ namespace Conan.VisualStudio.Services
 
         public void ShowInfoBar(VCProject project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var shell = _serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
             if (shell != null)
             {

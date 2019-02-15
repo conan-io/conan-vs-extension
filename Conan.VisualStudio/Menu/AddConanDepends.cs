@@ -1,7 +1,9 @@
 using System.ComponentModel.Design;
 using System.IO;
+using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using Task = System.Threading.Tasks.Task;
 using System;
@@ -57,9 +59,12 @@ namespace Conan.VisualStudio.Menu
 
             await InstallDependenciesAsync(conan, project);
 
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var infoBarService = new InfobarService(_serviceProvider);
             infoBarService.ShowInfoBar(vcProject);
+
+            await TaskScheduler.Default;
         }
 
         private async Task InstallDependenciesAsync(ConanRunner conan, ConanProject project)

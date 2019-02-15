@@ -18,12 +18,14 @@ namespace Conan.VisualStudio.Services
     {
         public VCProject GetActiveProject()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
             return GetActiveProject(dte);
         }
 
         private static VCProject GetActiveProject(DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             bool IsCppProject(Project project) =>
                 project != null
                 && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
@@ -103,6 +105,7 @@ namespace Conan.VisualStudio.Services
 
         public void UnloadProject(VCProject project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
             var projectGuid = new Guid(project.ProjectGUID);
 
@@ -112,6 +115,7 @@ namespace Conan.VisualStudio.Services
 
         public void ReloadProject(VCProject project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
             var projectGuid = new Guid(project.ProjectGUID);
 

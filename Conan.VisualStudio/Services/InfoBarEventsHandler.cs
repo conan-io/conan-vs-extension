@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 
@@ -23,6 +24,7 @@ namespace Conan.VisualStudio.Services
         {
             _vcProjectService.UnloadProject(_project);
             _vcProjectService.ReloadProject(_project);
+            ThreadHelper.ThrowIfNotOnUIThread();
             infoBarUIElement.Close();
         }
     }
