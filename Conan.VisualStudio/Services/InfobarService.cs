@@ -58,6 +58,10 @@ namespace Conan.VisualStudio.Services
 
                 //Get the factory object from IVsInfoBarUIFactory, create it and add it to host.
                 var factory = _serviceProvider.GetService(typeof(SVsInfoBarUIFactory)) as IVsInfoBarUIFactory;
+                if (factory == null)
+                {
+                    return;
+                }
                 IVsInfoBarUIElement element = factory.CreateInfoBar(infoBarModel);
 
                 var infoBarEventsHandler = new InfoBarEventsHandler(project);
