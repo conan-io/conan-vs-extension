@@ -85,6 +85,10 @@ namespace Conan.VisualStudio.Menu
                 {
                     var process = await conan.Install(project, configuration);
 
+                    Logger.Log(
+                        $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
+                        $"with arguments '{process.StartInfo.Arguments}'");
+
                     await logStream.WriteLineAsync(
                         $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
                         $"with arguments '{process.StartInfo.Arguments}'");
@@ -94,6 +98,8 @@ namespace Conan.VisualStudio.Menu
                         while ((line = await reader.ReadLineAsync()) != null)
                         {
                             await logStream.WriteLineAsync(line);
+
+                            Logger.Log(line);
                         }
                     }
 
