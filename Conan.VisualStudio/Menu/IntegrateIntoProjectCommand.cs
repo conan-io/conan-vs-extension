@@ -28,6 +28,11 @@ namespace Conan.VisualStudio.Menu
         protected internal override async Task MenuItemCallbackAsync()
         {
             var project = _vcProjectService.GetActiveProject();
+            if (project == null)
+            {
+                _dialogService.ShowPluginError("A C++ project with a conan file must be selected.");
+                return;
+            }
             var projectDirectory = project.ProjectDirectory;
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePath(projectDirectory);
             if (conanfileDirectory == null)
