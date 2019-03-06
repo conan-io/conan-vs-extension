@@ -45,7 +45,7 @@ namespace Conan.VisualStudio.Services
             var project = new ConanProject
             {
                 Path = projectPath,
-                InstallPath = Path.Combine(projectPath, "conan")
+                InstallPath = Path.Combine(projectPath, ".conan")
             };
 
             foreach (VCConfiguration configuration in vcProject.Configurations)
