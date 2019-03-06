@@ -34,7 +34,7 @@ namespace Conan.VisualStudio.Tests.Services
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             FileSystemUtils.CreateTempFile(directory, "conanfile.txt");
-            var installPath = Path.Combine(directory, "conan");
+            var installPath = Path.Combine(directory, ".conan");
 
             var vcProject = MockVcProject(directory);
 

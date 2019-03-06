@@ -35,7 +35,7 @@ namespace Conan.VisualStudio.Menu
                 _dialogService.ShowPluginError("unable to locate conanfile directory!");
                 return;
             }
-            var propFilePath = Path.Combine(conanfileDirectory, @"conan\conanbuildinfo_multi.props");
+            var propFilePath = Path.Combine(conanfileDirectory, @".conan\conanbuildinfo_multi.props");
             var relativePropFilePath = ConanPathHelper.GetRelativePath(projectDirectory, propFilePath);
             await _vcProjectService.AddPropsImportAsync(project.ProjectFile, relativePropFilePath);
         }
