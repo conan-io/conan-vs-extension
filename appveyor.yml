@@ -5,4 +5,4 @@ configuration: Release
 before_build:
     - nuget restore
 build_script:
-    msbuild /p:DeployExtension=false
+    msbuild /p:DeployExtension=false /p:verbosity=detailed

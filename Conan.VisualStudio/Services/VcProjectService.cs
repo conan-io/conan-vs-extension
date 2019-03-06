@@ -18,24 +18,30 @@ namespace Conan.VisualStudio.Services
     {
         public VCProject GetActiveProject()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
             return GetActiveProject(dte);
         }
 
         private static VCProject GetActiveProject(DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             bool IsCppProject(Project project) =>
                 project != null
                 && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
                     || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
 
             var projects = (object[])dte.ActiveSolutionProjects;
-            return projects.Cast<Project>().Where(IsCppProject).Select(p => p.Object).OfType<VCProject>().FirstOrDefault();
+            return projects.Cast<Project>().Where(IsCppProject).Select(p => { Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread(); return p.Object; }).OfType<VCProject>().FirstOrDefault();
         }
 
-        public async Task<ConanProject> ExtractConanProject(VCProject vcProject)
+        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
+            if (projectPath == null)
+            {
+                return null;
+            }
             var project = new ConanProject
             {
                 Path = projectPath,
@@ -76,7 +82,7 @@ namespace Conan.VisualStudio.Services
             };
         }
 
-        public Task AddPropsImport(string projectPath, string propFilePath) => Task.Run(() =>
+        public Task AddPropsImportAsync(string projectPath, string propFilePath) => Task.Run(() =>
         {
             var xml = XDocument.Load(projectPath);
             var project = xml.Root;
@@ -101,19 +107,24 @@ namespace Conan.VisualStudio.Services
             xml.Save(projectPath);
         });
 
-        public void UnloadProject(VCProject project)
+        public Guid UnloadProject(VCProject project)
         {
-            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var projectGuid = new Guid(project.ProjectGUID);
+            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
 
             int hr = solution.UnloadProject(ref projectGuid, (uint)_VSProjectUnloadStatus.UNLOADSTATUS_UnloadedByUser);
             ErrorHandler.ThrowOnFailure(hr);
+
+            return projectGuid;
         }
 
-        public void ReloadProject(VCProject project)
+        public void ReloadProject(Guid projectGuid)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
-            var projectGuid = new Guid(project.ProjectGUID);
 
             int hr = solution.ReloadProject(ref projectGuid);
             ErrorHandler.ThrowOnFailure(hr);

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.Design;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.Shell;
 
 namespace Conan.VisualStudio.Menu
 {
@@ -19,22 +20,34 @@ namespace Conan.VisualStudio.Menu
             InitializeMenuItem(commandService);
         }
 
-        protected internal abstract System.Threading.Tasks.Task MenuItemCallback();
+        protected internal abstract System.Threading.Tasks.Task MenuItemCallbackAsync();
+
+        async System.Threading.Tasks.Task CallMenuItemBallbackAsync()
+        {
+            try
+            {
+                await MenuItemCallbackAsync();
+            }
+            catch (Exception exception)
+            {
+                _dialogService.ShowPluginError(exception.ToString());
+            }
+        }
+
+        private void MenuItemCallback(object sender, EventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(
+                async delegate
+                {
+                    await CallMenuItemBallbackAsync();
+                }
+            );
+        }
 
         private void InitializeMenuItem(IMenuCommandService commandService)
         {
             var menuCommandId = new CommandID(CommandSetId, CommandId);
-            var menuItem = new MenuCommand(async (_, __) =>
-            {
-                try
-                {
-                    await MenuItemCallback();
-                }
-                catch (Exception exception)
-                {
-                    _dialogService.ShowPluginError(exception.ToString());
-                }
-            }, menuCommandId);
+            var menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
             commandService.AddCommand(menuItem);
         }
     }

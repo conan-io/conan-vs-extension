@@ -9,6 +9,7 @@ using Conan.VisualStudio.Services;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Threading;
 
 namespace Conan.VisualStudio
 {
@@ -46,23 +47,44 @@ namespace Conan.VisualStudio
             await base.InitializeAsync(cancellationToken, progress);
 
             _dte = await GetServiceAsync<DTE>();
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
+
+            await TaskScheduler.Default;
+
             var dialogService = new VisualStudioDialogService(serviceProvider);
             var commandService = await GetServiceAsync<IMenuCommandService>();
             var projectService = new VcProjectService();
             var settingsService = new VisualStudioSettingsService(this);
 
             _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             _solutionEventsHandler = new SolutionEventsHandler(this);
+
+            await TaskScheduler.Default;
+
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService, serviceProvider);
+
+            await TaskScheduler.Default;
+
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
             _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService);
 
             Logger.Initialize(serviceProvider, "Conan");
 
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
             SubscribeToEvents();
+
+            await TaskScheduler.Default;
         }
 
         private async Task<T> GetServiceAsync<T>() where T : class =>
@@ -78,6 +100,9 @@ namespace Conan.VisualStudio
              * to prevent from Visual Studio garbage collecting our variable which would
              * mean missed events.
             **/
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             _solutionEvents = _dte.Events.SolutionEvents;
 
             /**
@@ -95,6 +120,8 @@ namespace Conan.VisualStudio
             /**
              * Get all projects within the solution
              */
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var projects = _dte.Solution.Projects;
 
             /**

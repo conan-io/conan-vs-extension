@@ -16,6 +16,7 @@ namespace Conan.VisualStudio.Services
 
         public string GetConanExecutablePath()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             // Believe it or not, it's the recommended way of retrieving the option value per
             // https://docs.microsoft.com/en-us/visualstudio/extensibility/creating-an-options-page#accessing-options
             var page = (ConanOptionsPage)_package.GetDialogPage(typeof(ConanOptionsPage));

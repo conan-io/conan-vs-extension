@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Media;
 using Microsoft.VisualStudio.TaskRunnerExplorer;
+using Microsoft.VisualStudio.Shell;
 
 namespace Conan.VisualStudio.TaskRunner
 {
@@ -32,6 +33,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public string LoadBindings(string configPath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 return _bindingsPersister.Load(configPath);
@@ -44,6 +46,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public bool SaveBindings(string configPath, string bindingsXml)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 return _bindingsPersister.Save(configPath, bindingsXml);

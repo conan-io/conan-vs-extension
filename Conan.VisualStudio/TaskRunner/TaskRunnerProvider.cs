@@ -79,6 +79,8 @@ namespace Conan.VisualStudio.TaskRunner
         {
             return await Task.Run(() =>
             {
+                ThreadHelper.ThrowIfNotOnUIThread();
+
                 ITaskRunnerNode hierarchy = LoadHierarchy(configPath);
 
                 if (!hierarchy.Children.Any() && !hierarchy.Children.First().Children.Any())
@@ -95,17 +97,21 @@ namespace Conan.VisualStudio.TaskRunner
 
         private string SetVariables(string str, string cmdsDir)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (str == null)
                 return str;
 
             var dte = (DTE)_serviceProvider.GetService(typeof(DTE));
+            if (dte == null)
+                return str;
 
             Solution sln = dte.Solution;
             IList<Project> projs = GetProjects(dte);
             SolutionBuild build = sln.SolutionBuild;
             var slnCfg = (SolutionConfiguration2)build.ActiveConfiguration;
 
-            Project proj = projs.Cast<Project>().FirstOrDefault(x => x.FileName.Contains(cmdsDir) && !x.FullName.EndsWith("vcxproj"));
+            Project proj = projs.Cast<Project>().FirstOrDefault(x => { ThreadHelper.ThrowIfNotOnUIThread(); return x.FileName.Contains(cmdsDir) && !x.FullName.EndsWith("vcxproj"); });
 
             ApplyVariable("$(ConfigurationName)", slnCfg.Name, ref str);
             ApplyVariable("$(DevEnvDir)", Path.GetDirectoryName(dte.FileName), ref str);
@@ -152,6 +158,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private ITaskRunnerNode LoadHierarchy(string configPath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             ITaskRunnerNode root = new TaskRunnerNode("Commands");
             string rootDir = Path.GetDirectoryName(configPath);
             IEnumerable<CommandTask> commands = TaskParser.LoadTasks(configPath);
@@ -189,6 +197,8 @@ namespace Conan.VisualStudio.TaskRunner
         }
         private IList<Project> GetProjects(DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             Projects projects = dte.Solution.Projects;
             List<Project> list = new List<Project>();
             var item = projects.GetEnumerator();
@@ -215,6 +225,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private IEnumerable<Project> GetSolutionFolderProjects(Project solutionFolder)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             List<Project> list = new List<Project>();
             for (var i = 1; i <= solutionFolder.ProjectItems.Count; i++)
             {

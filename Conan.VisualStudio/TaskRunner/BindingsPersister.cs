@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.VisualStudio.Shell;
 
 namespace Conan.VisualStudio.TaskRunner
 {
@@ -19,6 +20,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public string Load(string configPath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             IVsTextView configTextView = TextViewUtil.FindTextViewFor(configPath);
             ITextUtil textUtil;
 
@@ -60,6 +62,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         public bool Save(string configPath, string bindingsXml)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             bindingsXml = bindingsXml.Replace("\u200B", string.Empty);
 
             var bindingsXmlObject = XElement.Parse(bindingsXml);

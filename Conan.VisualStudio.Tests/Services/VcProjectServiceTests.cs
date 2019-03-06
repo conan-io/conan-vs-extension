@@ -30,7 +30,7 @@ namespace Conan.VisualStudio.Tests.Services
         }
 
         [Fact]
-        public async Task ExtractConanProjectExtractsThePathsProperly()
+        public async Task ExtractConanProjectExtractsThePathsProperlyAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             FileSystemUtils.CreateTempFile(directory, "conanfile.txt");
@@ -38,13 +38,13 @@ namespace Conan.VisualStudio.Tests.Services
 
             var vcProject = MockVcProject(directory);
 
-            var project = await _service.ExtractConanProject(vcProject);
+            var project = await _service.ExtractConanProjectAsync(vcProject);
             Assert.Equal(directory, project.Path);
             Assert.Equal(installPath, project.InstallPath);
         }
 
         [Fact]
-        public async Task ExtractConanConfigurationExtractsAllTheData()
+        public async Task ExtractConanConfigurationExtractsAllTheDataAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             FileSystemUtils.CreateTempFile(directory, "conanfile.txt");
@@ -52,7 +52,7 @@ namespace Conan.VisualStudio.Tests.Services
             var vcConfiguration = MockVcConfiguration("Win32", "Debug", "v141");
             var vcProject = MockVcProject(directory, vcConfiguration);
 
-            var project = await _service.ExtractConanProject(vcProject);
+            var project = await _service.ExtractConanProjectAsync(vcProject);
             var configuration = project.Configurations.Single();
 
             Assert.Equal("x86", configuration.Architecture);
@@ -73,13 +73,13 @@ namespace Conan.VisualStudio.Tests.Services
 <Project DefaultTargets=""Build"" ToolsVersion=""15.0"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
     <Import Project=""foo\bar.props"" />
 </Project>")]
-        public async Task IntegrateAddsImportIfNecessary(string projectText)
+        public async Task IntegrateAddsImportIfNecessaryAsync(string projectText)
         {
             var path = Path.GetTempFileName();
             File.WriteAllText(path, projectText);
 
             const string propFilePath = @"foo\bar.props";
-            await new VcProjectService().AddPropsImport(path, propFilePath);
+            await new VcProjectService().AddPropsImportAsync(path, propFilePath);
 
             var document = XDocument.Load(path);
             XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";

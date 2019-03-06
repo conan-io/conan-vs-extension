@@ -1,7 +1,9 @@
 using System.ComponentModel.Design;
 using System.IO;
+using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Threading;
 using Task = System.Threading.Tasks.Task;
 using System;
@@ -31,7 +33,7 @@ namespace Conan.VisualStudio.Menu
             _serviceProvider = serviceProvider;
         }
 
-        protected internal override async Task MenuItemCallback()
+        protected internal override async Task MenuItemCallbackAsync()
         {
             var vcProject = _vcProjectService.GetActiveProject();
             if (vcProject == null)
@@ -52,20 +54,29 @@ namespace Conan.VisualStudio.Menu
                 return;
             }
 
-            var project = await _vcProjectService.ExtractConanProject(vcProject);
+            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject);
+            if (project == null)
+            {
+                _dialogService.ShowPluginError("Unable to extract conan project!");
+                return;
+            }
             var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);           
 
-            await InstallDependencies(conan, project);
+            await InstallDependenciesAsync(conan, project);
+
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var infoBarService = new InfobarService(_serviceProvider);
             infoBarService.ShowInfoBar(vcProject);
+
+            await TaskScheduler.Default;
         }
 
-        private async Task InstallDependencies(ConanRunner conan, ConanProject project)
+        private async Task InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
             var installPath = project.InstallPath;
             await Task.Run(() => Directory.CreateDirectory(installPath));
-            var logFilePath = Path.Combine(installPath, "conan.log");
+            var logFilePath = Path.Combine(installPath, $"conan_'{Guid.NewGuid().ToString()}'.log");
 
             using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var logStream = new StreamWriter(logFile))
@@ -73,6 +84,10 @@ namespace Conan.VisualStudio.Menu
                 foreach (var configuration in project.Configurations)
                 {
                     var process = await conan.Install(project, configuration);
+
+                    Logger.Log(
+                        $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
+                        $"with arguments '{process.StartInfo.Arguments}'");
 
                     await logStream.WriteLineAsync(
                         $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
@@ -83,6 +98,8 @@ namespace Conan.VisualStudio.Menu
                         while ((line = await reader.ReadLineAsync()) != null)
                         {
                             await logStream.WriteLineAsync(line);
+
+                            Logger.Log(line);
                         }
                     }
 

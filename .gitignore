@@ -1,6 +1,8 @@
 /.vs/
 /packages/
-
+/Backup/
+/MigrationBackup/
+UpgradeLog.htm
 obj/
 bin/
 

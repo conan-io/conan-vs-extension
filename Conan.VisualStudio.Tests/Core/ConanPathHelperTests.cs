@@ -49,14 +49,14 @@ namespace Conan.VisualStudio.Tests.Core
         }
 
         [Fact]
-        public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfile()
+        public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfileAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             Assert.Null(await ConanPathHelper.GetNearestConanfilePath(dir));
         }
 
         [Fact]
-        public async Task GetNearestConanfilePathReturnsCurrentPathIfValid()
+        public async Task GetNearestConanfilePathReturnsCurrentPathIfValidAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var conanfile = FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
@@ -68,7 +68,7 @@ namespace Conan.VisualStudio.Tests.Core
         }
 
         [Fact]
-        public async Task GetNearestConanfilePathReturnsParentPathIfValid()
+        public async Task GetNearestConanfilePathReturnsParentPathIfValidAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var subdir = Path.Combine(dir, "test");
@@ -79,7 +79,7 @@ namespace Conan.VisualStudio.Tests.Core
         }
 
         [Fact(Skip = "Manual test only; leaves traces at the disk root")]
-        public async Task GetNearestConanfilePathWorksForDiskRoot()
+        public async Task GetNearestConanfilePathWorksForDiskRootAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var root = Path.GetPathRoot(dir);
