@@ -50,6 +50,8 @@ namespace Conan.VisualStudio
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
+            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
+
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
 
             await TaskScheduler.Default;
@@ -59,17 +61,10 @@ namespace Conan.VisualStudio
             var projectService = new VcProjectService();
             var settingsService = new VisualStudioSettingsService(this);
 
-            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
-
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _solutionEventsHandler = new SolutionEventsHandler(this);
-
-            await TaskScheduler.Default;
-
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
-
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService, serviceProvider);
 
