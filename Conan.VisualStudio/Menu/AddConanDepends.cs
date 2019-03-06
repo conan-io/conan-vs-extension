@@ -76,7 +76,7 @@ namespace Conan.VisualStudio.Menu
         {
             var installPath = project.InstallPath;
             await Task.Run(() => Directory.CreateDirectory(installPath));
-            var logFilePath = Path.Combine(installPath, $"conan_'{Guid.NewGuid().ToString()}'.log");
+            var logFilePath = Path.Combine(installPath, $"conan_{Guid.NewGuid().ToString()}.log");
 
             using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             using (var logStream = new StreamWriter(logFile))
