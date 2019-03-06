@@ -33,7 +33,7 @@ namespace Conan.VisualStudio.Tests.Menu
                 projectService.Object);
             await command.MenuItemCallbackAsync();
 
-            projectService.Verify(p => p.AddPropsImportAsync(projectPath, @"..\conan\conanbuildinfo_multi.props"));
+            projectService.Verify(p => p.AddPropsImportAsync(projectPath, @"..\.conan\conanbuildinfo_multi.props"));
         }
     }
 }
