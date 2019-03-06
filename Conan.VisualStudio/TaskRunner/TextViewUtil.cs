@@ -11,6 +11,8 @@ namespace Conan.VisualStudio.TaskRunner
     {
         public static IVsTextView FindTextViewFor(string filePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             IVsWindowFrame frame = FindWindowFrame(filePath);
             if (frame != null)
             {
@@ -52,6 +54,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private static IVsWindowFrame FindWindowFrame(string filePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             foreach (IVsWindowFrame currentFrame in EnumerateDocumentWindowFrames())
             {
                 if (IsFrameForFilePath(currentFrame, filePath))
@@ -65,6 +69,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private static bool GetPhysicalPathFromFrame(IVsWindowFrame frame, out string frameFilePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             object propertyValue;
 
             int hr = frame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out propertyValue);
@@ -87,6 +93,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private static bool IsFrameForFilePath(IVsWindowFrame frame, string filePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             string frameFilePath;
 
             if (GetPhysicalPathFromFrame(frame, out frameFilePath))
