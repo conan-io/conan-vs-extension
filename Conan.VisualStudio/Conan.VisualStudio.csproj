@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props')" />
   <PropertyGroup>
@@ -75,6 +75,19 @@
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\VisualStudioDialogService.cs" />
     <Compile Include="Services\VcProjectService.cs" />
+    <Compile Include="TaskRunner\BindingsPersister.cs" />
+    <Compile Include="TaskRunner\CommandTask.cs" />
+    <Compile Include="TaskRunner\FileTextUtil.cs" />
+    <Compile Include="TaskRunner\ITextUtil.cs" />
+    <Compile Include="TaskRunner\LineRange.cs" />
+    <Compile Include="TaskRunner\Range.cs" />
+    <Compile Include="TaskRunner\TaskParser.cs" />
+    <Compile Include="TaskRunner\TaskRunnerConfig.cs" />
+    <Compile Include="TaskRunner\TaskRunnerConfigBase.cs" />
+    <Compile Include="TaskRunner\TaskRunnerProvider.cs" />
+    <Compile Include="TaskRunner\TextUtilExtensions.cs" />
+    <Compile Include="TaskRunner\TextViewUtil.cs" />
+    <Compile Include="TaskRunner\VsTextViewTextUtil.cs" />
     <Compile Include="VSConanPackage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +184,9 @@
       <HintPath>..\packages\Microsoft.VisualStudio.Shell.Interop.9.0.9.0.30729\lib\Microsoft.VisualStudio.Shell.Interop.9.0.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.TaskRunnerExplorer.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.VisualStudio.TaskRunnerExplorer.14.0.14.0.0\lib\net40\Microsoft.VisualStudio.TaskRunnerExplorer.14.0.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\Microsoft.VisualStudio.TextManager.Interop.7.10.6071\lib\net11\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
     </Reference>
@@ -210,6 +226,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
