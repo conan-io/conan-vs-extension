@@ -95,10 +95,14 @@ namespace Conan.VisualStudio.TaskRunner
 
         private string SetVariables(string str, string cmdsDir)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (str == null)
                 return str;
 
             var dte = (DTE)_serviceProvider.GetService(typeof(DTE));
+            if (dte == null)
+                return str;
 
             Solution sln = dte.Solution;
             IList<Project> projs = GetProjects(dte);

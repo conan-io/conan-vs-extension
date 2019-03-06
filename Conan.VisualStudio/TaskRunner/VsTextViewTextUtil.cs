@@ -27,6 +27,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public bool Delete(Range range)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 GetEditPointForRange(range)?.Delete(range.LineRange.Length);
@@ -40,6 +41,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public bool Insert(Range position, string text, bool addNewline)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 GetEditPointForRange(position)?.Insert(text + (addNewline ? Environment.NewLine : string.Empty));
@@ -117,6 +119,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private EditPoint GetEditPointForRange(Range range)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             IVsTextLines textLines;
             int hr = _view.GetBuffer(out textLines);
 
@@ -139,6 +143,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         public void FormatRange(LineRange range)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             Reset();
             int startLine, startLineOffset, endLine, endLineOffset;
             this.GetExtentInfo(range.Start, range.Length, out startLine, out startLineOffset, out endLine, out endLineOffset);
@@ -147,6 +153,8 @@ namespace Conan.VisualStudio.TaskRunner
             _view.GetSelection(out oldStartLine, out oldStartLineOffset, out oldEndLine, out oldEndLineOffset);
             _view.SetSelection(startLine, startLineOffset, endLine, endLineOffset);
             var target = (IOleCommandTarget)ServiceProvider.GlobalProvider.GetService(typeof(SUIHostCommandDispatcher));
+            if (null == target)
+                return;
             Guid cmdid = VSConstants.VSStd2K;
             int hr = _view.SendExplicitFocus();
             hr = target.Exec(ref cmdid, (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION, 0, IntPtr.Zero, IntPtr.Zero);

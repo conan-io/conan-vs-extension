@@ -27,6 +27,8 @@ namespace Conan.VisualStudio.TaskRunner
 
         private static IEnumerable<IVsWindowFrame> EnumerateDocumentWindowFrames()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
 
             if (shell != null)
