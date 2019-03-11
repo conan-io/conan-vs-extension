@@ -54,7 +54,7 @@ namespace Conan.VisualStudio.Menu
                 return;
             }
 
-            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject);
+            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService);
             if (project == null)
             {
                 _dialogService.ShowPluginError("Unable to extract conan project!");

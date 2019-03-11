@@ -38,7 +38,7 @@ namespace Conan.VisualStudio.Tests.Services
 
             var vcProject = MockVcProject(directory);
 
-            var project = await _service.ExtractConanProjectAsync(vcProject);
+            var project = await _service.ExtractConanProjectAsync(vcProject, null);
             Assert.Equal(directory, project.Path);
             Assert.Equal(installPath, project.InstallPath);
         }
@@ -52,7 +52,7 @@ namespace Conan.VisualStudio.Tests.Services
             var vcConfiguration = MockVcConfiguration("Win32", "Debug", "v141");
             var vcProject = MockVcProject(directory, vcConfiguration);
 
-            var project = await _service.ExtractConanProjectAsync(vcProject);
+            var project = await _service.ExtractConanProjectAsync(vcProject, null);
             var configuration = project.Configurations.Single();
 
             Assert.Equal("x86", configuration.Architecture);

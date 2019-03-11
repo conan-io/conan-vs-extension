@@ -7,6 +7,7 @@ namespace Conan.VisualStudio
     public class ConanOptionsPage : DialogPage
     {
         private string _conanExecutablePath;
+        private bool? _installOnlyActiveConfiguration;
 
         [Category("Conan")]
         [DisplayName("Conan executable")]
@@ -15,6 +16,15 @@ namespace Conan.VisualStudio
         {
             get => _conanExecutablePath ?? (_conanExecutablePath = ConanPathHelper.DetermineConanPathFromEnvironment());
             set => _conanExecutablePath = value;
+        }
+
+        [Category("Conan")]
+        [DisplayName("Install only active configuration")]
+        [Description(@"Install only active configuration, or all configurations")]
+        public bool ConanInstallOnlyActiveConfiguration
+        {
+            get => _installOnlyActiveConfiguration ?? true;
+            set => _installOnlyActiveConfiguration = value;
         }
     }
 }

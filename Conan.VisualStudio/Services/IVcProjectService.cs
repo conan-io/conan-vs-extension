@@ -8,7 +8,7 @@ namespace Conan.VisualStudio.Services
     public interface IVcProjectService
     {
         VCProject GetActiveProject();
-        Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject);
+        Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService);
         Task AddPropsImportAsync(string projectPath, string propFilePath);
         Guid UnloadProject(VCProject project);
         void ReloadProject(Guid projectGuid);

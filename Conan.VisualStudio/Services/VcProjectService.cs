@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +34,7 @@ namespace Conan.VisualStudio.Services
             return projects.Cast<Project>().Where(IsCppProject).Select(p => { Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread(); return p.Object; }).OfType<VCProject>().FirstOrDefault();
         }
 
-        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject)
+        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService)
         {
             var projectPath = await ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
             if (projectPath == null)
@@ -48,11 +47,17 @@ namespace Conan.VisualStudio.Services
                 InstallPath = Path.Combine(projectPath, ".conan")
             };
 
-            foreach (VCConfiguration configuration in vcProject.Configurations)
+            if (settingsService != null && settingsService.GetConanInstallOnlyActiveConfiguration())
             {
-                project.Configurations.Add(ExtractConanConfiguration(configuration));
+                project.Configurations.Add(ExtractConanConfiguration(vcProject.ActiveConfiguration));
             }
-
+            else
+            {
+                foreach (VCConfiguration configuration in vcProject.Configurations)
+                {
+                    project.Configurations.Add(ExtractConanConfiguration(configuration));
+                }
+            }
             return project;
         }
 

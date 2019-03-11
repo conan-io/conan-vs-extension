@@ -39,7 +39,7 @@ namespace Conan.VisualStudio.Tests.Menu
 
             var projectService = new Mock<IVcProjectService>();
             projectService.Setup(x => x.GetActiveProject()).Returns(vcProject);
-            projectService.Setup(x => x.ExtractConanProjectAsync(It.IsAny<VCProject>())).ReturnsAsync(project);
+            projectService.Setup(x => x.ExtractConanProjectAsync(It.IsAny<VCProject>(), null)).ReturnsAsync(project);
 
             var settingsService = new Mock<ISettingsService>();
             settingsService.Setup(x => x.GetConanExecutablePath()).Returns(conanPath);
