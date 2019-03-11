@@ -34,6 +34,12 @@ namespace Conan.VisualStudio.Services
             return GetConanPage().ConanInstallOnlyActiveConfiguration;
         }
 
+        public ConanGeneratorType GetConanGenerator()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return GetConanPage().ConanGenerator;
+        }
+
         /// <summary>
         /// Try and load a project-level conan-vs-settings.json file
         /// </summary>

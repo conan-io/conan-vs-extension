@@ -27,10 +27,14 @@ namespace Conan.VisualStudio.Tests.Menu
             var projectService = new Mock<IVcProjectService>();
             projectService.Setup(p => p.GetActiveProject()).Returns(project.Object);
 
+            var settingsService = new Mock<ISettingsService>();
+            settingsService.Setup(p => p.GetConanGenerator()).Returns(VisualStudio.Core.ConanGeneratorType.visual_studio_multi);
+
             var command = new IntegrateIntoProjectCommand(
                 Mock.Of<IMenuCommandService>(),
                 Mock.Of<IDialogService>(),
-                projectService.Object);
+                projectService.Object,
+                settingsService.Object);
             await command.MenuItemCallbackAsync();
 
             projectService.Verify(p => p.AddPropsImportAsync(projectPath, @"..\.conan\conanbuildinfo_multi.props"));

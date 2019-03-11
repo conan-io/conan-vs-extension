@@ -14,4 +14,10 @@ namespace Conan.VisualStudio.Core
         public string Name { get; set; }
         public string Args { get; set; }
     }
+
+    public enum ConanGeneratorType
+    {
+        visual_studio,
+        visual_studio_multi
+    }
 }

@@ -13,6 +13,12 @@ namespace Conan.VisualStudio.Services
         bool GetConanInstallOnlyActiveConfiguration();
 
         /// <summary>
+        /// returns default conan generator, either visual_studio, or visual_studio_multi
+        /// </summary>
+        /// <returns>value of default conan generator type</returns>
+        ConanGeneratorType GetConanGenerator();
+
+        /// <summary>
         /// Try and load a project-level conan-vs-settings.json file
         /// </summary>
         /// <param name="project">Project</param>

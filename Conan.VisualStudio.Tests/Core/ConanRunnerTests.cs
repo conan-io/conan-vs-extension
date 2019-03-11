@@ -28,7 +28,7 @@ namespace Conan.VisualStudio.Tests.Core
                     }
                 }
             };
-            using (var process = await conan.Install(project, project.Configurations.Single()))
+            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi))
             {
                 Assert.Equal("install . -g visual_studio_multi " +
                              "--install-folder ./conan " +
@@ -64,7 +64,7 @@ namespace Conan.VisualStudio.Tests.Core
 
             var conan = new ConanRunner(conanSettings, ResourceUtils.ConanShim);
 
-            using (var process = await conan.Install(project, project.Configurations.Single()))
+            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi))
             {
                 Assert.Equal("install -test", process.StartInfo.Arguments);
             }

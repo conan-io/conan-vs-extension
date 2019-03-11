@@ -15,14 +15,17 @@ namespace Conan.VisualStudio.Menu
 
         private readonly IVcProjectService _vcProjectService;
         private readonly IDialogService _dialogService;
+        private readonly ISettingsService _settingsService;
 
         public IntegrateIntoProjectCommand(
             IMenuCommandService commandService,
             IDialogService dialogService,
-            IVcProjectService vcProjectService) : base(commandService, dialogService)
+            IVcProjectService vcProjectService,
+            ISettingsService settingsService) : base(commandService, dialogService)
         {
             _vcProjectService = vcProjectService;
             _dialogService = dialogService;
+            _settingsService = settingsService;
         }
 
         protected internal override async Task MenuItemCallbackAsync()
@@ -40,7 +43,13 @@ namespace Conan.VisualStudio.Menu
                 _dialogService.ShowPluginError("unable to locate conanfile directory!");
                 return;
             }
-            var propFilePath = Path.Combine(conanfileDirectory, @".conan\conanbuildinfo_multi.props");
+            ConanGeneratorType generator = _settingsService.GetConanGenerator();
+            string props;
+            if (generator == ConanGeneratorType.visual_studio)
+                props = @".conan\conanbuildinfoprops";
+            else
+                props = @".conan\conanbuildinfo_multi.props";
+            var propFilePath = Path.Combine(conanfileDirectory, props);
             var relativePropFilePath = ConanPathHelper.GetRelativePath(projectDirectory, propFilePath);
             await _vcProjectService.AddPropsImportAsync(project.ProjectFile, relativePropFilePath);
         }

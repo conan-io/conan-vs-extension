@@ -71,7 +71,7 @@ namespace Conan.VisualStudio
             await TaskScheduler.Default;
 
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
-            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService);
+            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService, settingsService);
 
             Logger.Initialize(serviceProvider, "Conan");
 

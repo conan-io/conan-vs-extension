@@ -8,6 +8,7 @@ namespace Conan.VisualStudio
     {
         private string _conanExecutablePath;
         private bool? _installOnlyActiveConfiguration;
+        private ConanGeneratorType? _conanGenerator;
 
         [Category("Conan")]
         [DisplayName("Conan executable")]
@@ -25,6 +26,15 @@ namespace Conan.VisualStudio
         {
             get => _installOnlyActiveConfiguration ?? true;
             set => _installOnlyActiveConfiguration = value;
+        }
+
+        [Category("Conan")]
+        [DisplayName("Generator")]
+        [Description(@"Conan generator to use")]
+        public ConanGeneratorType ConanGenerator
+        {
+            get => _conanGenerator ?? ConanGeneratorType.visual_studio_multi;
+            set => _conanGenerator = value;
         }
     }
 }

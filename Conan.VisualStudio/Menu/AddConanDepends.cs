@@ -83,7 +83,8 @@ namespace Conan.VisualStudio.Menu
             {
                 foreach (var configuration in project.Configurations)
                 {
-                    var process = await conan.Install(project, configuration);
+                    ConanGeneratorType generator = _settingsService.GetConanGenerator();
+                    var process = await conan.Install(project, configuration, generator);
 
                     Logger.Log(
                         $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +

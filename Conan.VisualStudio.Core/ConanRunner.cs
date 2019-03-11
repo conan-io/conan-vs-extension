@@ -19,7 +19,7 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
-        public Task<Process> Install(ConanProject project, ConanConfiguration configuration)
+        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
@@ -33,7 +33,7 @@ namespace Conan.VisualStudio.Core
             }
             else
             {
-                const string generatorName = "visual_studio_multi";
+                string generatorName = generator.ToString();
                 var settingValues = new[]
                 {
                     ("arch", configuration.Architecture),
