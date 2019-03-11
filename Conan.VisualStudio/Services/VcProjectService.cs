@@ -62,6 +62,8 @@ namespace Conan.VisualStudio.Services
             {
                 case "Win32": return "x86";
                 case "x64": return "x86_64";
+                case "ARM": return "armv7";
+                case "ARM64": return "armv8";
                 default: throw new NotSupportedException($"Platform {platformName} is not supported by the Conan plugin");
             }
         }
