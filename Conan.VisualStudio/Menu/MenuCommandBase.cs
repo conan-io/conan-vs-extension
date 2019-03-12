@@ -11,13 +11,17 @@ namespace Conan.VisualStudio.Menu
         private static readonly Guid CommandSetId = new Guid("614d6e2d-166a-4d8c-b047-1c2248bbef97");
 
         private readonly IDialogService _dialogService;
+        private readonly MenuCommand _menuCommand;
 
         protected abstract int CommandId { get; }
 
         public MenuCommandBase(IMenuCommandService commandService, IDialogService dialogService)
         {
             _dialogService = dialogService;
-            InitializeMenuItem(commandService);
+            var menuCommandId = new CommandID(CommandSetId, CommandId);
+            _menuCommand = new MenuCommand(MenuItemCallback, menuCommandId);
+            _menuCommand.Enabled = false;
+            commandService.AddCommand(_menuCommand);
         }
 
         protected internal abstract System.Threading.Tasks.Task MenuItemCallbackAsync();
@@ -44,11 +48,9 @@ namespace Conan.VisualStudio.Menu
             );
         }
 
-        private void InitializeMenuItem(IMenuCommandService commandService)
+        public void EnableMenu(bool enable)
         {
-            var menuCommandId = new CommandID(CommandSetId, CommandId);
-            var menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
-            commandService.AddCommand(menuItem);
+            _menuCommand.Enabled = enable;
         }
     }
 }

@@ -19,12 +19,12 @@ namespace Conan.VisualStudio.Tests.Menu
         private static ConanProject NewTestProject(string path) => new ConanProject
         {
             Path = path,
-            InstallPath = Path.Combine(path, "conan"),
             Configurations =
             {
                 new ConanConfiguration
                 {
-                    CompilerVersion = "15"
+                    CompilerVersion = "15",
+                    InstallPath = Path.Combine(path, "conan"),
                 }
             }
         };
@@ -51,7 +51,8 @@ namespace Conan.VisualStudio.Tests.Menu
                 _dialogService.Object,
                 projectService.Object,
                 settingsService.Object,
-                serviceProvider.Object);
+                serviceProvider.Object,
+                Mock.Of<IConanService>());
             return command.MenuItemCallbackAsync();
         }
 

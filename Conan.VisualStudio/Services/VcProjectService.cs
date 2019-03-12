@@ -22,21 +22,37 @@ namespace Conan.VisualStudio.Services
             return GetActiveProject(dte);
         }
 
+        private static bool IsCppProject(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return project != null && project.CodeModel != null
+                && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
+                    || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
+        }
+
+        public bool IsConanProject(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return IsCppProject(project) && null != ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory);
+        }
+
+        public VCProject AsVCProject(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return project.Object as VCProject;
+        }
+
         private static VCProject GetActiveProject(DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            bool IsCppProject(Project project) =>
-                project != null
-                && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
-                    || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
 
             var projects = (object[])dte.ActiveSolutionProjects;
             return projects.Cast<Project>().Where(IsCppProject).Select(p => { Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread(); return p.Object; }).OfType<VCProject>().FirstOrDefault();
         }
 
-        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService)
+        public ConanProject ExtractConanProject(VCProject vcProject, ISettingsService settingsService)
         {
-            var projectPath = await ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
+            var projectPath = ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
             if (projectPath == null)
             {
                 return null;
@@ -44,22 +60,26 @@ namespace Conan.VisualStudio.Services
             var project = new ConanProject
             {
                 Path = projectPath,
-                InstallPath = Path.Combine(projectPath, ".conan")
             };
 
             if (settingsService != null && settingsService.GetConanInstallOnlyActiveConfiguration())
             {
-                project.Configurations.Add(ExtractConanConfiguration(vcProject.ActiveConfiguration));
+                project.Configurations.Add(ExtractConanConfiguration(settingsService, vcProject.ActiveConfiguration));
             }
             else
             {
                 foreach (VCConfiguration configuration in vcProject.Configurations)
                 {
-                    project.Configurations.Add(ExtractConanConfiguration(configuration));
+                    project.Configurations.Add(ExtractConanConfiguration(settingsService, configuration));
                 }
             }
             return project;
         }
+
+        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService) => await Task.Run(() =>
+        {
+            return ExtractConanProject(vcProject, settingsService);
+        });
 
         internal static string GetArchitecture(string platformName)
         {
@@ -75,17 +95,36 @@ namespace Conan.VisualStudio.Services
 
         internal static string GetBuildType(string configurationName) => configurationName;
 
-        private static ConanConfiguration ExtractConanConfiguration(VCConfiguration configuration)
+        private static string GetInstallationDirectoryImpl(ISettingsService settingsService, VCConfiguration configuration)
         {
-            var x = configuration.Platform;
+            string installPath = ".conan";
+            if (settingsService != null && settingsService.GetConanGenerator() == ConanGeneratorType.visual_studio)
+            {
+                IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
+                string outputDirectory = generalSettings.GetEvaluatedPropertyValue("OutDir");
+                return Path.Combine(outputDirectory, installPath);
+            }
+            return Path.Combine(configuration.project.ProjectDirectory, installPath);
+        }
+
+        public string GetInstallationDirectory(ISettingsService settingsService, VCConfiguration configuration)
+        {
+            return GetInstallationDirectoryImpl(settingsService, configuration);
+        }
+
+        private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, VCConfiguration configuration)
+        {
             IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
             var toolset = generalSettings.GetEvaluatedPropertyValue("PlatformToolset");
+            string installPath = GetInstallationDirectoryImpl(settingsService, configuration);
+
             return new ConanConfiguration
             {
                 Architecture = GetArchitecture(configuration.Platform.Name),
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = toolset,
-                CompilerVersion = "15"
+                CompilerVersion = "15",
+                InstallPath = installPath
             };
         }
 

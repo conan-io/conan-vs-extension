@@ -6,6 +6,7 @@ namespace Conan.VisualStudio.Core
         public string BuildType { get; set; }
         public string CompilerToolset { get; set; }
         public string CompilerVersion { get; set; }
+        public string InstallPath { get; set; }
 
         public override string ToString()
         {
