@@ -20,4 +20,12 @@ namespace Conan.VisualStudio.Core
         visual_studio,
         visual_studio_multi
     }
+
+    public enum ConanBuildType
+    {
+        none,
+        missing,
+        always,
+        outdated
+    }
 }

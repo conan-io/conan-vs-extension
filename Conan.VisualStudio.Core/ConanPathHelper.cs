@@ -49,7 +49,7 @@ namespace Conan.VisualStudio.Core
         /// Searches for either conanfile.txt or conanfile.py in the directory or any of its' parent paths.
         /// </summary>
         /// <returns>Path to the nearest parent directory containing any type of conanfile.</returns>
-        public static Task<string> GetNearestConanfilePath(string path) => Task.Run(() =>
+        public static string GetNearestConanfilePath(string path)
         {
             while (path != null)
             {
@@ -63,6 +63,11 @@ namespace Conan.VisualStudio.Core
             }
 
             return path;
+        }
+
+        public static async Task<string> GetNearestConanfilePathAsync(string path) => await Task.Run(() =>
+        {
+            return GetNearestConanfilePath(path);
         });
     }
 }

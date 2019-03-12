@@ -19,7 +19,7 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
-        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator)
+        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
@@ -41,7 +41,11 @@ namespace Conan.VisualStudio.Core
                     ("compiler.toolset", configuration.CompilerToolset),
                     ("compiler.version", configuration.CompilerVersion)
                 };
-                const string options = "--build missing --update";
+                string options = "";
+                if (build != ConanBuildType.none)
+                    options += "--build " + build.ToString();
+                if (update)
+                    options += " --update";
 
                 var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
                 {
@@ -50,7 +54,7 @@ namespace Conan.VisualStudio.Core
                 }));
                 arguments = $"install {Escape(path)} " +
                             $"-g {generatorName} " +
-                            $"--install-folder {Escape(project.InstallPath)} " +
+                            $"--install-folder {Escape(configuration.InstallPath)} " +
                             $"{settings} {options}";
             }
 

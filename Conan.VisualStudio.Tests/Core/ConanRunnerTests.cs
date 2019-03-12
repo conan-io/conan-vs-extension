@@ -16,7 +16,6 @@ namespace Conan.VisualStudio.Tests.Core
             var project = new ConanProject
             {
                 Path = ".",
-                InstallPath = "./conan",
                 Configurations = 
                 {
                     new ConanConfiguration
@@ -24,11 +23,12 @@ namespace Conan.VisualStudio.Tests.Core
                         Architecture = "x86_64",
                         BuildType = "Debug",
                         CompilerToolset = "v141",
-                        CompilerVersion = "15"
+                        CompilerVersion = "15",
+                        InstallPath = "./conan"
                     }
                 }
             };
-            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi))
+            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi, ConanBuildType.missing, true))
             {
                 Assert.Equal("install . -g visual_studio_multi " +
                              "--install-folder ./conan " +
@@ -46,7 +46,6 @@ namespace Conan.VisualStudio.Tests.Core
             var project = new ConanProject
             {
                 Path = ResourceUtils.FakeProject,
-                InstallPath = "./conan",
                 Configurations =
                 {
                     new ConanConfiguration
@@ -54,7 +53,8 @@ namespace Conan.VisualStudio.Tests.Core
                         Architecture = "x86_64",
                         BuildType = "Debug",
                         CompilerToolset = "v141",
-                        CompilerVersion = "15"
+                        CompilerVersion = "15",
+                        InstallPath = "./conan"
                     }
                 }
             };
@@ -64,7 +64,7 @@ namespace Conan.VisualStudio.Tests.Core
 
             var conan = new ConanRunner(conanSettings, ResourceUtils.ConanShim);
 
-            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi))
+            using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi, ConanBuildType.missing, true))
             {
                 Assert.Equal("install -test", process.StartInfo.Arguments);
             }

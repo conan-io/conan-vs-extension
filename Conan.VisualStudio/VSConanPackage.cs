@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
 using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
+using Microsoft.VisualStudio.VCProjectEngine;
+using Conan.VisualStudio.Core;
 
 namespace Conan.VisualStudio
 {
@@ -21,9 +24,13 @@ namespace Conan.VisualStudio
     [ProvideMenuResource("Menus.ctmenu", 1)]
     // Indicate we want to load whenever VS opens, so that we can hopefully catch the Solution_Opened event
     [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
     [ProvideToolWindow(typeof(PackageListToolWindow))]
-    public sealed class VSConanPackage : AsyncPackage
+    public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         /// <summary>
         /// VSConanPackage GUID string.
@@ -37,6 +44,10 @@ namespace Conan.VisualStudio
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
         private SolutionEventsHandler _solutionEventsHandler;
+        private ISettingsService _settingsService;
+        private IVcProjectService _vcProjectService;
+        private IConanService _conanService;
+        private IVsSolutionBuildManager3 _solutionBuildManager;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -51,6 +62,7 @@ namespace Conan.VisualStudio
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
+            _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>() as IVsSolutionBuildManager3;
 
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
 
@@ -58,20 +70,21 @@ namespace Conan.VisualStudio
 
             var dialogService = new VisualStudioDialogService(serviceProvider);
             var commandService = await GetServiceAsync<IMenuCommandService>();
-            var projectService = new VcProjectService();
-            var settingsService = new VisualStudioSettingsService(this);
+            _vcProjectService = new VcProjectService();
+            _settingsService = new VisualStudioSettingsService(this);
+            _conanService = new ConanService(_settingsService, dialogService, _vcProjectService);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _solutionEventsHandler = new SolutionEventsHandler(this);
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
-            _addConanDepends = new AddConanDepends(commandService, dialogService, projectService, settingsService, serviceProvider);
+            _addConanDepends = new AddConanDepends(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
 
             await TaskScheduler.Default;
 
             _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
-            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, projectService, settingsService);
+            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, _vcProjectService, _settingsService, _conanService);
 
             Logger.Initialize(serviceProvider, "Conan");
 
@@ -79,7 +92,16 @@ namespace Conan.VisualStudio
 
             SubscribeToEvents();
 
+            EnableMenus(_dte.Solution != null && _dte.Solution.IsOpen);
+
             await TaskScheduler.Default;
+        }
+
+        private void EnableMenus(bool enable)
+        {
+            _showPackageListCommand.EnableMenu(enable);
+            _integrateIntoProjectCommand.EnableMenu(enable);
+            _addConanDepends.EnableMenu(enable);
         }
 
         private async Task<T> GetServiceAsync<T>() where T : class =>
@@ -105,6 +127,69 @@ namespace Conan.VisualStudio
              * according to https://docs.microsoft.com/en-us/dotnet/api/envdte.solutioneventsclass.opened?view=visualstudiosdk-2017
              */
             _solutionEvents.Opened += SolutionEvents_Opened;
+            _solutionEvents.AfterClosing += SolutionEvents_AfterClosing;
+            _solutionEvents.ProjectAdded += SolutionEvents_ProjectAdded;
+
+            if (_solutionBuildManager != null)
+            {
+                uint pdwcookie = 0;
+                _solutionBuildManager.AdviseUpdateSolutionEvents3(this, out pdwcookie);
+            }
+        }
+
+        public int OnBeforeActiveSolutionCfgChange(IVsCfg pOldActiveSlnCfg, IVsCfg pNewActiveSlnCfg)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterActiveSolutionCfgChange(IVsCfg pOldActiveSlnCfg, IVsCfg pNewActiveSlnCfg)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (_settingsService.GetConanInstallOnlyActiveConfiguration())
+                InstallConanDepsIfRequired();
+            return VSConstants.S_OK;
+        }
+
+        private void InstallConanDeps(VCProject vcProject)
+        {
+            ThreadHelper.JoinableTaskFactory.RunAsync(
+                async delegate
+                {
+                    await _conanService.InstallAsync(vcProject);
+                    await _conanService.IntegrateAsync(vcProject);
+                }
+            );
+        }
+
+        private void SolutionEvents_AfterClosing()
+        {
+            EnableMenus(false);
+        }
+
+        private void SolutionEvents_ProjectAdded(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (_settingsService.GetConanInstallAutomatically())
+            {
+                if (_vcProjectService.IsConanProject(project))
+                    InstallConanDeps(_vcProjectService.AsVCProject(project));
+            }
+        }
+
+        private void InstallConanDepsIfRequired()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (_settingsService.GetConanInstallAutomatically())
+            {
+                foreach (Project project in _dte.Solution.Projects)
+                {
+                    if (_vcProjectService.IsConanProject(project))
+                        InstallConanDeps(_vcProjectService.AsVCProject(project));
+                }
+            }
         }
 
         /// <summary>
@@ -116,6 +201,8 @@ namespace Conan.VisualStudio
              * Get all projects within the solution
              */
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            EnableMenus(true);
 
             var projects = _dte.Solution.Projects;
 
@@ -131,6 +218,7 @@ namespace Conan.VisualStudio
                  */
                 var fileName = project.FileName;
             }
+            InstallConanDepsIfRequired();
         }
     }
 }

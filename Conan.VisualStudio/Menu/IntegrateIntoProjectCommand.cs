@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Conan.VisualStudio.Menu
 {
@@ -16,16 +17,19 @@ namespace Conan.VisualStudio.Menu
         private readonly IVcProjectService _vcProjectService;
         private readonly IDialogService _dialogService;
         private readonly ISettingsService _settingsService;
+        private readonly IConanService _conanService;
 
         public IntegrateIntoProjectCommand(
             IMenuCommandService commandService,
             IDialogService dialogService,
             IVcProjectService vcProjectService,
-            ISettingsService settingsService) : base(commandService, dialogService)
+            ISettingsService settingsService,
+            IConanService conanService) : base(commandService, dialogService)
         {
             _vcProjectService = vcProjectService;
             _dialogService = dialogService;
             _settingsService = settingsService;
+            _conanService = conanService;
         }
 
         protected internal override async Task MenuItemCallbackAsync()
@@ -36,22 +40,7 @@ namespace Conan.VisualStudio.Menu
                 _dialogService.ShowPluginError("A C++ project with a conan file must be selected.");
                 return;
             }
-            var projectDirectory = project.ProjectDirectory;
-            var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePath(projectDirectory);
-            if (conanfileDirectory == null)
-            {
-                _dialogService.ShowPluginError("unable to locate conanfile directory!");
-                return;
-            }
-            ConanGeneratorType generator = _settingsService.GetConanGenerator();
-            string props;
-            if (generator == ConanGeneratorType.visual_studio)
-                props = @".conan\conanbuildinfoprops";
-            else
-                props = @".conan\conanbuildinfo_multi.props";
-            var propFilePath = Path.Combine(conanfileDirectory, props);
-            var relativePropFilePath = ConanPathHelper.GetRelativePath(projectDirectory, propFilePath);
-            await _vcProjectService.AddPropsImportAsync(project.ProjectFile, relativePropFilePath);
+            await _conanService.IntegrateAsync(project);
         }
     }
 }

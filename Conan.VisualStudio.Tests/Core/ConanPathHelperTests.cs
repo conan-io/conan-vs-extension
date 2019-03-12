@@ -52,7 +52,7 @@ namespace Conan.VisualStudio.Tests.Core
         public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfileAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
-            Assert.Null(await ConanPathHelper.GetNearestConanfilePath(dir));
+            Assert.Null(await ConanPathHelper.GetNearestConanfilePathAsync(dir));
         }
 
         [Fact]
@@ -60,11 +60,11 @@ namespace Conan.VisualStudio.Tests.Core
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var conanfile = FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
 
             File.Delete(conanfile);
             FileSystemUtils.CreateTempFile(dir, "conanfile.py");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(dir));
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Conan.VisualStudio.Tests.Core
             Directory.CreateDirectory(subdir);
 
             FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePath(subdir));
+            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(subdir));
         }
 
         [Fact(Skip = "Manual test only; leaves traces at the disk root")]
@@ -85,8 +85,8 @@ namespace Conan.VisualStudio.Tests.Core
             var root = Path.GetPathRoot(dir);
 
             FileSystemUtils.CreateTempFile(root, "conanfile.txt");
-            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(dir));
-            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePath(root));
+            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePathAsync(root));
         }
     }
 }

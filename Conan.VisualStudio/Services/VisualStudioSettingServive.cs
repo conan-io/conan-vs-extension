@@ -16,7 +16,6 @@ namespace Conan.VisualStudio.Services
 
         private ConanOptionsPage GetConanPage()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             // Believe it or not, it's the recommended way of retrieving the option value per
             // https://docs.microsoft.com/en-us/visualstudio/extensibility/creating-an-options-page#accessing-options
             return (ConanOptionsPage)_package.GetDialogPage(typeof(ConanOptionsPage));
@@ -24,20 +23,32 @@ namespace Conan.VisualStudio.Services
 
         public string GetConanExecutablePath()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             return GetConanPage().ConanExecutablePath;
         }
 
         public bool GetConanInstallOnlyActiveConfiguration()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             return GetConanPage().ConanInstallOnlyActiveConfiguration;
         }
 
         public ConanGeneratorType GetConanGenerator()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             return GetConanPage().ConanGenerator;
+        }
+
+        public bool GetConanInstallAutomatically()
+        {
+            return GetConanPage().ConanInstallAutomatically;
+        }
+
+        public ConanBuildType GetConanBuild()
+        {
+            return GetConanPage().ConanBuild;
+        }
+
+        public bool GetConanUpdate()
+        {
+            return GetConanPage().ConanUpdate;
         }
 
         /// <summary>

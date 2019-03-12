@@ -40,7 +40,6 @@ namespace Conan.VisualStudio.Tests.Services
 
             var project = await _service.ExtractConanProjectAsync(vcProject, null);
             Assert.Equal(directory, project.Path);
-            Assert.Equal(installPath, project.InstallPath);
         }
 
         [Fact]
@@ -50,7 +49,9 @@ namespace Conan.VisualStudio.Tests.Services
             FileSystemUtils.CreateTempFile(directory, "conanfile.txt");
 
             var vcConfiguration = MockVcConfiguration("Win32", "Debug", "v141");
-            var vcProject = MockVcProject(directory, vcConfiguration);
+            var vcProject = MockVcProject(directory, vcConfiguration.Object);
+
+            vcConfiguration.Setup(c => c.project).Returns(vcProject);
 
             var project = await _service.ExtractConanProjectAsync(vcProject, null);
             var configuration = project.Configurations.Single();
@@ -95,7 +96,7 @@ namespace Conan.VisualStudio.Tests.Services
             return project.Object;
         }
 
-        private VCConfiguration MockVcConfiguration(string platformName, string configurationName, string platformToolset)
+        private Mock<VCConfiguration> MockVcConfiguration(string platformName, string configurationName, string platformToolset)
         {
             var configuration = new Mock<VCConfiguration>();
             configuration.Setup(c => c.ConfigurationName).Returns(configurationName);
@@ -116,7 +117,7 @@ namespace Conan.VisualStudio.Tests.Services
             rulesCollection.Setup(c => c.Item("ConfigurationGeneral")).Returns(generalSettings.Object);
             configuration.Setup(c => c.Rules).Returns(rulesCollection.Object);
 
-            return configuration.Object;
+            return configuration;
         }
     }
 }
