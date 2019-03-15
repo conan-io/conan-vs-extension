@@ -103,6 +103,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BcCube64.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Resources\Conan.VisualStudio.png" />
     <Content Include="Resources\VSConanPackage.ico" />
     <VSCTCompile Include="VSConanPackage.vsct">
