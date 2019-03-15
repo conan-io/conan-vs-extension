@@ -48,6 +48,8 @@ namespace Conan.VisualStudio
         private IVcProjectService _vcProjectService;
         private IConanService _conanService;
         private IVsSolutionBuildManager3 _solutionBuildManager;
+        private ProjectItemsEvents _projectItemEvents;
+        private DocumentEvents _documentEvents;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -130,11 +132,47 @@ namespace Conan.VisualStudio
             _solutionEvents.AfterClosing += SolutionEvents_AfterClosing;
             _solutionEvents.ProjectAdded += SolutionEvents_ProjectAdded;
 
+            _projectItemEvents = (_dte.Events as EnvDTE80.Events2).ProjectItemsEvents;
+            _projectItemEvents.ItemAdded += SolutionItemEvents_ItemAdded;
+            _projectItemEvents.ItemRenamed += SolutionItemEvents_ItemRenamed;
+
+            _documentEvents = _dte.Events.DocumentEvents;
+            _documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
+
             if (_solutionBuildManager != null)
             {
                 uint pdwcookie = 0;
                 _solutionBuildManager.AdviseUpdateSolutionEvents3(this, out pdwcookie);
             }
+        }
+
+        private static bool IsConanfile(string name)
+        {
+            return (name.ToLower() == "conanfile.txt" || name.ToLower() == "conanfile.py");
+        }
+
+        public void SolutionItemEvents_ItemAdded(ProjectItem ProjectItem)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (IsConanfile(ProjectItem.Name))
+                InstallConanDepsIfRequired(ProjectItem.ContainingProject);
+        }
+
+        public void SolutionItemEvents_ItemRenamed(ProjectItem ProjectItem, string OldName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (IsConanfile(ProjectItem.Name))
+                InstallConanDepsIfRequired(ProjectItem.ContainingProject);
+        }
+
+        public void DocumentEvents_DocumentSaved(Document document)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (IsConanfile(document.ProjectItem.Name))
+                InstallConanDepsIfRequired(document.ProjectItem.ContainingProject);
         }
 
         public int OnBeforeActiveSolutionCfgChange(IVsCfg pOldActiveSlnCfg, IVsCfg pNewActiveSlnCfg)
@@ -168,6 +206,13 @@ namespace Conan.VisualStudio
         }
 
         private void SolutionEvents_ProjectAdded(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            InstallConanDepsIfRequired(project);
+        }
+
+        private void InstallConanDepsIfRequired(Project project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
