@@ -1,105 +1,59 @@
-conan-vs-extension [![Build status][badge-appveyor]][build-appveyor]
+#### Build Status
+[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-vs-extension?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-vs-extension)  
+
+conan-vs-extension
 ==================
 
-Visual Studio 2017/2019 extension to integrate [Conan C/C++ package manager][conan]
-functionality into any existing project.
+Visual Studio 2017/2019 extension to automate the use of [Conan C/C++ package manager](https://conan.io/) for retrieving dependencies within any existing Visual Studio project project.  
 
-The current task is to provide package management comparable to whan NuGet
-provides for .NET projects.
+Extension Installation
+-----------------------
+The extension will soon be published to the Visual Studio marketplace. Please find it there to install. 
+
+Extension Usage
+-----------------------
+Once the extension is installed, projects simply need to have a `conanfile.txt` or `conanfile.py` added to the solution.  Once one of these files has been added, the `conan-vs-extension` will download all the project dependencies, build them if necessary, and pass the resulting paths and flags to Visual Studio through a generated `.props` file. Furthermore, when changing the Visual Studio project `Configuration` (between `Release` or `Debug`) or `Platform` (between `x64` and `x86`/`Win32` ), the extension will re-run `Conan` automatically with these new settings and download or build the required binaries.  Crucially, after each run of a Conan operation, the extension will offer to refresh your Visual Studio project once the operation is complete.  This refresh will be necessary for intellisense apply all the new preprocessor defintions and flags, and to reflect all the new headers.  
+
+Development and Testing
+-----------------------  
+If you want to build the extension yourself and test it locally (perhaps because you are making changes for a PR), you can currently test the extension one of two ways:  Debug Mode and Local VSIX Installation.
+
+#### Debug Mode  
+Most likely, you should just run your changes in debug mode.  Open the `Conan.VisualStudio.sln` file using the Visual Studio 2017 or 2019 and  `Run` the project. It will create an isolated Visual Studio environment and load the extension.  
+*Note: This can take up to a minute or two.*
+
+#### Local VSIX Installation  
+Alternatively, you may want to build the VSIX and share with a few other developers or something.  In that case, just "Build" the `Release` configuration of project in Visual Studio.  You can build from a Developer Command prompt with this command: 
+
+	$ msbuild /p:Configuration=Release
+
+
+It will output the `.vsix` file to:  
+
+	Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
+	
+From there, you can share and/or install the `.vsix` file as desired. Here is a decent [blog post about working with `.vsix` files manually](https://weblog.west-wind.com/posts/2016/Mar/01/Registering-and-Unregistering-a-VSIX-Extension-from-the-Command-Line#Installing)
+
+#### Using the Extension with Changes
+
+Once you have the Visual Studio environment with the modified extension loaded, or have installed the extension from the `.vsix` file, you can test it by opening the example project:
+
+	Conan.VisualStudio.Examples/ExampleCLI/ExampleCLI.sln
+
+This example has a `conanfile.txt` with a dependency on the popular formatting library `fmt`.  When the project is first opened, Visual Studio is unable to find the `fmt` project dependency.  The extension should immediately run however, and Visual Studio should give you a toolbar dropdown message offering to refresh the project.  After refreshing, the `fmt` headers should be found by the compiler, and the `lib` files should be found by the linker successfully.  
+
+
+Update 03-14-2019
+------------------
+Thanks to @sboulema and @SSE4, the extension now provides the minimum required functionality for basic use and initial testing. 
 
 Update 02-06-2019
 ------------------
 Plugin development is now being resumed after being stagnant for the past year. 
 
-The overall goal of the plugin is for Visual Studio to be able to execute Conan automatically as-needed based on the currently loaded solution/project/configuration.  Over time, this could grow to a lot of convenience operations.  However, the primary (first) objective is to run `conan install` which will generate `conanbuildinfo.props` and satisfy the dependencies. 
+The overall goal of the extension is for Visual Studio to be able to execute Conan automatically as-needed based on the currently loaded solution/project/configuration.  Over time, this could grow to a lot of convenience operations.  However, the primary (first) objective is to run `conan install` which will generate `conanbuildinfo.props` and satisfy the dependencies. 
 
 Thus, the first requirement is to provide users a mechanism for mapping each Solution/Project/Configuration to a corresponding `conan install` command. A strategy has been chosen for this, and is being discussed here: https://github.com/bincrafters/conan-vs-extension/issues/5
 
-Overall, future features and should try to use a similar configuration-file-based strategy to provide maximum configurability and flexibility to the user of the plugin, by making any new conan-related-operations exposed in any toolbar menus and right-click menus configurable and composeable.  This is particular important in the near-term while we are still deciding how the parts should work together, so that new workflow ideas can be tested without requiring code changes and rebuilds of the plugin. 
+Overall, future features and should try to use a similar configuration-file-based strategy to provide maximum configurability and flexibility to the user of the extension, by making any new conan-related-operations exposed in any toolbar menus and right-click menus configurable and composeable.  This is particular important in the near-term while we are still deciding how the parts should work together, so that new workflow ideas can be tested without requiring code changes and rebuilds of the extension. 
 
-Usage
------
-
-To use the plugin, open the `Conan.VisualStudio.sln` file using the Visual
-Studio 2017 and invoke the Run command on the developer machine (we aren't
-providing the installer packages yet). It will create an isolated Visual Studio
-environment and load the plugin.
-
-### Configuration
-
-To use the Conan executable on your local system, the plugin needs to know where
-the Conan executable is. It will try to detect that automatically from your
-`PATH` environment variable, but you could set that manually for cases when the
-automatic detection doesn't work.
-
-To set the Conan executable location, enter "Tools → Options" menu and select
-"Conan" settings category.
-
-![Settings window screenshot][screenshot-settings]
-
-### Package installation
-
-The plugin will install the dependencies using the `conan install` command. To
-do that, ensure that your `conanfile.txt` is placed in the same directory as
-your project file or in any of its' parent directories, and then invoke the
-"Tools → Invoke AddConanDepends" menu command.
-
-!["Invoke AddConanDepends" menu item screenshot][screenshot-addconandepends]
-
-It will call `conan install --build missing --update` using the
-[`visual_studio_multi` generator][visual_studio_multi]. After that, you'll need
-to integrate the resulting property files into your Visual Studio project.
-
-If you need any diagnostic information, please look for `conan/conan.log` file
-in the directory with your conanfile.
-
-### Integration with project
-
-The [`visual_studio_multi` generator][visual_studio_multi] creates the
-`conan/conanbuildinfo.props` property file that should be integrated into your
-`vcxproj` file. To do that, use the "Tools → Integrate into project" menu
-command. It will automatically add the corresponding `<Import>` item into the
-`vcxproj` file.
-
-!["Integrate into project" menu item screenshot][screenshot-integrate]
-
-### Building without Visual Studio
-
-If you need to build the generated project without Visual Studio (e.g. on a
-build server machine), execute the following terminal commands:
-
-```console
-$ cd [directory with conanfile]
-$ conan install . -g visual_studio_multi --install-folder ./conan -s compiler.version=15 --build missing --update
-$ msbuild [usual params here]
-```
-
-After calling `conan install` that way, `msbuild` will be able to find all the
-dependencies, because it'll be able to use the Conan-generated
-`conan/conanbuildinfo.props` file.
-
-Build
------
-
-To build the Conan Visual Studio plugin, either with Visual Studio (nothing
-unusual here), or use MSBuild:
-
-```console
-$ msbuild /p:DeployExtension=false
-```
-
-Test
-----
-
-This project uses [xUnit.net][xunit] tests, please use any compatible test
-runner to run the automated tests.
-
-[build-appveyor]: https://ci.appveyor.com/project/ForNeVeR/conan-vs-extension/branch/master
-[conan]: https://www.conan.io/
-[visual_studio_multi]: http://docs.conan.io/en/latest/reference/generators/visualstudiomulti.html
-[xunit]: https://xunit.github.io/
-
-[badge-appveyor]: https://ci.appveyor.com/api/projects/status/y4srt9dcjxy466f8/branch/master?svg=true
-[screenshot-addconandepends]: docs/screenshot-addconandepends.png
-[screenshot-integrate]: docs/screenshot-integrate.png
-[screenshot-settings]: docs/screenshot-settings.png
