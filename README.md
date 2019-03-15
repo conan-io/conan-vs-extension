@@ -4,7 +4,7 @@
 conan-vs-extension
 ==================
 
-Visual Studio 2017/2019 extension to automate the use of [Conan C/C++ package manager](https://conan.io/) for retrieving dependencies within any existing Visual Studio project project.  
+An extension for Visual Studio 2017/2019 which automates the use of [the Conan C/C++ package manager](https://conan.io/) for retrieving dependencies within Visual Studio projects.  
 
 Extension Installation
 -----------------------
