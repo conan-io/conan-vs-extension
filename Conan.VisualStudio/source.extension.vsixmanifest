@@ -1,9 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="VSConanPackage.cab4ca1d-6f42-438f-a2eb-ab74c8069056" Version="1.0" Language="en-US" Publisher="BinCrafters" />
-        <DisplayName>VSConanPackage</DisplayName>
-        <Description xml:space="preserve">Installs Conan dependencies into the projectI</Description>
+        <Identity Id="VSConanPackage.cab4ca1d-6f42-438f-a2eb-ab74c8069056" Version="1.0.0" Language="en-US" Publisher="Bincrafters" />
+        <DisplayName>Conan Visual Studio Extension</DisplayName>
+        <Description xml:space="preserve">Automatically install C/C++ dependencies from the Conan package manager into Visual Studio projects. </Description>
+        <MoreInfo>https://github.com/bincrafters/conan-vs-extension</MoreInfo>
+        <License>LICENSE.txt</License>
+        <ReleaseNotes>https://github.com/bincrafters/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
+        <Icon>BcCube64.ico</Icon>
+        <Tags>conan c c++ packaging dependency management bincrafters</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0]" />
