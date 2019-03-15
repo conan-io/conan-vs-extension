@@ -7,13 +7,15 @@ namespace Conan.VisualStudio.Core
         public string CompilerToolset { get; set; }
         public string CompilerVersion { get; set; }
         public string InstallPath { get; set; }
+        public string RuntimeLibrary { get; set; }
 
         public override string ToString()
         {
             return $"Architecture: {Architecture}, " +
                    $"build type: {BuildType}, " +
                    $"compiler toolset: {CompilerToolset}, " +
-                   $"compiler version: {CompilerVersion}";
+                   $"compiler version: {CompilerVersion}" +
+                   $"runtime library: {RuntimeLibrary}";
         }
     }
 }

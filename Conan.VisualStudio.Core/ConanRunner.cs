@@ -39,7 +39,8 @@ namespace Conan.VisualStudio.Core
                     ("arch", configuration.Architecture),
                     ("build_type", configuration.BuildType),
                     ("compiler.toolset", configuration.CompilerToolset),
-                    ("compiler.version", configuration.CompilerVersion)
+                    ("compiler.version", configuration.CompilerVersion),
+                    ("compiler.runtime", configuration.RuntimeLibrary),
                 };
                 string options = "";
                 if (build != ConanBuildType.none)

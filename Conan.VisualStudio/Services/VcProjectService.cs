@@ -112,11 +112,29 @@ namespace Conan.VisualStudio.Services
             return GetInstallationDirectoryImpl(settingsService, configuration);
         }
 
+        private static string runtimeLibraryToString(runtimeLibraryOption RuntimeLibrary)
+        {
+            switch (RuntimeLibrary)
+            {
+                case runtimeLibraryOption.rtMultiThreaded:
+                    return "MT";
+                case runtimeLibraryOption.rtMultiThreadedDebug:
+                    return "MTd";
+                case runtimeLibraryOption.rtMultiThreadedDLL:
+                    return "MD";
+                case runtimeLibraryOption.rtMultiThreadedDebugDLL:
+                    return "MDd";
+                default:
+                    throw new NotSupportedException($"Runtime Library {RuntimeLibrary} is not supported by the Conan plugin");
+            }
+        }
+
         private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, VCConfiguration configuration)
         {
             IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
             var toolset = generalSettings.GetEvaluatedPropertyValue("PlatformToolset");
             string installPath = GetInstallationDirectoryImpl(settingsService, configuration);
+            var VCCLCompilerTool = configuration.Tools.Item("VCCLCompilerTool");
 
             return new ConanConfiguration
             {
@@ -124,7 +142,8 @@ namespace Conan.VisualStudio.Services
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = toolset,
                 CompilerVersion = "15",
-                InstallPath = installPath
+                InstallPath = installPath,
+                RuntimeLibrary = runtimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
             };
         }
 
