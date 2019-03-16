@@ -11,7 +11,7 @@ namespace Conan.VisualStudio.Menu
         private static readonly Guid CommandSetId = new Guid("614d6e2d-166a-4d8c-b047-1c2248bbef97");
 
         private readonly IDialogService _dialogService;
-        private readonly MenuCommand _menuCommand;
+        private readonly OleMenuCommand _menuCommand;
 
         protected abstract int CommandId { get; }
 
@@ -19,8 +19,8 @@ namespace Conan.VisualStudio.Menu
         {
             _dialogService = dialogService;
             var menuCommandId = new CommandID(CommandSetId, CommandId);
-            _menuCommand = new MenuCommand(MenuItemCallback, menuCommandId);
-            _menuCommand.Enabled = false;
+            _menuCommand = new OleMenuCommand(MenuItemCallback, menuCommandId);
+            _menuCommand.BeforeQueryStatus += new EventHandler(OnBeforeQueryStatus);
             commandService.AddCommand(_menuCommand);
         }
 
@@ -51,6 +51,11 @@ namespace Conan.VisualStudio.Menu
         public void EnableMenu(bool enable)
         {
             _menuCommand.Enabled = enable;
+        }
+
+        protected virtual void OnBeforeQueryStatus(object sender, EventArgs e)
+        {
+            // do nothing, override in child, if necessary
         }
     }
 }

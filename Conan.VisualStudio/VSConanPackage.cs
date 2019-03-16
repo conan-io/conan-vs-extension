@@ -12,7 +12,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.VCProjectEngine;
-using Conan.VisualStudio.Core;
 
 namespace Conan.VisualStudio
 {
@@ -37,9 +36,10 @@ namespace Conan.VisualStudio
         /// </summary>
         public const string PackageGuidString = "33315c89-72dd-43bb-863c-561c1aa5ed54";
 
-        private AddConanDepends _addConanDepends;
-        private ShowPackageListCommand _showPackageListCommand;
-        private IntegrateIntoProjectCommand _integrateIntoProjectCommand;
+        private AddConanDependsProject _addConanDependsProject;
+        private AddConanDependsSolution _addConanDependsSolution;
+        private AddConanDependsConanfile _addConanDependsConanfile;
+        private ConanOptions _conanOptions;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
@@ -81,12 +81,13 @@ namespace Conan.VisualStudio
             _solutionEventsHandler = new SolutionEventsHandler(this);
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
-            _addConanDepends = new AddConanDepends(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
+            _addConanDependsProject = new AddConanDependsProject(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
+            _addConanDependsSolution = new AddConanDependsSolution(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
+            _addConanDependsConanfile = new AddConanDependsConanfile(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
+
+            _conanOptions = new ConanOptions(commandService, dialogService, ShowOptionPage);
 
             await TaskScheduler.Default;
-
-            _showPackageListCommand = new ShowPackageListCommand(this, commandService, dialogService);
-            _integrateIntoProjectCommand = new IntegrateIntoProjectCommand(commandService, dialogService, _vcProjectService, _settingsService, _conanService);
 
             Logger.Initialize(serviceProvider, "Conan");
 
@@ -99,11 +100,15 @@ namespace Conan.VisualStudio
             await TaskScheduler.Default;
         }
 
+        private void ShowOptionPage()
+        {
+            base.ShowOptionPage(typeof(ConanOptionsPage));
+        }
+
         private void EnableMenus(bool enable)
         {
-            _showPackageListCommand.EnableMenu(enable);
-            _integrateIntoProjectCommand.EnableMenu(enable);
-            _addConanDepends.EnableMenu(enable);
+            _addConanDependsProject.EnableMenu(enable);
+            _addConanDependsSolution.EnableMenu(enable);
         }
 
         private async Task<T> GetServiceAsync<T>() where T : class =>
@@ -146,7 +151,7 @@ namespace Conan.VisualStudio
             }
         }
 
-        private static bool IsConanfile(string name)
+        public static bool IsConanfile(string name)
         {
             return (name.ToLower() == "conanfile.txt" || name.ToLower() == "conanfile.py");
         }

@@ -164,7 +164,6 @@
     <Compile Include="Core\ConanRunnerTests.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="Menu\AddConanDependsTests.cs" />
-    <Compile Include="Menu\IntegrateIntoProjectCommandTests.cs" />
     <Compile Include="Menu\MenuCommandBaseTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceUtils.cs" />

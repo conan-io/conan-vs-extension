@@ -46,7 +46,7 @@ namespace Conan.VisualStudio.Tests.Menu
 
             var serviceProvider = new Mock<IServiceProvider>();
 
-            var command = new AddConanDepends(
+            var command = new AddConanDependsProject(
                 commandService,
                 _dialogService.Object,
                 projectService.Object,
