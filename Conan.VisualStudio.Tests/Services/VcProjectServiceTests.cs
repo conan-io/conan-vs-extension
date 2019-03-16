@@ -50,8 +50,14 @@ namespace Conan.VisualStudio.Tests.Services
 
             var vcConfiguration = MockVcConfiguration("Win32", "Debug", "v141");
             var vcProject = MockVcProject(directory, vcConfiguration.Object);
+            var vcToolsCollection = new Mock<IVCCollection>();
+            var vcTools = new Mock<VCCLCompilerTool>();
 
             vcConfiguration.Setup(c => c.project).Returns(vcProject);
+            vcConfiguration.Setup(c => c.Tools).Returns(vcToolsCollection.Object);
+            vcToolsCollection.Setup(c => c.Item("VCCLCompilerTool")).Returns(vcTools.Object);
+
+            vcTools.Setup(c => c.RuntimeLibrary).Returns(runtimeLibraryOption.rtMultiThreadedDLL);
 
             var project = await _service.ExtractConanProjectAsync(vcProject, null);
             var configuration = project.Configurations.Single();
@@ -60,6 +66,7 @@ namespace Conan.VisualStudio.Tests.Services
             Assert.Equal("Debug", configuration.BuildType);
             Assert.Equal("v141", configuration.CompilerToolset);
             Assert.Equal("15", configuration.CompilerVersion);
+            Assert.Equal("MD", configuration.RuntimeLibrary);
         }
 
         [Theory]
