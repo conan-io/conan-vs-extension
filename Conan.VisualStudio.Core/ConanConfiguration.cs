@@ -14,7 +14,7 @@ namespace Conan.VisualStudio.Core
             return $"Architecture: {Architecture}, " +
                    $"build type: {BuildType}, " +
                    $"compiler toolset: {CompilerToolset}, " +
-                   $"compiler version: {CompilerVersion}" +
+                   $"compiler version: {CompilerVersion}, " +
                    $"runtime library: {RuntimeLibrary}";
         }
     }

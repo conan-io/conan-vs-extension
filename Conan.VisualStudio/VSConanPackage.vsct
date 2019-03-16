@@ -1,68 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <Extern href="stdidcmd.h" />
-  <Extern href="vsshlids.h" />
+    <Extern href="stdidcmd.h" />
+    <Extern href="vsshlids.h" />
 
-  <Commands package="guidVSConanPackage">
-      <Menus>
-          <Menu guid="guidVSConanPackageCmdSet" id="ConanMenu" priority="0x0300" type="Menu">
-              <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
-              <Strings>
-                  <ButtonText>Conan</ButtonText>
-                  <CommandName>Conan</CommandName>
-              </Strings>
-          </Menu>
-      </Menus>
+    <Commands package="guidVSConanPackage">
+        <Menus>
+            <Menu guid="guidVSConanPackageCmdSet" id="ConanMenu" priority="0x0300" type="Menu">
+                <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+                <Strings>
+                    <ButtonText>Conan Package Management</ButtonText>
+                    <CommandName>Conan</CommandName>
+                </Strings>
+            </Menu>
+            <Menu guid="guidVSConanPackageCmdSet" id="ConanSubmenu" priority="0x0100" type="Menu">
+                <Parent guid="guidVSConanPackageCmdSet" id="ConanMenuGroup"/>
 
-    <Groups>
-      <Group guid="guidVSConanPackageCmdSet" id="ConanMenuGroup" priority="0x0600">
-        <Parent guid="guidVSConanPackageCmdSet" id="ConanMenu" />
-      </Group>
-    </Groups>
+                <Strings>
+                    <ButtonText>Conan Package Management</ButtonText>
+                    <CommandName>Conan Package Management</CommandName>
+                </Strings>
+            </Menu>
+        </Menus>
 
-    <Buttons>
-      <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsId" priority="0x0100" type="Button">
-        <Parent guid="guidVSConanPackageCmdSet" id="ConanMenuGroup" />
-        <Icon guid="guidImages" id="bmpPic1" />
-        <Strings>
-          <ButtonText>Install</ButtonText>
-        </Strings>
-      </Button>
-      <Button guid="guidVSConanPackageCmdSet" id="cmdidPackageListToolWindowCommand" priority="0x0100" type="Button">
-        <Parent guid="guidVSConanPackageCmdSet" id="ConanMenuGroup" />
-        <Icon guid="guidImages" id="conanIcon" />
-        <Strings>
-          <ButtonText>Conan Package Management</ButtonText>
-        </Strings>
-      </Button>
-      <Button guid="guidVSConanPackageCmdSet" id="cmdidIntegrateIntoProjectCommand" priority="0x0100" type="Button">
-        <Parent guid="guidVSConanPackageCmdSet" id="ConanMenuGroup" />
-        <Icon guid="guidImages" id="conanIcon" />
-        <Strings>
-          <ButtonText>Integrate into project</ButtonText>
-        </Strings>
-      </Button>
-    </Buttons>
+        <Groups>
+            <Group guid="guidVSConanPackageCmdSet" id="ConanMenuGroup" priority="0x0600">
+                <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+            </Group>
+            <Group guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" priority="0x0000">
+                <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenu"/>
+            </Group>
+            <Group guid="guidVSConanPackageCmdSet" id="ConanProjectGroup" priority="0x0000">
+                <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
+            </Group>
+            <Group guid="guidVSConanPackageCmdSet" id="ConanSolutionGroup" priority="0x0000">
+                <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
+            </Group>
+            <Group guid="guidVSConanPackageCmdSet" id="ConanItemGroup" priority="0x0000">
+                <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+            </Group>
+        </Groups>
 
-    <Bitmaps>
-      <Bitmap guid="guidImages" href="Resources\Conan.VisualStudio.png" usedList="bmpPic1, conanIcon" />
-    </Bitmaps>
-  </Commands>
+        <Buttons>
+            <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsConanfileId" priority="0x0100" type="Button">
+                <Icon guid="guidImages" id="conanIcon" />
+                <CommandFlag>DefaultInvisible</CommandFlag>
+                <CommandFlag>DynamicVisibility</CommandFlag>
+                <Strings>
+                    <ButtonText>Install</ButtonText>
+                </Strings>
+            </Button>
+            <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsProjectId" priority="0x0100" type="Button">
+                <Icon guid="guidImages" id="conanIcon" />
+                <CommandFlag>DefaultDisabled</CommandFlag>
+                <Strings>
+                    <ButtonText>Install (Current Project)</ButtonText>
+                </Strings>
+            </Button>
+            <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsSolutiontId" priority="0x0100" type="Button">
+                <Icon guid="guidImages" id="conanIcon" />
+                <CommandFlag>DefaultDisabled</CommandFlag>
+                <Strings>
+                    <ButtonText>Install (Entire Solution)</ButtonText>
+                </Strings>
+            </Button>
+            <Button guid="guidVSConanPackageCmdSet" id="ConanOptionsId" priority="0x0100" type="Button">
+                <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" />
+                <Icon guid="guidImages" id="conanIcon" />
+                <Strings>
+                    <ButtonText>Options...</ButtonText>
+                </Strings>
+            </Button>
+        </Buttons>
 
-  <Symbols>
-    <GuidSymbol name="guidVSConanPackage" value="{33315c89-72dd-43bb-863c-561c1aa5ed54}" />
+        <Bitmaps>
+            <Bitmap guid="guidImages" href="Resources\Conan.VisualStudio.png" usedList="bmpPic1, conanIcon" />
+        </Bitmaps>
+    </Commands>
 
-    <GuidSymbol name="guidVSConanPackageCmdSet" value="{614d6e2d-166a-4d8c-b047-1c2248bbef97}">
-      <IDSymbol name="ConanMenu" value="0x1010" />
-      <IDSymbol name="ConanMenuGroup" value="0x1020" />
-      <IDSymbol name="AddConanDependsId" value="0x0100" />
-      <IDSymbol name="cmdidPackageListToolWindowCommand" value="4129" />
-      <IDSymbol name="cmdidIntegrateIntoProjectCommand" value="4130"/>
-    </GuidSymbol>
+    <CommandPlacements>
+        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsSolutiontId" priority="0x1000">
+            <Parent guid="guidVSConanPackageCmdSet" id="ConanSolutionGroup" />
+        </CommandPlacement>
+        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsSolutiontId" priority="0x0100">
+            <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" />
+        </CommandPlacement>
+        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsProjectId" priority="0x1000">
+            <Parent guid="guidVSConanPackageCmdSet" id="ConanProjectGroup" />
+        </CommandPlacement>
+        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsProjectId" priority="0x0100">
+            <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" />
+        </CommandPlacement>
+        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsConanfileId" priority="0x0100">
+            <Parent guid="guidVSConanPackageCmdSet" id="ConanItemGroup" />
+        </CommandPlacement>
+    </CommandPlacements>
 
-    <GuidSymbol name="guidImages" value="{96b705f3-a54e-4748-86e2-ae8eb2e35169}">
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="conanIcon" value="2" />
-    </GuidSymbol>
-  </Symbols>
+    <Symbols>
+        <GuidSymbol name="guidVSConanPackage" value="{33315c89-72dd-43bb-863c-561c1aa5ed54}" />
+
+        <GuidSymbol name="guidVSConanPackageCmdSet" value="{614d6e2d-166a-4d8c-b047-1c2248bbef97}">
+            <IDSymbol name="ConanMenu" value="0x1010" />
+            <IDSymbol name="ConanMenuGroup" value="0x1020" />
+            <IDSymbol name="AddConanDependsProjectId" value="0x0100" />
+            <IDSymbol name="AddConanDependsSolutiontId" value="0x0101" />
+            <IDSymbol name="AddConanDependsConanfileId" value="0x0102" />
+            <IDSymbol name="ConanOptionsId" value="0x0103" />
+            <IDSymbol name="ConanSubmenu" value="4131" />
+            <IDSymbol name="ConanSubmenuGroup" value="4132" />
+            <IDSymbol name="ConanProjectGroup" value="4133"/>
+            <IDSymbol name="ConanSolutionGroup" value="4134"/>
+            <IDSymbol name="ConanItemGroup" value="4135"/>
+            <IDSymbol name="cmdidPackageListToolWindowCommand" value="4129" />
+            <IDSymbol name="cmdidIntegrateIntoProjectCommand" value="4130"/>
+        </GuidSymbol>
+
+        <GuidSymbol name="guidImages" value="{96b705f3-a54e-4748-86e2-ae8eb2e35169}">
+            <IDSymbol name="bmpPic1" value="1" />
+            <IDSymbol name="conanIcon" value="2" />
+        </GuidSymbol>
+    </Symbols>
 </CommandTable>

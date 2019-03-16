@@ -56,15 +56,16 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Menu\AddConanDepends.cs" />
-    <Compile Include="Menu\IntegrateIntoProjectCommand.cs" />
+    <Compile Include="Menu\AddConanDependsConanfile.cs" />
+    <Compile Include="Menu\AddConanDependsProject.cs" />
+    <Compile Include="Menu\AddConanDependsSolution.cs" />
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Menu\ConanOptions.cs" />
     <Compile Include="Menu\MenuCommandBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PackageListToolWindow.cs" />
-    <Compile Include="Menu\ShowPackageListCommand.cs" />
     <Compile Include="PackageListControl.xaml.cs">
       <DependentUpon>PackageListControl.xaml</DependentUpon>
     </Compile>
