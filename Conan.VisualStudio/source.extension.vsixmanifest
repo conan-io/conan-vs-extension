@@ -3,11 +3,12 @@
     <Metadata>
         <Identity Id="VSConanPackage.cab4ca1d-6f42-438f-a2eb-ab74c8069056" Version="1.0.0" Language="en-US" Publisher="Bincrafters" />
         <DisplayName>Conan Visual Studio Extension</DisplayName>
-        <Description xml:space="preserve">Automatically install C/C++ dependencies from the Conan package manager into Visual Studio projects. </Description>
+        <Description xml:space="preserve">The Conan Visual Studio Extention automates the use of the Conan C/C++ package manager for retrieving dependencies within Visual Studio projects.</Description>
         <MoreInfo>https://github.com/bincrafters/conan-vs-extension</MoreInfo>
         <License>LICENSE.txt</License>
         <ReleaseNotes>https://github.com/bincrafters/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
-        <Icon>BcCube64.ico</Icon>
+        <Icon>Icon.png</Icon>
+        <PreviewImage>Preview.png</PreviewImage>
         <Tags>conan c c++ packaging dependency management bincrafters</Tags>
     </Metadata>
     <Installation>
