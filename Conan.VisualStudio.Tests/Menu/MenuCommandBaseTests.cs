@@ -16,8 +16,8 @@ namespace Conan.VisualStudio.Tests.Menu
         {
             protected override int CommandId => 0;
 
-            public TestMenuCommand(IMenuCommandService commandService, IDialogService dialogService)
-                : base(commandService, dialogService)
+            public TestMenuCommand(IMenuCommandService commandService, IErrorListService errorListService)
+                : base(commandService, errorListService)
             {
             }
 
@@ -33,11 +33,11 @@ namespace Conan.VisualStudio.Tests.Menu
             commandService.Setup(x => x.AddCommand(It.IsAny<MenuCommand>()))
                 .Callback((Action<MenuCommand>)commands.Add);
 
-            var dialogServiceMock = new Mock<IDialogService>();
-            var command = new TestMenuCommand(commandService.Object, dialogServiceMock.Object);
+            var errorListService = new Mock<IErrorListService>();
+            var command = new TestMenuCommand(commandService.Object, errorListService.Object);
 
             commands.Single().Invoke();
-            dialogServiceMock.Verify(x => x.ShowPluginError(It.IsAny<string>()));
+            errorListService.Verify(x => x.WriteError(It.IsAny<string>(), It.IsAny<string>()));
         }
     }
 }

@@ -15,35 +15,30 @@ namespace Conan.VisualStudio.Menu
     {
         protected override int CommandId => 0x0102;
 
-        private readonly IDialogService _dialogService;
+        private readonly IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
-        private readonly ISettingsService _settingsService;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IConanService _conanService;
         private readonly DTE2 _dte2;
 
         public AddConanDependsConanfile(
             IMenuCommandService commandService,
-            IDialogService dialogService,
+            IErrorListService errorListService,
             IVcProjectService vcProjectService,
-            ISettingsService settingsService,
-            IServiceProvider serviceProvider,
-            IConanService conanService) : base(commandService, dialogService)
+            IConanService conanService) : base(commandService, errorListService)
         {
-            _dialogService = dialogService;
+            _errorListService = errorListService;
             _vcProjectService = vcProjectService;
-            _settingsService = settingsService;
-            _serviceProvider = serviceProvider;
             _conanService = conanService;
-            _dte2 = _serviceProvider.GetService(typeof(SDTE)) as DTE2;
+            _dte2 = Package.GetGlobalService(typeof(SDTE)) as DTE2;
         }
 
         protected internal override async Task MenuItemCallbackAsync()
         {
+            _errorListService.Clear();
             var vcProject = _vcProjectService.GetActiveProject();
             if (vcProject == null)
             {
-                _dialogService.ShowPluginError("A C++ project with a conan file must be selected.");
+                _errorListService.WriteError("A C++ project with a conan file must be selected.");
                 return;
             }
 
@@ -63,8 +58,7 @@ namespace Conan.VisualStudio.Menu
                 if (selectedItems.Length == 1)
                 {
                     EnvDTE.UIHierarchyItem uIHierarchyItem = selectedItems[0] as EnvDTE.UIHierarchyItem;
-                    EnvDTE.ProjectItem projectItem = uIHierarchyItem.Object as EnvDTE.ProjectItem;
-                    if (null != projectItem && VSConanPackage.IsConanfile(projectItem.Name))
+                    if (uIHierarchyItem.Object is EnvDTE.ProjectItem projectItem && VSConanPackage.IsConanfile(projectItem.Name))
                         command.Visible = true;
                 }
             }

@@ -50,6 +50,7 @@ namespace Conan.VisualStudio
         private IVsSolutionBuildManager3 _solutionBuildManager;
         private ProjectItemsEvents _projectItemEvents;
         private DocumentEvents _documentEvents;
+        private IErrorListService _errorListService;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -70,22 +71,22 @@ namespace Conan.VisualStudio
 
             await TaskScheduler.Default;
 
-            var dialogService = new VisualStudioDialogService(serviceProvider);
             var commandService = await GetServiceAsync<IMenuCommandService>();
             _vcProjectService = new VcProjectService();
             _settingsService = new VisualStudioSettingsService(this);
-            _conanService = new ConanService(_settingsService, dialogService, _vcProjectService);
+            _errorListService = new ErrorListService();
+            _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _solutionEventsHandler = new SolutionEventsHandler(this);
             _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
-            _addConanDependsProject = new AddConanDependsProject(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
-            _addConanDependsSolution = new AddConanDependsSolution(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
-            _addConanDependsConanfile = new AddConanDependsConanfile(commandService, dialogService, _vcProjectService, _settingsService, serviceProvider, _conanService);
+            _addConanDependsProject = new AddConanDependsProject(commandService, _errorListService, _vcProjectService, _conanService);
+            _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
+            _addConanDependsConanfile = new AddConanDependsConanfile(commandService, _errorListService, _vcProjectService, _conanService);
 
-            _conanOptions = new ConanOptions(commandService, dialogService, ShowOptionPage);
+            _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
 
             await TaskScheduler.Default;
 
@@ -145,10 +146,7 @@ namespace Conan.VisualStudio
             _documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
 
             if (_solutionBuildManager != null)
-            {
-                uint pdwcookie = 0;
-                _solutionBuildManager.AdviseUpdateSolutionEvents3(this, out pdwcookie);
-            }
+                _solutionBuildManager.AdviseUpdateSolutionEvents3(this, out uint pdwcookie);
         }
 
         public static bool IsConanfile(string name)
@@ -196,6 +194,7 @@ namespace Conan.VisualStudio
 
         private void InstallConanDeps(VCProject vcProject)
         {
+            _errorListService.Clear();
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
