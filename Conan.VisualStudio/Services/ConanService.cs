@@ -10,13 +10,13 @@ namespace Conan.VisualStudio.Services
     internal class ConanService : IConanService
     {
         private readonly ISettingsService _settingsService;
-        private readonly IDialogService _dialogService;
+        private readonly IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
 
-        public ConanService(ISettingsService settingsService, IDialogService dialogService, IVcProjectService vcProjectService)
+        public ConanService(ISettingsService settingsService, IErrorListService errorListService, IVcProjectService vcProjectService)
         {
             _settingsService = settingsService;
-            _dialogService = dialogService;
+            _errorListService = errorListService;
             _vcProjectService = vcProjectService;
         }
 
@@ -38,7 +38,7 @@ namespace Conan.VisualStudio.Services
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory);
             if (conanfileDirectory == null)
             {
-                _dialogService.ShowPluginError("unable to locate conanfile directory!");
+                _errorListService.WriteError("unable to locate conanfile directory!");
                 return;
             }
 
@@ -62,7 +62,7 @@ namespace Conan.VisualStudio.Services
             var conanPath = _settingsService.GetConanExecutablePath();
             if (conanPath == null)
             {
-                _dialogService.ShowPluginError(
+                _errorListService.WriteError(
                     "Conan executable path is not set and Conan executable wasn't found automatically. " +
                     "Please set it up in the Tools → Settings → Conan menu.");
                 return;
@@ -71,7 +71,7 @@ namespace Conan.VisualStudio.Services
             var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService);
             if (project == null)
             {
-                _dialogService.ShowPluginError("Unable to extract conan project!");
+                _errorListService.WriteError("Unable to extract conan project!");
                 return;
             }
             var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);
@@ -121,7 +121,7 @@ namespace Conan.VisualStudio.Services
 
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
-                        _dialogService.ShowPluginError(message);
+                        _errorListService.WriteError(message, logFilePath);
                         return;
                     }
                     else
@@ -129,6 +129,7 @@ namespace Conan.VisualStudio.Services
                         message = $"[Conan.VisualStudio] Conan has succsessfully installed configuration '{configuration}'";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
+                        _errorListService.WriteMessage(message);
                     }
                 }
             }

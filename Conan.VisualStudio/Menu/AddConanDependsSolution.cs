@@ -15,24 +15,18 @@ namespace Conan.VisualStudio.Menu
     {
         protected override int CommandId => 0x0101;
 
-        private readonly IDialogService _dialogService;
         private readonly IVcProjectService _vcProjectService;
-        private readonly ISettingsService _settingsService;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IErrorListService _errorListService;
         private readonly IConanService _conanService;
 
         public AddConanDependsSolution(
             IMenuCommandService commandService,
-            IDialogService dialogService,
+            IErrorListService errorListService,
             IVcProjectService vcProjectService,
-            ISettingsService settingsService,
-            IServiceProvider serviceProvider,
-            IConanService conanService) : base(commandService, dialogService)
+            IConanService conanService) : base(commandService, errorListService)
         {
-            _dialogService = dialogService;
             _vcProjectService = vcProjectService;
-            _settingsService = settingsService;
-            _serviceProvider = serviceProvider;
+            _errorListService = errorListService;
             _conanService = conanService;
         }
 
@@ -40,7 +34,9 @@ namespace Conan.VisualStudio.Menu
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            _errorListService.Clear();
+
+            var dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
             foreach (Project project in dte.Solution.Projects)
             {
                 if (_vcProjectService.IsConanProject(project))
@@ -49,7 +45,6 @@ namespace Conan.VisualStudio.Menu
                     await _conanService.IntegrateAsync(_vcProjectService.AsVCProject(project));
                 }
             }
-
             await TaskScheduler.Default;
         }
     }

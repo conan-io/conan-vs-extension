@@ -1,12 +1,6 @@
 using System.ComponentModel.Design;
-using System.Threading.Tasks;
 using Conan.VisualStudio.Services;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using EnvDTE80;
-using Microsoft.VisualStudio.Threading;
 using Task = System.Threading.Tasks.Task;
-using System;
 
 namespace Conan.VisualStudio.Menu
 {
@@ -15,35 +9,28 @@ namespace Conan.VisualStudio.Menu
     {
         protected override int CommandId => 0x0100;
 
-        private readonly IDialogService _dialogService;
+        private readonly IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
-        private readonly ISettingsService _settingsService;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IConanService _conanService;
-        private readonly DTE2 _dte2;
 
         public AddConanDependsProject(
             IMenuCommandService commandService,
-            IDialogService dialogService,
+            IErrorListService errorListService,
             IVcProjectService vcProjectService,
-            ISettingsService settingsService,
-            IServiceProvider serviceProvider,
-            IConanService conanService) : base(commandService, dialogService)
+            IConanService conanService) : base(commandService, errorListService)
         {
-            _dialogService = dialogService;
+            _errorListService = errorListService;
             _vcProjectService = vcProjectService;
-            _settingsService = settingsService;
-            _serviceProvider = serviceProvider;
             _conanService = conanService;
-            _dte2 = _serviceProvider.GetService(typeof(SDTE)) as DTE2;
         }
 
         protected internal override async Task MenuItemCallbackAsync()
         {
+            _errorListService.Clear();
             var vcProject = _vcProjectService.GetActiveProject();
             if (vcProject == null)
             {
-                _dialogService.ShowPluginError("A C++ project with a conan file must be selected.");
+                _errorListService.WriteError("A C++ project with a conan file must be selected.");
                 return;
             }
 

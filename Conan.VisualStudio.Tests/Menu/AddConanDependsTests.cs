@@ -14,7 +14,7 @@ namespace Conan.VisualStudio.Tests.Menu
 {
     public class AddConanDependsTests
     {
-        private readonly Mock<IDialogService> _dialogService = new Mock<IDialogService>();
+        private readonly Mock<IErrorListService> _errorListService = new Mock<IErrorListService>();
 
         private static ConanProject NewTestProject(string path) => new ConanProject
         {
@@ -35,7 +35,6 @@ namespace Conan.VisualStudio.Tests.Menu
             Mock.Get(vcProject).Setup(x => x.Name).Returns("TestProject");
 
             var commandService = Mock.Of<IMenuCommandService>();
-            _dialogService.Setup(x => x.ShowOkCancel(It.IsAny<string>())).Returns(true);
 
             var projectService = new Mock<IVcProjectService>();
             projectService.Setup(x => x.GetActiveProject()).Returns(vcProject);
@@ -48,10 +47,8 @@ namespace Conan.VisualStudio.Tests.Menu
 
             var command = new AddConanDependsProject(
                 commandService,
-                _dialogService.Object,
+                _errorListService.Object,
                 projectService.Object,
-                settingsService.Object,
-                serviceProvider.Object,
                 Mock.Of<IConanService>());
             return command.MenuItemCallbackAsync();
         }
@@ -67,11 +64,11 @@ namespace Conan.VisualStudio.Tests.Menu
             const int exitCode = 10;
             var logFilePath = Path.Combine(directory, "conan", "conan.log");
 
-            _dialogService.Verify(
-                x => x.ShowPluginError(
+            _errorListService.Verify(
+                x => x.WriteError(
                     $"Conan has returned exit code '{exitCode}' " +
                     $"while processing configuration '{project.Configurations.Single()}'. " +
-                    $"Please check file '{logFilePath}' for details."));
+                    $"Please check file '{logFilePath}' for details.", logFilePath));
             var logContent = File.ReadAllText(logFilePath);
             Assert.NotEmpty(logContent);
         }
@@ -84,7 +81,7 @@ namespace Conan.VisualStudio.Tests.Menu
 
             await RunCommandAsync(ResourceUtils.ConanShim, project);
 
-            _dialogService.Verify(x => x.ShowPluginError(It.IsAny<string>()), Times.Never);
+            _errorListService.Verify(x => x.WriteError(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

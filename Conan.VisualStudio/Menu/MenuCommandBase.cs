@@ -10,14 +10,14 @@ namespace Conan.VisualStudio.Menu
     {
         private static readonly Guid CommandSetId = new Guid("614d6e2d-166a-4d8c-b047-1c2248bbef97");
 
-        private readonly IDialogService _dialogService;
+        private readonly IErrorListService _errorListService;
         private readonly OleMenuCommand _menuCommand;
 
         protected abstract int CommandId { get; }
 
-        public MenuCommandBase(IMenuCommandService commandService, IDialogService dialogService)
+        public MenuCommandBase(IMenuCommandService commandService, IErrorListService errorListService)
         {
-            _dialogService = dialogService;
+            _errorListService = errorListService;
             var menuCommandId = new CommandID(CommandSetId, CommandId);
             _menuCommand = new OleMenuCommand(MenuItemCallback, menuCommandId);
             _menuCommand.BeforeQueryStatus += new EventHandler(OnBeforeQueryStatus);
@@ -34,7 +34,7 @@ namespace Conan.VisualStudio.Menu
             }
             catch (Exception exception)
             {
-                _dialogService.ShowPluginError(exception.ToString());
+                _errorListService.WriteError(exception.ToString());
             }
         }
 
