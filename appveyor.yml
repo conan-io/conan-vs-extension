@@ -6,3 +6,16 @@ before_build:
     - nuget restore
 build_script:
     msbuild /p:DeployExtension=false /p:verbosity=detailed
+artifacts:
+    - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
+      name: Conan Visual Studio Extention
+deploy:
+    - provider: GitHub
+      tag: v$(appveyor_build_version)
+      release: Conan Visual Studio Extention v$(appveyor_build_version)
+      description: Conan Visual Studio Extention v$(appveyor_build_version)
+      auth_token:
+        secure: 2Eh4YpQsYERkDVSLjyc0iWEmCZ0VIa4iFxqOmcgsgr44x6Q6w8cYOzDaURRUFp30
+      draft: true
+      prerelease: true
+      force_update: false
