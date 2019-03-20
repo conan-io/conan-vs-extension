@@ -46,6 +46,7 @@ namespace Conan.VisualStudio.Services
             {
                 string relativePropFilePath = GetPropsFilePath(vcProject.ActiveConfiguration);
                 vcProject.ActiveConfiguration.AddPropertySheet(relativePropFilePath);
+                vcProject.ActiveConfiguration.CollectIntelliSenseInfo();
             }
             else
             {
@@ -53,6 +54,7 @@ namespace Conan.VisualStudio.Services
                 {
                     string relativePropFilePath = GetPropsFilePath(configuration);
                     configuration.AddPropertySheet(relativePropFilePath);
+                    configuration.CollectIntelliSenseInfo();
                 }
             }
         }
