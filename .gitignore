@@ -8,3 +8,12 @@ bin/
 
 *.user
 .conan/
+*.tlog
+*.log
+*.pdb
+*.idb
+*.obj
+*.ilk
+*.iobj
+*.ipdb
+*.exe

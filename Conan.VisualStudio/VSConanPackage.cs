@@ -18,7 +18,7 @@ namespace Conan.VisualStudio
     /// <summary>This is the class that implements the package exposed by this assembly.</summary>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
-    [Guid(PackageGuidString)]
+    [Guid(PackageGuids.guidVSConanPackageString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     // Indicate we want to load whenever VS opens, so that we can hopefully catch the Solution_Opened event
@@ -31,11 +31,6 @@ namespace Conan.VisualStudio
     [ProvideToolWindow(typeof(PackageListToolWindow))]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
-        /// <summary>
-        /// VSConanPackage GUID string.
-        /// </summary>
-        public const string PackageGuidString = "33315c89-72dd-43bb-863c-561c1aa5ed54";
-
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
         private AddConanDependsConanfile _addConanDependsConanfile;

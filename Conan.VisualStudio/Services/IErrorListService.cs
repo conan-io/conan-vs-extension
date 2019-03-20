@@ -1,6 +1,6 @@
 namespace Conan.VisualStudio.Services
 {
-    interface IErrorListService
+    public interface IErrorListService
     {
         void Clear();
         void WriteError(string text, string document = null);

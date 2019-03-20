@@ -8,8 +8,6 @@ namespace Conan.VisualStudio.Menu
     /// <summary>Base class for a menu command.</summary>
     internal abstract class MenuCommandBase
     {
-        private static readonly Guid CommandSetId = new Guid("614d6e2d-166a-4d8c-b047-1c2248bbef97");
-
         private readonly IErrorListService _errorListService;
         private readonly OleMenuCommand _menuCommand;
 
@@ -18,7 +16,7 @@ namespace Conan.VisualStudio.Menu
         public MenuCommandBase(IMenuCommandService commandService, IErrorListService errorListService)
         {
             _errorListService = errorListService;
-            var menuCommandId = new CommandID(CommandSetId, CommandId);
+            var menuCommandId = new CommandID(PackageGuids.guidVSConanPackageCmdSet, CommandId);
             _menuCommand = new OleMenuCommand(MenuItemCallback, menuCommandId);
             _menuCommand.BeforeQueryStatus += new EventHandler(OnBeforeQueryStatus);
             commandService.AddCommand(_menuCommand);

@@ -13,7 +13,7 @@ namespace Conan.VisualStudio.Menu
     /// <summary>Command handler.</summary>
     internal sealed class AddConanDependsSolution : MenuCommandBase
     {
-        protected override int CommandId => 0x0101;
+        protected override int CommandId => PackageIds.AddConanDependsSolutiontId;
 
         private readonly IVcProjectService _vcProjectService;
         private readonly IErrorListService _errorListService;
