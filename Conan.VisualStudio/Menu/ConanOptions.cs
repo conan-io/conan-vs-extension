@@ -8,7 +8,7 @@ namespace Conan.VisualStudio.Menu
     /// <summary>Command handler.</summary>
     internal sealed class ConanOptions : MenuCommandBase
     {
-        protected override int CommandId => 0x0103;
+        protected override int CommandId => PackageIds.ConanOptionsId;
 
         private readonly OptionsDelegate _optionsDelegate;
 

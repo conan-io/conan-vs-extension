@@ -7,8 +7,8 @@
         <MoreInfo>https://github.com/bincrafters/conan-vs-extension</MoreInfo>
         <License>LICENSE.txt</License>
         <ReleaseNotes>https://github.com/bincrafters/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
-        <Icon>Icon.png</Icon>
-        <PreviewImage>Preview.png</PreviewImage>
+        <Icon>Resources\Icon.png</Icon>
+        <PreviewImage>Resources\Preview.png</PreviewImage>
         <Tags>conan c c++ packaging dependency management bincrafters</Tags>
     </Metadata>
     <Installation>
