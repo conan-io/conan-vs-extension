@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.VCProjectEngine;
 using Moq;
-using Xunit;
 
 namespace Conan.VisualStudio.Tests.Menu
 {
@@ -52,8 +52,8 @@ namespace Conan.VisualStudio.Tests.Menu
                 Mock.Of<IConanService>());
             return command.MenuItemCallbackAsync();
         }
-
-        [Fact(Skip = "failing because of ThreadHelper, we're not going to test GUI")]
+        [Ignore("failing because of ThreadHelper, we're not going to test GUI")]
+        [TestMethod]
         public async Task AddConanDependsShowsAnErrorWindowIfConanReturnsExitCodeAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
@@ -70,10 +70,11 @@ namespace Conan.VisualStudio.Tests.Menu
                     $"while processing configuration '{project.Configurations.Single()}'. " +
                     $"Please check file '{logFilePath}' for details.", logFilePath));
             var logContent = File.ReadAllText(logFilePath);
-            Assert.NotEmpty(logContent);
+            Assert.AreNotEqual(logContent, "");
         }
 
-        [Fact(Skip = "failing because of ThreadHelper, we're not going to test GUI")]
+        [Ignore("failing because of ThreadHelper, we're not going to test GUI")]
+        [TestMethod]
         public async Task AddConanDependsSuccedsIfLogDirectoryDoesNotExistsAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();

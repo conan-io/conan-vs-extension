@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.VCProjectEngine;
 using Moq;
-using Xunit;
 
 namespace Conan.VisualStudio.Tests.Services
 {
@@ -15,21 +15,21 @@ namespace Conan.VisualStudio.Tests.Services
     {
         private readonly IVcProjectService _service = new VcProjectService();
 
-        [Fact]
+        [TestMethod]
         public void GetArchitrectureSupportsTheNecessaryArchitectures()
         {
-            Assert.Equal("x86", VcProjectService.GetArchitecture("Win32"));
-            Assert.Equal("x86_64", VcProjectService.GetArchitecture("x64"));
+            Assert.AreEqual("x86", VcProjectService.GetArchitecture("Win32"));
+            Assert.AreEqual("x86_64", VcProjectService.GetArchitecture("x64"));
         }
 
-        [Fact]
+        [TestMethod]
         public void GetBuildTypeReturnsItsArgument()
         {
             var configurationName = Guid.NewGuid().ToString();
-            Assert.Equal(configurationName, VcProjectService.GetBuildType(configurationName));
+            Assert.AreEqual(configurationName, VcProjectService.GetBuildType(configurationName));
         }
 
-        [Fact]
+        [TestMethod]
         public async Task ExtractConanProjectExtractsThePathsProperlyAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
@@ -39,10 +39,10 @@ namespace Conan.VisualStudio.Tests.Services
             var vcProject = MockVcProject(directory);
 
             var project = await _service.ExtractConanProjectAsync(vcProject, null);
-            Assert.Equal(directory, project.Path);
+            Assert.AreEqual(directory, project.Path);
         }
 
-        [Fact]
+        [TestMethod]
         public async Task ExtractConanConfigurationExtractsAllTheDataAsync()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
@@ -62,38 +62,13 @@ namespace Conan.VisualStudio.Tests.Services
             var project = await _service.ExtractConanProjectAsync(vcProject, null);
             var configuration = project.Configurations.Single();
 
-            Assert.Equal("x86", configuration.Architecture);
-            Assert.Equal("Debug", configuration.BuildType);
-            Assert.Equal("v141", configuration.CompilerToolset);
-            Assert.Equal("15", configuration.CompilerVersion);
-            Assert.Equal("MD", configuration.RuntimeLibrary);
+            Assert.AreEqual("x86", configuration.Architecture);
+            Assert.AreEqual("Debug", configuration.BuildType);
+            Assert.AreEqual("v141", configuration.CompilerToolset);
+            Assert.AreEqual("15", configuration.CompilerVersion);
+            Assert.AreEqual("MD", configuration.RuntimeLibrary);
         }
 
-        [Theory]
-        [InlineData(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<Project DefaultTargets=""Build"" ToolsVersion=""15.0"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
-</Project>")]
-        [InlineData(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<Project DefaultTargets=""Build"" ToolsVersion=""15.0"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
-    <Import Project=""foo\other.props"" />
-</Project>")]
-        [InlineData(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<Project DefaultTargets=""Build"" ToolsVersion=""15.0"" xmlns=""http://schemas.microsoft.com/developer/msbuild/2003"">
-    <Import Project=""foo\bar.props"" />
-</Project>")]
-        public async Task IntegrateAddsImportIfNecessaryAsync(string projectText)
-        {
-            var path = Path.GetTempFileName();
-            File.WriteAllText(path, projectText);
-
-            const string propFilePath = @"foo\bar.props";
-            await new VcProjectService().AddPropsImportAsync(path, propFilePath);
-
-            var document = XDocument.Load(path);
-            XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
-            var imports = document.Root.Descendants(ns + "Import");
-            Assert.Single(imports, import => import.Attribute("Project").Value == propFilePath);
-        }
 
         private VCProject MockVcProject(string directory, params VCConfiguration[] configurations)
         {
