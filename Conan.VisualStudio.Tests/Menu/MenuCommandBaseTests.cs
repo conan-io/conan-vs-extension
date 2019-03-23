@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Xunit;
 
 namespace Conan.VisualStudio.Tests.Menu
 {
@@ -25,7 +25,8 @@ namespace Conan.VisualStudio.Tests.Menu
                 throw new Exception("Test menu command exception");
         }
 
-        [Fact(Skip = "failing because of ThreadHelper, we're not going to test GUI")]
+        [Ignore("failing because of ThreadHelper, we're not going to test GUI")]
+        [TestMethod]
         public void MenuCommandBaseShowsAnExceptionDialog()
         {
             var commands = new List<MenuCommand>();

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Conan.VisualStudio.Services
 {
-    internal class VisualStudioSettingsService : ISettingsService
+    public class VisualStudioSettingsService : ISettingsService
     {
         private readonly Package _package;
 

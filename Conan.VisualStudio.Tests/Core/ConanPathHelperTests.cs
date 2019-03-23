@@ -2,23 +2,23 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Conan.VisualStudio.Tests.Core
 {
     public class ConanPathHelperTests
     {
-        [Theory]
-        [InlineData(@"C:\", @"C:\Program Files", "Program Files")]
-        [InlineData(@"C:\Conan", @"C:\Conan\file.txt", "file.txt")]
-        [InlineData(@"C:\Conan\", @"C:\Conan\file.txt", "file.txt")]
-        [InlineData(@"C:\Conan", @"C:\Program Files", @"..\Program Files")]
-        [InlineData(@"C:\Conan", @"D:\Program Files", @"D:\Program Files")]
-        [InlineData(@"C:\Solution\Project", @"C:\Solution\conan\conanfile.props", @"..\conan\conanfile.props")]
+        [DataTestMethod]
+        [DataRow(@"C:\", @"C:\Program Files", "Program Files")]
+        [DataRow(@"C:\Conan", @"C:\Conan\file.txt", "file.txt")]
+        [DataRow(@"C:\Conan\", @"C:\Conan\file.txt", "file.txt")]
+        [DataRow(@"C:\Conan", @"C:\Program Files", @"..\Program Files")]
+        [DataRow(@"C:\Conan", @"D:\Program Files", @"D:\Program Files")]
+        [DataRow(@"C:\Solution\Project", @"C:\Solution\conan\conanfile.props", @"..\conan\conanfile.props")]
         public void GetRelativePathTests(string basePath, string location, string expectedRelativePath) =>
-            Assert.Equal(expectedRelativePath, ConanPathHelper.GetRelativePath(basePath, location));
+            Assert.AreEqual(expectedRelativePath, ConanPathHelper.GetRelativePath(basePath, location));
 
-        [Fact]
+        [TestMethod]
         public void ConanPathIsDeterminedAutomatically()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
@@ -28,10 +28,10 @@ namespace Conan.VisualStudio.Tests.Core
             Environment.SetEnvironmentVariable("PATH", directory);
             Environment.SetEnvironmentVariable("PATHEXT", extension);
 
-            Assert.Equal(conanShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+            Assert.AreEqual(conanShim, ConanPathHelper.DetermineConanPathFromEnvironment());
         }
 
-        [Fact]
+        [TestMethod]
         public void PathDeterminerRespectPathExtOrder()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
@@ -42,32 +42,32 @@ namespace Conan.VisualStudio.Tests.Core
             Environment.SetEnvironmentVariable("PATH", directory);
 
             Environment.SetEnvironmentVariable("PATHEXT", ".COM;.EXE;.BAT");
-            Assert.Equal(comShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+            Assert.AreEqual(comShim, ConanPathHelper.DetermineConanPathFromEnvironment());
 
             Environment.SetEnvironmentVariable("PATHEXT", ".BAT;.EXE;.COM");
-            Assert.Equal(batShim, ConanPathHelper.DetermineConanPathFromEnvironment());
+            Assert.AreEqual(batShim, ConanPathHelper.DetermineConanPathFromEnvironment());
         }
 
-        [Fact]
+        [TestMethod]
         public async Task GetNearestConanfilePathReturnsNullIfThereIsNoConanfileAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
-            Assert.Null(await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.IsNull(await ConanPathHelper.GetNearestConanfilePathAsync(dir));
         }
 
-        [Fact]
+        [TestMethod]
         public async Task GetNearestConanfilePathReturnsCurrentPathIfValidAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var conanfile = FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
 
             File.Delete(conanfile);
             FileSystemUtils.CreateTempFile(dir, "conanfile.py");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
         }
 
-        [Fact]
+        [TestMethod]
         public async Task GetNearestConanfilePathReturnsParentPathIfValidAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
@@ -75,18 +75,18 @@ namespace Conan.VisualStudio.Tests.Core
             Directory.CreateDirectory(subdir);
 
             FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.Equal(dir, await ConanPathHelper.GetNearestConanfilePathAsync(subdir));
+            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(subdir));
         }
-
-        [Fact(Skip = "Manual test only; leaves traces at the disk root")]
+        [Ignore("Manual test only; leaves traces at the disk root")]
+        [TestMethod]
         public async Task GetNearestConanfilePathWorksForDiskRootAsync()
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var root = Path.GetPathRoot(dir);
 
             FileSystemUtils.CreateTempFile(root, "conanfile.txt");
-            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
-            Assert.Equal(root, await ConanPathHelper.GetNearestConanfilePathAsync(root));
+            Assert.AreEqual(root, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(root, await ConanPathHelper.GetNearestConanfilePathAsync(root));
         }
     }
 }

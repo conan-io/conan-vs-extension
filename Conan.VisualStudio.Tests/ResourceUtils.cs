@@ -14,6 +14,6 @@ namespace Conan.VisualStudio.Tests
 
         public static string ConanShim => GetResourcePath("conan-shim.cmd");
         public static string ConanShimError => GetResourcePath("conan-shim-error.cmd");
-        public static string FakeProject => GetResourcePath("FakeProject.vcproj");
+        public static string FakeProject => GetResourcePath("FakeProject.vcxproj");
     }
 }

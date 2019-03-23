@@ -7,6 +7,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <UseCodebase>true</UseCodebase>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -19,7 +20,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -91,12 +91,12 @@
     <Compile Include="Services\InfoBarEventsHandler.cs" />
     <Compile Include="Services\InfobarService.cs" />
     <Compile Include="Services\SolutionEventsHandler.cs" />
-    <Compile Include="Services\VisualStudioSettingServive.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IVcProjectService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\VisualStudioDialogService.cs" />
     <Compile Include="Services\VcProjectService.cs" />
+    <Compile Include="Services\VisualStudioSettingService.cs" />
     <Compile Include="source.extension.cs">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>

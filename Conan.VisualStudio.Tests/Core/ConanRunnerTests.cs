@@ -3,13 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Services;
-using Xunit;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Conan.VisualStudio.Tests.Core
 {
     public class ConanRunnerTests
     {
-        [Fact(Skip = "FIXME: . disappears from path!")]
+        [Ignore ("FIXME: . disappears from path!")]
+        [TestMethod]
         public async Task GeneratorShouldBeInvokedProperlyAsync()
         {
             var conan = new ConanRunner(null, ResourceUtils.ConanShim);
@@ -30,7 +31,7 @@ namespace Conan.VisualStudio.Tests.Core
             };
             using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi, ConanBuildType.missing, true))
             {
-                Assert.Equal("install . -g visual_studio_multi " +
+                Assert.AreEqual("install . -g visual_studio_multi " +
                              "--install-folder ./conan " +
                              "-s arch=x86_64 " +
                              "-s build_type=Debug " +
@@ -39,8 +40,8 @@ namespace Conan.VisualStudio.Tests.Core
                              "--build missing --update", process.StartInfo.Arguments);
             }
         }
-
-        [Fact(Skip = "FIXME: System.IO.FileLoadException : Could not load file or assembly 'Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed' or one of its dependencies. The located assembly's manifest definition does not match the assembly ref")]
+        [Ignore("FIXME: System.IO.FileLoadException : Could not load file or assembly 'Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed' or one of its dependencies. The located assembly's manifest definition does not match the assembly ref")]
+        [TestMethod]
         public async Task SettingsFileShouldBeParsedProperlyAsync()
         {
             var project = new ConanProject
@@ -66,7 +67,7 @@ namespace Conan.VisualStudio.Tests.Core
 
             using (var process = await conan.Install(project, project.Configurations.Single(), ConanGeneratorType.visual_studio_multi, ConanBuildType.missing, true))
             {
-                Assert.Equal("install -test", process.StartInfo.Arguments);
+                Assert.AreEqual("install -test", process.StartInfo.Arguments);
             }
         }
     }
