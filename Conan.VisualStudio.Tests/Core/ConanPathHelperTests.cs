@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Conan.VisualStudio.Tests.Core
 {
+    [TestClass]
     public class ConanPathHelperTests
     {
         [DataTestMethod]
