@@ -91,7 +91,6 @@
     <Compile Include="Services\InfoBarEventsHandler.cs" />
     <Compile Include="Services\InfobarService.cs" />
     <Compile Include="Services\SolutionEventsHandler.cs" />
-    <Compile Include="Services\VisualStudioSettingServive.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IVcProjectService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="TaskRunner\TextUtilExtensions.cs" />
     <Compile Include="TaskRunner\TextViewUtil.cs" />
     <Compile Include="TaskRunner\VsTextViewTextUtil.cs" />
+    <Compile Include="VisualStudioSettingService.cs" />
     <Compile Include="VSConanPackage.cs" />
     <Compile Include="VSConan.cs">
       <AutoGen>True</AutoGen>
