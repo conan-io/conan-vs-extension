@@ -199,6 +199,10 @@
       <Project>{6fbebc9c-6e86-4588-bcda-83ac909c7eac}</Project>
       <Name>Conan.VisualStudio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VisualStudio.OpenFolder\VisualStudio.OpenFolder.csproj">
+      <Project>{11d3f7ba-7426-4c99-add2-6de951c6102c}</Project>
+      <Name>VisualStudio.OpenFolder</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
