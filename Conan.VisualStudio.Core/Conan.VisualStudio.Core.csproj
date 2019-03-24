@@ -16,4 +16,8 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VisualStudio.OpenFolder\VisualStudio.OpenFolder.csproj" />
+  </ItemGroup>
+
 </Project>

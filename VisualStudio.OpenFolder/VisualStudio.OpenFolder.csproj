@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Json.Schema.ToDotNet" Version="0.63.0" />
+  </ItemGroup>
+
+  
+  <Target Name="GenerateOpenFolderSources" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>  
+      <ToDotNetCLI>$(PkgMicrosoft_Json_Schema_ToDotNet)\tools\net461\Microsoft.Json.Schema.ToDotNet.Cli.exe</ToDotNetCLI>
+
+      <SchemaDirectory>Resources</SchemaDirectory>
+      <GenOutDir>$(MSBuildProjectDirectory)</GenOutDir>
+      
+      <Namespace>VisualStudio.OpenFolder</Namespace>
+  
+      <CMakeSettingsSchemaFile>$(SchemaDirectory)/CMakeSettings_schema.json</CMakeSettingsSchemaFile>
+      <CMakeSettingsSchemaName>CMakeSettings</CMakeSettingsSchemaName>
+
+      <CppPropertiesSchemaFile>$(SchemaDirectory)/CppProperties_schema.json</CppPropertiesSchemaFile>
+      <CppPropertiesSchemaName>CppProperties</CppPropertiesSchemaName>
+
+      <TasksSchemaFile>$(SchemaDirectory)/tasks_schema.json</TasksSchemaFile>
+      <TasksSchemaName>TasksVs</TasksSchemaName>
+
+      <LaunchSchemaFile>$(SchemaDirectory)/launch_schema.json</LaunchSchemaFile>
+      <LaunchSchemaName>LaunchVs</LaunchSchemaName>
+
+      <VSWorkspaceSettingsSchemaFile>$(SchemaDirectory)/VSWorkspaceSettings.json</VSWorkspaceSettingsSchemaFile>
+      <VSWorkspaceSettingsSchemaName>VSWorkspaceSettings</VSWorkspaceSettingsSchemaName>
+
+    </PropertyGroup>  
+      
+    <Exec Command="$(ToDotNetCLI) -f -n $(Namespace) -o $(GenOutDir) -r $(CMakeSettingsSchemaName) -e $(CMakeSettingsSchemaName) -s $(CMakeSettingsSchemaFile)"/>
+  
+    <Exec Command="$(ToDotNetCLI) -f -n $(Namespace) -o $(GenOutDir) -r $(CppPropertiesSchemaName) -e $(CppPropertiesSchemaName) -s $(CppPropertiesSchemaFile)"/>
+  
+    <!-- TODO : Had to remove all but the default task to generate from this schema. Not sure if shcmea or generator issue.  Try again in future.    -->
+    <Exec Command="$(ToDotNetCLI) -f -n $(Namespace) -o $(GenOutDir) -r $(TasksSchemaName) -e $(TasksSchemaName) -s $(TasksSchemaFile)"/>
+    
+    <!-- TODO : Schema fails to generate. Not sure if schema or generator issue, try again in future.    -->
+    <!-- <Exec Command="$(ToDotNetCLI) -f -n $(Namespace) -o $(GenOutDir) -r $(LaunchSchemaName) -e $(LaunchSchemaName) -s $(LaunchSchemaFile)"/> -->
+  
+    <!-- TODO : Visual Studio did not have a proper schema file for the workspace settings. Keep looking for one in future releases -->
+    <!-- <Exec Command="$(ToDotNetCLI) -f -n $(Namespace) -o $(GenOutDir) -r $(VSWorkspaceSettingsSchemaName) -e $(VSWorkspaceSettingsSchemaName) -s $(VSWorkspaceSettingsSchemaFile)"/> -->
+  
+  </Target>
+	
+</Project>
