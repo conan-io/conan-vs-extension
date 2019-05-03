@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json.schemastore.org/vsix-publish",
+    "categories": [ "Security", "Scaffolding", "Other" ],
+    "identity": {
+      "internalName": "conan_vs_extension"
+    },
+    "overview": "../README.md",
+    "priceCategory": "free",
+    "publisher": "conan-io",
+    "private": true,
+    "qna": false,
+    "repo": "https://github.com/conan-io/conan-vs-extension"
+  }
+  
