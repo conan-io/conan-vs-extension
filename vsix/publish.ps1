@@ -8,6 +8,7 @@ $vsixpublish = Get-ChildItem -File .\packages -recurse |
     Select-Object -First 1 -ExpandProperty FullName
 
 Write-Host "vsixpublish: $vsixpublish"
+.\VsixPublisher.exe --version
 . $vsixpublish login -publisherName conan-io -personalAccessToken $env:vsmarketplacetoken
 
 $manifest = (Get-Item .\vsix\publish-manifest.json).FullName
