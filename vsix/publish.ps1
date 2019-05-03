@@ -6,6 +6,12 @@ $vsixpublish = Get-ChildItem -File .\packages -recurse |
     Where-Object { $_.Name -eq "VsixPublisher.exe" } | 
     Sort-Object -Descending -Property CreationTime | 
     Select-Object -First 1 -ExpandProperty FullName
+Write-Host "vsixpublish: $vsixpublish"
+
+$visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
+$vsixPublisher = Join-Path $visualStudioInstallation 'VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe'
+Write-Host "vsixPublisher: $vsixPublisher"
+
 
 Write-Host "vsixpublish: $vsixpublish"
 .\VsixPublisher.exe --version
