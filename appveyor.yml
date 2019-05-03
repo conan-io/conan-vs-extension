@@ -23,3 +23,7 @@ deploy:
       draft: true
       prerelease: true
       force_update: false
+      on:
+        branch: publish-to-github  # https://www.appveyor.com/docs/deployment/github/
+deploy_script:
+    - ps: .\vsix\publish.ps1
