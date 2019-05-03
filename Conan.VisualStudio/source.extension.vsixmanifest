@@ -9,7 +9,7 @@
         <ReleaseNotes>https://github.com/conan-io/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
         <Icon>Resources\Icon.png</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
-        <Tags>conan c c++ packaging dependency management bincrafters</Tags>
+        <Tags>conan c++ packaging</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,16.0]" />
