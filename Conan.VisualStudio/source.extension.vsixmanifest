@@ -5,7 +5,7 @@
         <DisplayName>Conan Visual Studio Extension</DisplayName>
         <Description xml:space="preserve">The Conan Visual Studio Extention automates the use of the Conan C/C++ package manager for retrieving dependencies within Visual Studio projects.</Description>
         <MoreInfo>https://github.com/conan-io/conan-vs-extension</MoreInfo>
-        <License>LICENSE.txt</License>
+        <License>..\LICENSE.txt</License>
         <ReleaseNotes>https://github.com/conan-io/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
         <Icon>Resources\Icon.png</Icon>
         <PreviewImage>Resources\Preview.png</PreviewImage>
