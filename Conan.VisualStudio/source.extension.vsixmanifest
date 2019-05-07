@@ -2,7 +2,7 @@
     <Metadata>
         <Identity Id="VSConanPackage.4d0379e2-2698-4e66-89de-6ead71165e9f" Version="1.0.0" Language="en-US" Publisher="Conan" />
         <DisplayName>Conan Visual Studio Extension</DisplayName>
-        <Description xml:space="preserve">The Conan Visual Studio Extention automates the use of the Conan C/C++ package manager for retrieving dependencies within Visual Studio projects.</Description>
+        <Description xml:space="preserve">The Conan Visual Studio Extension automates the use of the Conan C/C++ package manager for retrieving dependencies within Visual Studio projects.</Description>
         <MoreInfo>https://github.com/conan-io/conan-vs-extension</MoreInfo>
         <License>..\LICENSE.md</License>
         <ReleaseNotes>https://github.com/conan-io/conan-vs-extension/blob/master/CHANGELOG.md</ReleaseNotes>
@@ -11,13 +11,13 @@
         <Tags>conan; c++; c; packaging</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0,16.1]" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[15.0,16.1]" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
     </Dependencies>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[14.0,16.1]" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.1]" DisplayName="Visual Studio core editor" />
     </Prerequisites>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
