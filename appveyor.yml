@@ -26,4 +26,4 @@ deploy:
       on:
         branch: publish-to-github  # https://www.appveyor.com/docs/deployment/github/
 deploy_script:
-    - ps: .\vsix\publish.ps1
+    - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
