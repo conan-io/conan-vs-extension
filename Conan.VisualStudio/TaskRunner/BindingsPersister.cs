@@ -11,7 +11,7 @@ namespace Conan.VisualStudio.TaskRunner
     internal class BindingsPersister
     {
         private const string BindingsName = "-vs-binding";
-        private TaskRunnerProvider _provider;
+        private readonly TaskRunnerProvider _provider;
 
         public BindingsPersister(TaskRunnerProvider provider)
         {
@@ -36,9 +36,8 @@ namespace Conan.VisualStudio.TaskRunner
             string fileText = textUtil.ReadAllText();
             var body = JObject.Parse(fileText);
 
-            var bindings = body[BindingsName] as JObject;
 
-            if (bindings != null)
+            if (body[BindingsName] is JObject bindings)
             {
                 var bindingsElement = XElement.Parse("<binding />");
 
@@ -118,9 +117,8 @@ namespace Conan.VisualStudio.TaskRunner
                     bindingText = ", " + bindingText;
                 }
 
-                string line;
                 int lineNumber = 0, candidateLine = -1, lastBraceIndex = -1, characterCount = 0;
-                while (textUtil.TryReadLine(out line))
+                while (textUtil.TryReadLine(out string line))
                 {
                     if (!string.IsNullOrWhiteSpace(line))
                     {
@@ -151,9 +149,7 @@ namespace Conan.VisualStudio.TaskRunner
             int bindingsIndex = currentContents.IndexOf(@"""" + BindingsName + @"""", StringComparison.Ordinal);
             int closeBindingsBrace = currentContents.IndexOf('}', bindingsIndex) + 1;
             int length = closeBindingsBrace - bindingsIndex;
-
-            int startLine, startLineOffset, endLine, endLineOffset;
-            textUtil.GetExtentInfo(bindingsIndex, length, out startLine, out startLineOffset, out endLine, out endLineOffset);
+            textUtil.GetExtentInfo(bindingsIndex, length, out int startLine, out int startLineOffset, out _, out _);
 
             if (!anyAdded)
             {
@@ -163,7 +159,7 @@ namespace Conan.VisualStudio.TaskRunner
                 if (previousComma > -1)
                 {
                     tail += bindingsIndex - previousComma;
-                    textUtil.GetExtentInfo(previousComma, length, out startLine, out startLineOffset, out endLine, out endLineOffset);
+                    textUtil.GetExtentInfo(previousComma, length, out startLine, out startLineOffset, out _, out _);
                 }
 
                 if (textUtil.Delete(new Range { LineNumber = startLine, LineRange = new LineRange { Start = startLineOffset, Length = length + tail } }))

@@ -8,7 +8,7 @@ namespace Conan.VisualStudio.Services
 {
     public class InfobarService
     {
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public InfobarService(IServiceProvider serviceProvider)
         {
@@ -41,8 +41,7 @@ namespace Conan.VisualStudio.Services
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var shell = _serviceProvider.GetService(typeof(SVsShell)) as IVsShell;
-            if (shell != null)
+            if (_serviceProvider.GetService(typeof(SVsShell)) is IVsShell shell)
             {
                 // Get the main window handle to host our InfoBar
                 shell.GetProperty((int)__VSSPROPID7.VSSPROPID_MainWindowInfoBarHost, out var obj);
@@ -57,16 +56,14 @@ namespace Conan.VisualStudio.Services
                 InfoBarModel infoBarModel = CreateInfoBarModel();
 
                 //Get the factory object from IVsInfoBarUIFactory, create it and add it to host.
-                var factory = _serviceProvider.GetService(typeof(SVsInfoBarUIFactory)) as IVsInfoBarUIFactory;
-                if (factory == null)
+                if (!(_serviceProvider.GetService(typeof(SVsInfoBarUIFactory)) is IVsInfoBarUIFactory factory))
                 {
                     return;
                 }
                 IVsInfoBarUIElement element = factory.CreateInfoBar(infoBarModel);
 
                 var infoBarEventsHandler = new InfoBarEventsHandler(project);
-
-                element.Advise(infoBarEventsHandler, out var _cookie);
+                element.Advise(infoBarEventsHandler, out _);
                 host.AddInfoBar(element);
             }
         }

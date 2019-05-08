@@ -13,7 +13,7 @@ namespace Conan.VisualStudio.TaskRunner
     {
         private int _currentLineLength;
         private int _lineNumber;
-        private IVsTextView _view;
+        private readonly IVsTextView _view;
 
         public VsTextViewTextUtil(IVsTextView view)
         {
@@ -55,8 +55,7 @@ namespace Conan.VisualStudio.TaskRunner
 
         public bool TryReadLine(out string line)
         {
-            IVsTextLines textLines;
-            int hr = _view.GetBuffer(out textLines);
+            int hr = _view.GetBuffer(out IVsTextLines textLines);
 
             if (hr != VSConstants.S_OK || textLines == null)
             {
@@ -64,8 +63,7 @@ namespace Conan.VisualStudio.TaskRunner
                 return false;
             }
 
-            int lineCount;
-            hr = textLines.GetLineCount(out lineCount);
+            hr = textLines.GetLineCount(out int lineCount);
 
             if (hr != VSConstants.S_OK || _lineNumber == lineCount)
             {
@@ -103,8 +101,7 @@ namespace Conan.VisualStudio.TaskRunner
         public string ReadAllText()
         {
             var text = new StringBuilder();
-            string line;
-            while (TryReadLine(out line))
+            while (TryReadLine(out string line))
             {
                 text.Append(line);
             }
@@ -121,19 +118,16 @@ namespace Conan.VisualStudio.TaskRunner
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            IVsTextLines textLines;
-            int hr = _view.GetBuffer(out textLines);
+            int hr = _view.GetBuffer(out IVsTextLines textLines);
 
             if (hr != VSConstants.S_OK || textLines == null)
             {
                 return null;
             }
 
-            object editPointObject;
-            hr = textLines.CreateEditPoint(range.LineNumber, range.LineRange.Start, out editPointObject);
-            var editPoint = editPointObject as EditPoint;
+            hr = textLines.CreateEditPoint(range.LineNumber, range.LineRange.Start, out object editPointObject);
 
-            if (hr != VSConstants.S_OK || editPoint == null)
+            if (hr != VSConstants.S_OK || !(editPointObject is EditPoint editPoint))
             {
                 return null;
             }
@@ -146,18 +140,16 @@ namespace Conan.VisualStudio.TaskRunner
             ThreadHelper.ThrowIfNotOnUIThread();
 
             Reset();
-            int startLine, startLineOffset, endLine, endLineOffset;
-            this.GetExtentInfo(range.Start, range.Length, out startLine, out startLineOffset, out endLine, out endLineOffset);
+            this.GetExtentInfo(range.Start, range.Length, out int startLine, out int startLineOffset, out int endLine, out int endLineOffset);
 
-            int oldStartLine, oldStartLineOffset, oldEndLine, oldEndLineOffset;
-            _view.GetSelection(out oldStartLine, out oldStartLineOffset, out oldEndLine, out oldEndLineOffset);
+            _view.GetSelection(out int oldStartLine, out int oldStartLineOffset, out int oldEndLine, out int oldEndLineOffset);
             _view.SetSelection(startLine, startLineOffset, endLine, endLineOffset);
             var target = (IOleCommandTarget)ServiceProvider.GlobalProvider.GetService(typeof(SUIHostCommandDispatcher));
             if (null == target)
                 return;
             Guid cmdid = VSConstants.VSStd2K;
-            int hr = _view.SendExplicitFocus();
-            hr = target.Exec(ref cmdid, (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION, 0, IntPtr.Zero, IntPtr.Zero);
+            _ = _view.SendExplicitFocus();
+            _ = target.Exec(ref cmdid, (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION, 0, IntPtr.Zero, IntPtr.Zero);
             _view.SetSelection(oldStartLine, oldStartLineOffset, oldEndLine, oldEndLineOffset);
         }
     }

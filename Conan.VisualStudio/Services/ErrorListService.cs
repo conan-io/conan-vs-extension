@@ -63,9 +63,9 @@ namespace Conan.VisualStudio.Services
                 Guid logicalView = VSConstants.LOGVIEWID_Code;
                 if (ErrorHandler.Failed(openDocument.OpenDocumentViaProject(path,
                     ref logicalView,
-                    out Microsoft.VisualStudio.OLE.Interop.IServiceProvider sp,
-                    out IVsUIHierarchy hierarchy,
-                    out uint itemId,
+                    out _,
+                    out _,
+                    out _,
                     out IVsWindowFrame frame)) || frame == null)
                     return;
                 frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocData, out object docData);

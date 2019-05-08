@@ -16,8 +16,8 @@ namespace Conan.VisualStudio.TaskRunner
 {
     internal class TrimmingStringComparer : IEqualityComparer<string>
     {
-        private char _toTrim;
-        private IEqualityComparer<string> _basisComparison;
+        private readonly char _toTrim;
+        private readonly IEqualityComparer<string> _basisComparison;
 
         public TrimmingStringComparer(char toTrim)
             : this(toTrim, StringComparer.Ordinal)
@@ -47,8 +47,8 @@ namespace Conan.VisualStudio.TaskRunner
     [TaskRunnerExport("tasks.vs.json")]
     class TaskRunnerProvider : ITaskRunner
     {
-        private ImageSource _icon;
-        private HashSet<string> _dynamicNames = new HashSet<string>(new TrimmingStringComparer('\u200B'));
+        private readonly ImageSource _icon;
+        private readonly HashSet<string> _dynamicNames = new HashSet<string>(new TrimmingStringComparer('\u200B'));
 
         [Import]
         internal SVsServiceProvider _serviceProvider = null;
@@ -167,27 +167,29 @@ namespace Conan.VisualStudio.TaskRunner
             if (commands == null)
                 return root;
 
-            var tasks = new TaskRunnerNode("Commands");
-            tasks.Description = "A list of command to execute";
+            var tasks = new TaskRunnerNode("Commands")
+            {
+                Description = "A list of command to execute"
+            };
             root.Children.Add(tasks);
 
-            foreach (CommandTask command in commands.OrderBy(k => k.taskName))
+            foreach (CommandTask command in commands.OrderBy(k => k.TaskName))
             {
-                command.args.ForEach(a => SetVariables(a, rootDir));
-                command.command = SetVariables(command.command, rootDir);
-                command.taskName = SetVariables(command.taskName, rootDir);
-                command.envVars.VSCMD_START_DIR = SetVariables(command.envVars.VSCMD_START_DIR, rootDir);
+                command.Args.ForEach(a => SetVariables(a, rootDir));
+                command.Command = SetVariables(command.Command, rootDir);
+                command.TaskName = SetVariables(command.TaskName, rootDir);
+                command.EnvVars.VSCMD_START_DIR = SetVariables(command.EnvVars.VSCMD_START_DIR, rootDir);
 
-                string cwd = command.envVars.VSCMD_START_DIR ?? rootDir;
+                string cwd = command.EnvVars.VSCMD_START_DIR ?? rootDir;
 
                 // Add zero width space
-                string commandName = command.taskName += "\u200B";
+                string commandName = command.TaskName += "\u200B";
                 SetDynamicTaskName(commandName);
 
                 var task = new TaskRunnerNode(commandName, true)
                 {
-                    Command = new TaskRunnerCommand(cwd, command.command, string.Join(" ", command.args)),
-                    Description = $"Filename:\t {command.command}\r\nArguments:\t {command.args}"
+                    Command = new TaskRunnerCommand(cwd, command.Command, string.Join(" ", command.Args)),
+                    Description = $"Filename:\t {command.Command}\r\nArguments:\t {command.Args}"
                 };
 
                 tasks.Children.Add(task);
@@ -204,8 +206,7 @@ namespace Conan.VisualStudio.TaskRunner
             var item = projects.GetEnumerator();
             while (item.MoveNext())
             {
-                var project = item.Current as Project;
-                if (project == null)
+                if (!(item.Current is Project project))
                 {
                     continue;
                 }

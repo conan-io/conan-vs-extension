@@ -8,8 +8,8 @@ namespace Conan.VisualStudio.TaskRunner
     internal abstract class TaskRunnerConfigBase : ITaskRunnerConfig
     {
         private static ImageSource SharedIcon;
-        private BindingsPersister _bindingsPersister;
-        private ITaskRunnerCommandContext _context;
+        private readonly BindingsPersister _bindingsPersister;
+        private readonly ITaskRunnerCommandContext _context;
 
         protected TaskRunnerConfigBase(TaskRunnerProvider provider, ITaskRunnerCommandContext context, ITaskRunnerNode hierarchy)
         {
@@ -24,6 +24,8 @@ namespace Conan.VisualStudio.TaskRunner
         public virtual ImageSource Icon => SharedIcon ?? (SharedIcon = LoadRootNodeIcon());
 
         public ITaskRunnerNode TaskHierarchy { get; }
+
+        public ITaskRunnerCommandContext Context => _context;
 
         public void Dispose()
         {

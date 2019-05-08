@@ -4,13 +4,13 @@ namespace Conan.VisualStudio.TaskRunner
 {
     public class CommandTask
     {
-        public string taskName { get; set; }
-        public string appliesTo { get; set; }
-        public string type { get; set; }
-        public string contextType { get; set; }
-        public string command { get; set; }
-        public List<string> args { get; set; }
-        public EnvVars envVars { get; set; }
+        public string TaskName { get; set; }
+        public string AppliesTo { get; set; }
+        public string Type { get; set; }
+        public string ContextType { get; set; }
+        public string Command { get; set; }
+        public List<string> Args { get; set; }
+        public EnvVars EnvVars { get; set; }
     }
     public class EnvVars
     {
@@ -19,8 +19,8 @@ namespace Conan.VisualStudio.TaskRunner
 
     public class VsTasks
     {
-        public string version { get; set; }
-        public string outDir { get; set; }
-        public List<CommandTask> tasks { get; set; }
+        public string Version { get; set; }
+        public string OutDir { get; set; }
+        public List<CommandTask> Tasks { get; set; }
     }
 }

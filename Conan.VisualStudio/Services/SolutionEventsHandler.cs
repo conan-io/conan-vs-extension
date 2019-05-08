@@ -14,8 +14,8 @@ namespace Conan.VisualStudio.Services
 {
     public class SolutionEventsHandler : IVsSolutionEvents
     {
-        private VisualStudioSettingsService _settingsService;
-        private string _conanPath;
+        private readonly VisualStudioSettingsService _settingsService;
+        private readonly string _conanPath;
 
         public SolutionEventsHandler(VSConanPackage package)
         {

@@ -16,9 +16,7 @@ namespace Conan.VisualStudio.TaskRunner
             IVsWindowFrame frame = FindWindowFrame(filePath);
             if (frame != null)
             {
-                IVsTextView textView;
-
-                if (GetTextViewFromFrame(frame, out textView))
+                if (GetTextViewFromFrame(frame, out IVsTextView textView))
                 {
                     return textView;
                 }
@@ -31,20 +29,15 @@ namespace Conan.VisualStudio.TaskRunner
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var shell = Package.GetGlobalService(typeof(SVsUIShell)) as IVsUIShell;
-
-            if (shell != null)
+            if (Package.GetGlobalService(typeof(SVsUIShell)) is IVsUIShell shell)
             {
-                IEnumWindowFrames framesEnum;
-
-                int hr = shell.GetDocumentWindowEnum(out framesEnum);
+                int hr = shell.GetDocumentWindowEnum(out IEnumWindowFrames framesEnum);
 
                 if (hr == VSConstants.S_OK && framesEnum != null)
                 {
                     var frames = new IVsWindowFrame[1];
-                    uint fetched;
 
-                    while (framesEnum.Next(1, frames, out fetched) == VSConstants.S_OK && fetched == 1)
+                    while (framesEnum.Next(1, frames, out uint fetched) == VSConstants.S_OK && fetched == 1)
                     {
                         yield return frames[0];
                     }
@@ -71,9 +64,7 @@ namespace Conan.VisualStudio.TaskRunner
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            object propertyValue;
-
-            int hr = frame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out propertyValue);
+            int hr = frame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out object propertyValue);
             if (hr == VSConstants.S_OK && propertyValue != null)
             {
                 frameFilePath = propertyValue.ToString();
@@ -95,9 +86,7 @@ namespace Conan.VisualStudio.TaskRunner
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            string frameFilePath;
-
-            if (GetPhysicalPathFromFrame(frame, out frameFilePath))
+            if (GetPhysicalPathFromFrame(frame, out string frameFilePath))
             {
                 return String.Equals(filePath, frameFilePath, StringComparison.OrdinalIgnoreCase);
             }
