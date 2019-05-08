@@ -136,12 +136,16 @@ namespace Conan.VisualStudio.Services
             string installPath = GetInstallationDirectoryImpl(settingsService, configuration);
             var VCCLCompilerTool = configuration.Tools.Item("VCCLCompilerTool");
 
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
+            int verName = fvi.ProductMajorPart;
+
             return new ConanConfiguration
             {
                 Architecture = GetArchitecture(configuration.Platform.Name),
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = toolset,
-                CompilerVersion = "15",
+                CompilerVersion = verName.ToString(),
                 InstallPath = installPath,
                 RuntimeLibrary = RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
             };
