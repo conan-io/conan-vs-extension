@@ -5,7 +5,7 @@ namespace Conan.VisualStudio.TaskRunner
 {
     class TaskRunnerConfig : TaskRunnerConfigBase
     {
-        private ImageSource _rootNodeIcon;
+        private readonly ImageSource _rootNodeIcon;
 
         public TaskRunnerConfig(TaskRunnerProvider provider, ITaskRunnerCommandContext context, ITaskRunnerNode hierarchy)
             : base(provider, context, hierarchy)

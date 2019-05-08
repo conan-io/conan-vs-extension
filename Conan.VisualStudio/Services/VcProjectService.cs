@@ -112,7 +112,7 @@ namespace Conan.VisualStudio.Services
             return GetInstallationDirectoryImpl(settingsService, configuration);
         }
 
-        private static string runtimeLibraryToString(runtimeLibraryOption RuntimeLibrary)
+        private static string RuntimeLibraryToString(runtimeLibraryOption RuntimeLibrary)
         {
             switch (RuntimeLibrary)
             {
@@ -143,7 +143,7 @@ namespace Conan.VisualStudio.Services
                 CompilerToolset = toolset,
                 CompilerVersion = "15",
                 InstallPath = installPath,
-                RuntimeLibrary = runtimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
+                RuntimeLibrary = RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
             };
         }
 

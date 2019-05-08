@@ -22,7 +22,7 @@ namespace Conan.VisualStudio.TaskRunner
                 foreach (JProperty child in commandNode.Children<JProperty>())
                 {
                     CommandTask command = JsonConvert.DeserializeObject<CommandTask>(child.Value.ToString());
-                    command.taskName = child.Name;
+                    command.TaskName = child.Name;
                     //command.WorkingDirectory = MakeAbsolute(configPath, command.WorkingDirectory);
                     list.Add(command);
                 }

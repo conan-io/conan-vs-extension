@@ -6,8 +6,8 @@ namespace Conan.VisualStudio.Services
 {
     public class InfoBarEventsHandler : IVsInfoBarUIEvents
     {
-        private VCProject _project;
-        private IVcProjectService _vcProjectService;
+        private readonly VCProject _project;
+        private readonly IVcProjectService _vcProjectService;
 
         public InfoBarEventsHandler(VCProject project)
         {

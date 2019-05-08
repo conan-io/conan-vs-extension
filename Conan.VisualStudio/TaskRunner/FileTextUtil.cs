@@ -66,8 +66,7 @@ namespace Conan.VisualStudio.TaskRunner
             using (var reader = new StringReader(fileContents))
             using (TextWriter writer = new StreamWriter(File.Open(_filename, FileMode.Create)))
             {
-                string lineText;
-                if (SeekTo(reader, writer, range, out lineText))
+                if (SeekTo(reader, writer, range, out string lineText))
                 {
                     writer.WriteLine(lineText.Substring(0, range.LineRange.Start) + text + (addNewline ? Environment.NewLine : string.Empty) + lineText.Substring(range.LineRange.Start));
                 }
