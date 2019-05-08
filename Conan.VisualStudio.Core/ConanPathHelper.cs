@@ -31,14 +31,16 @@ namespace Conan.VisualStudio.Core
 
             var executableExtensions = pathExt.Split(Path.PathSeparator);
             foreach (var directory in path.Split(Path.PathSeparator))
-            foreach (var extension in executableExtensions)
             {
-                var fileName = Path.ChangeExtension("conan", extension);
-                var filePath = Path.Combine(directory, fileName);
-                if (File.Exists(filePath))
+                foreach (var extension in executableExtensions)
                 {
-                    // to get the proper file name case:
-                    return Directory.GetFiles(directory, fileName).Single();
+                    var fileName = Path.ChangeExtension("conan", extension);
+                    var filePath = Path.Combine(directory, fileName);
+                    if (File.Exists(filePath))
+                    {
+                        // to get the proper file name case:
+                        return Directory.GetFiles(directory, fileName).Single();
+                    }
                 }
             }
 

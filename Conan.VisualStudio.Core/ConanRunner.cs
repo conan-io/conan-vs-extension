@@ -8,7 +8,7 @@ namespace Conan.VisualStudio.Core
     public class ConanRunner
     {
         private readonly ConanSettings _conanSettings;
-        private readonly string _executablePath;      
+        private readonly string _executablePath;
 
         public ConanRunner(ConanSettings conanSettings, string executablePath)
         {
@@ -44,9 +44,14 @@ namespace Conan.VisualStudio.Core
                 };
                 string options = "";
                 if (build != ConanBuildType.none)
+                {
                     options += "--build " + build.ToString();
+                }
+
                 if (update)
+                {
                     options += " --update";
+                }
 
                 var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
                 {
