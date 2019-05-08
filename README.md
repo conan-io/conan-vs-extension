@@ -1,5 +1,5 @@
 #### Build Status
-[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-vs-extension?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-vs-extension)  
+[![Build status](https://ci.appveyor.com/api/projects/status/8ddamkckmfgu618o/branch/master?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/conan-vs-extension/branch/master)
 
 conan-vs-extension
 ==================
