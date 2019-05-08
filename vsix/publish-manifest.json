@@ -4,7 +4,21 @@
     "identity": {
       "internalName": "conan-vs-extension"
     },
-    "overview": "../README.md",
+    "overview": "../docs/marketplace.visualstudio.com/overview.md",
+    "assetFiles": [
+        {
+            "pathOnDisk": "../docs/marketplace.visualstudio.com/conan-decentralized.png",
+            "targetPath": "conan-decentralized.png"
+        },
+        {
+            "pathOnDisk": "../docs/marketplace.visualstudio.com/tools-options.png",
+            "targetPath": "tools-options.png"
+        },
+        {
+            "pathOnDisk": "../docs/marketplace.visualstudio.com/vs-screen.png",
+            "targetPath": "vs-screen.png"
+        }
+    ],
     "priceCategory": "free",
     "publisher": "conan-io",
     "private": true,
