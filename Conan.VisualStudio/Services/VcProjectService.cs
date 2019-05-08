@@ -129,6 +129,18 @@ namespace Conan.VisualStudio.Services
             }
         }
 
+        private static string ConanCompilerVersion()
+        {
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
+            if (File.Exists(path))
+            {
+                System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
+                int verName = fvi.ProductMajorPart;
+                return verName.ToString();
+            }
+            throw new NotSupportedException($"Cannot detect compiler version, file {path} missing");
+        }
+
         private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, VCConfiguration configuration)
         {
             IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
@@ -136,16 +148,12 @@ namespace Conan.VisualStudio.Services
             string installPath = GetInstallationDirectoryImpl(settingsService, configuration);
             var VCCLCompilerTool = configuration.Tools.Item("VCCLCompilerTool");
 
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
-            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
-            int verName = fvi.ProductMajorPart;
-
             return new ConanConfiguration
             {
                 Architecture = GetArchitecture(configuration.Platform.Name),
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = toolset,
-                CompilerVersion = verName.ToString(),
+                CompilerVersion = ConanCompilerVersion(),
                 InstallPath = installPath,
                 RuntimeLibrary = RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
             };
