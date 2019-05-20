@@ -40,8 +40,11 @@ namespace Conan.VisualStudio.Core
                     ("build_type", configuration.BuildType),
                     ("compiler.toolset", configuration.CompilerToolset),
                     ("compiler.version", configuration.CompilerVersion),
-                    ("compiler.runtime", configuration.RuntimeLibrary),
                 };
+                if (configuration.RuntimeLibrary != null)
+                {
+                    settingValues = settingValues.Concat(new[] { ("compiler.runtime", configuration.RuntimeLibrary) }).ToArray();
+                }
                 string options = "";
                 if (build != ConanBuildType.none)
                 {
