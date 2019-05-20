@@ -23,8 +23,6 @@ namespace Conan.VisualStudio.Core
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
-            var path = Path.GetDirectoryName(project.Path);
-
             var arguments = string.Empty;
             if (_conanSettings != null)
             {
@@ -61,7 +59,7 @@ namespace Conan.VisualStudio.Core
                     var (key, value) = pair;
                     return ProcessArgument(key, value);
                 }));
-                arguments = $"install {Escape(path)} " +
+                arguments = $"install {Escape(project.Path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(configuration.InstallPath)} " +
                             $"{settings} {options}";
@@ -72,7 +70,7 @@ namespace Conan.VisualStudio.Core
                 FileName = _executablePath,
                 Arguments = arguments,
                 UseShellExecute = false,
-                WorkingDirectory = path,
+                WorkingDirectory = Path.GetDirectoryName(project.Path),
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };

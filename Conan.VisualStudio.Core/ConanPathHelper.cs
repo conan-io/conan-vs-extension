@@ -55,15 +55,14 @@ namespace Conan.VisualStudio.Core
         {
             while (path != null)
             {
-                if (File.Exists(Path.Combine(path, "conanfile.py"))
-                    || File.Exists(Path.Combine(path, "conanfile.txt")))
-                {
-                    break;
-                }
-
+                string conanfile_py = Path.Combine(path, "conanfile.py");
+                string conanfile_txt = Path.Combine(path, "conanfile.txt");
+                if (File.Exists(conanfile_py))
+                    return conanfile_py;
+                if (File.Exists(conanfile_txt))
+                    return conanfile_txt;
                 path = Directory.GetParent(path)?.FullName;
             }
-
             return path;
         }
 
