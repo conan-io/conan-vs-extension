@@ -38,13 +38,15 @@ namespace Conan.VisualStudio.Services
             string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, absPropFilePath);
 
             IVCCollection tools = (IVCCollection)configuration.Tools;
-            VCLinkerTool ltool = (VCLinkerTool)tools.Item("VCLinkerTool");
-            if (ltool != null)
+            if (tools != null)
             {
-                string deps = ltool.AdditionalDependencies;
-                ltool.AdditionalDependencies = deps.Replace("$(NOINHERIT)", "");
+                VCLinkerTool ltool = (VCLinkerTool)tools.Item("VCLinkerTool");
+                if (ltool != null)
+                {
+                    string deps = ltool.AdditionalDependencies;
+                    ltool.AdditionalDependencies = deps.Replace("$(NOINHERIT)", "");
+                }
             }
-
 
             foreach (VCPropertySheet sheet in configuration.PropertySheets)
             {
