@@ -61,11 +61,11 @@ namespace Conan.VisualStudio.Tests.Core
         {
             var dir = FileSystemUtils.CreateTempDirectory();
             var conanfile = FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(Path.Combine(dir, "conanfile.txt"), await ConanPathHelper.GetNearestConanfilePathAsync(dir));
 
             File.Delete(conanfile);
             FileSystemUtils.CreateTempFile(dir, "conanfile.py");
-            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(Path.Combine(dir, "conanfile.py"), await ConanPathHelper.GetNearestConanfilePathAsync(dir));
         }
 
         [TestMethod]
@@ -76,18 +76,18 @@ namespace Conan.VisualStudio.Tests.Core
             Directory.CreateDirectory(subdir);
 
             FileSystemUtils.CreateTempFile(dir, "conanfile.txt");
-            Assert.AreEqual(dir, await ConanPathHelper.GetNearestConanfilePathAsync(subdir));
+            Assert.AreEqual(Path.Combine(dir, "conanfile.txt"), await ConanPathHelper.GetNearestConanfilePathAsync(subdir));
         }
-        [Ignore("Manual test only; leaves traces at the disk root")]
+
         [TestMethod]
         public async Task GetNearestConanfilePathWorksForDiskRootAsync()
         {
-            var dir = FileSystemUtils.CreateTempDirectory();
-            var root = Path.GetPathRoot(dir);
+            var root = FileSystemUtils.CreateTempDirectory();
+            var dir = Directory.CreateDirectory(Path.Combine(root, Path.GetRandomFileName())).FullName;
 
             FileSystemUtils.CreateTempFile(root, "conanfile.txt");
-            Assert.AreEqual(root, await ConanPathHelper.GetNearestConanfilePathAsync(dir));
-            Assert.AreEqual(root, await ConanPathHelper.GetNearestConanfilePathAsync(root));
+            Assert.AreEqual(Path.Combine(root, "conanfile.txt"), await ConanPathHelper.GetNearestConanfilePathAsync(dir));
+            Assert.AreEqual(Path.Combine(root, "conanfile.txt"), await ConanPathHelper.GetNearestConanfilePathAsync(root));
         }
     }
 }

@@ -155,7 +155,7 @@ namespace Conan.VisualStudio.Services
                 CompilerToolset = toolset,
                 CompilerVersion = ConanCompilerVersion(),
                 InstallPath = installPath,
-                RuntimeLibrary = RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
+                RuntimeLibrary = VCCLCompilerTool != null ? RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary) : null
             };
         }
 
