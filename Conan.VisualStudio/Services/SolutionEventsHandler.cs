@@ -95,7 +95,8 @@ namespace Conan.VisualStudio.Services
                 RedirectStandardOutput = true,
                 CreateNoWindow = true
             };
-            System.Diagnostics.Process.Start(startInfo);
+            // TODO: Path to hardcoded MSBuild/15.0, make it conditional
+            // System.Diagnostics.Process.Start(startInfo);
         }
 
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
