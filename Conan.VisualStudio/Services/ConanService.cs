@@ -28,8 +28,22 @@ namespace Conan.VisualStudio.Services
                 propFileName = @"conanbuildinfo.props";
             else
                 propFileName = @"conanbuildinfo_multi.props";
-            string propFilePath = Path.Combine(installPath, propFileName);
-            return ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, propFilePath);
+            return Path.Combine(installPath, propFileName);
+        }
+
+
+        private void IntegrateIntoConfiguration(VCConfiguration configuration)
+        {
+            string absPropFilePath = GetPropsFilePath(configuration);
+            string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, absPropFilePath);
+
+            foreach (VCPropertySheet sheet in configuration.PropertySheets)
+            {
+                if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
+                    return;
+            }
+            configuration.AddPropertySheet(relativePropFilePath);
+            configuration.CollectIntelliSenseInfo();
         }
 
         public async Task IntegrateAsync(VCProject vcProject)
@@ -44,17 +58,13 @@ namespace Conan.VisualStudio.Services
 
             if (_settingsService.GetConanInstallOnlyActiveConfiguration())
             {
-                string relativePropFilePath = GetPropsFilePath(vcProject.ActiveConfiguration);
-                vcProject.ActiveConfiguration.AddPropertySheet(relativePropFilePath);
-                vcProject.ActiveConfiguration.CollectIntelliSenseInfo();
+                IntegrateIntoConfiguration(vcProject.ActiveConfiguration);
             }
             else
             {
                 foreach (VCConfiguration configuration in vcProject.Configurations)
                 {
-                    string relativePropFilePath = GetPropsFilePath(configuration);
-                    configuration.AddPropertySheet(relativePropFilePath);
-                    configuration.CollectIntelliSenseInfo();
+                    IntegrateIntoConfiguration(configuration);
                 }
             }
         }
