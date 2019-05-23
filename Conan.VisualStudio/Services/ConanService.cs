@@ -37,6 +37,15 @@ namespace Conan.VisualStudio.Services
             string absPropFilePath = GetPropsFilePath(configuration);
             string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, absPropFilePath);
 
+            IVCCollection tools = (IVCCollection)configuration.Tools;
+            VCLinkerTool ltool = (VCLinkerTool)tools.Item("VCLinkerTool");
+            if (ltool != null)
+            {
+                string deps = ltool.AdditionalDependencies;
+                ltool.AdditionalDependencies = deps.Replace("$(NOINHERIT)", "");
+            }
+
+
             foreach (VCPropertySheet sheet in configuration.PropertySheets)
             {
                 if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
