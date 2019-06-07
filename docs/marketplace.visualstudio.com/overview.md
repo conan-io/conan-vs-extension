@@ -46,7 +46,7 @@ The next image shows a typical layout of Visual Studio with the extension workin
 
 
 There is a lot of work ahead, we expect to keep adding functionalities to this plugin; and, if you
-come across any issue of you just want to provide feedback, please write in
+come across any issue or you just want to provide feedback, please write in
 [our repository](https://github.com/conan-io/conan-vs-extension).
 
 Requirements

@@ -1,5 +1,5 @@
 #### Build Status
-[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-vs-extension?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-vs-extension)  
+[![Build status](https://ci.appveyor.com/api/projects/status/8ddamkckmfgu618o/branch/master?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/conan-vs-extension/branch/master)
 
 conan-vs-extension
 ==================
@@ -53,7 +53,7 @@ Plugin development is now being resumed after being stagnant for the past year.
 
 The overall goal of the extension is for Visual Studio to be able to execute Conan automatically as-needed based on the currently loaded solution/project/configuration.  Over time, this could grow to a lot of convenience operations.  However, the primary (first) objective is to run `conan install` which will generate `conanbuildinfo.props` and satisfy the dependencies. 
 
-Thus, the first requirement is to provide users a mechanism for mapping each Solution/Project/Configuration to a corresponding `conan install` command. A strategy has been chosen for this, and is being discussed here: https://github.com/bincrafters/conan-vs-extension/issues/5
+Thus, the first requirement is to provide users a mechanism for mapping each Solution/Project/Configuration to a corresponding `conan install` command. A strategy has been chosen for this, and is being discussed here: https://github.com/conan-io/conan-vs-extension/issues/5
 
 Overall, future features and should try to use a similar configuration-file-based strategy to provide maximum configurability and flexibility to the user of the extension, by making any new conan-related-operations exposed in any toolbar menus and right-click menus configurable and composeable.  This is particular important in the near-term while we are still deciding how the parts should work together, so that new workflow ideas can be tested without requiring code changes and rebuilds of the extension. 
 

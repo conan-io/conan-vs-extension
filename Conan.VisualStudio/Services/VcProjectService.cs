@@ -52,7 +52,7 @@ namespace Conan.VisualStudio.Services
 
         public ConanProject ExtractConanProject(VCProject vcProject, ISettingsService settingsService)
         {
-            var projectPath = ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory);
+            var projectPath = ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory); // TODO: Instead of nearest, use the one added to the project (be explicit)
             if (projectPath == null)
             {
                 return null;
@@ -155,7 +155,7 @@ namespace Conan.VisualStudio.Services
                 CompilerToolset = toolset,
                 CompilerVersion = ConanCompilerVersion(),
                 InstallPath = installPath,
-                RuntimeLibrary = RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary)
+                RuntimeLibrary = VCCLCompilerTool != null ? RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary) : null
             };
         }
 

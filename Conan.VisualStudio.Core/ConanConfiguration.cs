@@ -11,11 +11,13 @@ namespace Conan.VisualStudio.Core
 
         public override string ToString()
         {
-            return $"Architecture: {Architecture}, " +
-                   $"build type: {BuildType}, " +
-                   $"compiler toolset: {CompilerToolset}, " +
-                   $"compiler version: {CompilerVersion}, " +
-                   $"runtime library: {RuntimeLibrary}";
+            string value = $"Architecture: {Architecture}, " +
+                           $"build type: {BuildType}, " +
+                           $"compiler toolset: {CompilerToolset}, " +
+                           $"compiler version: {CompilerVersion};";
+            if (RuntimeLibrary != null)
+                value += $", runtime library: {RuntimeLibrary}";
+            return value;
         }
     }
 }
