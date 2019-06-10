@@ -54,7 +54,6 @@ namespace Conan.VisualStudio.Services
                     return;
             }
             configuration.AddPropertySheet(relativePropFilePath);
-            configuration.CollectIntelliSenseInfo();
         }
 
         public async Task IntegrateAsync(VCProject vcProject)
