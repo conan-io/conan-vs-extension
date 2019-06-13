@@ -27,3 +27,5 @@ deploy:
         branch: publish-to-github  # https://www.appveyor.com/docs/deployment/github/
 deploy_script:
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
+after_test:
+    - ps: Vsix-PublishToGallery
