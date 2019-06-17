@@ -16,6 +16,13 @@ Once the extension is installed, projects simply need to have a `conanfile.txt` 
 
 Development and Testing
 -----------------------  
+
+#### Prerequisites
+
+In order to be able to build extension from the source, you need Visual Studio 2017 or 2019 installed. All required components Visual Studio components are listed in the [.vsconfig](https://devblogs.microsoft.com/setup/configure-visual-studio-across-your-organization-with-vsconfig/#) file in the repository root. Just open the `Conan.VisualStudio.sln` solution, and IDE will display a prompt to install missing components:
+
+![vsconfig](docs/images/vsconfig.png)
+
 If you want to build the extension yourself and test it locally (perhaps because you are making changes for a PR), you can currently test the extension one of two ways:  Debug Mode and Local VSIX Installation.
 
 #### Debug Mode  
