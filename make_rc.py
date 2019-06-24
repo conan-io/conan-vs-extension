@@ -154,16 +154,24 @@ def work_on_release(next_release):
             write_changelog(next_release, prs)
 
             # Commit current and checkout rc branch
-            # TODO: May automate all of this.
+            # TODO: May work directly with the API
             os.system("git add CHANGELOG.md")
             os.system("git add Conan.VisualStudio/source.extension.cs")
             os.system("git add Conan.VisualStudio/source.extension.vsixmanifest")
 
             if query_yes_no("Commit change to 'dev' branch"):
                 os.system('git commit -m "close milestone {}"'.format(next_release))
+                os.system('git push')
+
                 os.system('git checkout -b rc-{}'.format(next_release))
+                os.system('git push')
 
                 sys.stdout.write("Now commit this branch and make the PR to master")
+
+                repo.create_pull(title="Release {}".format(next_release),
+                                 head="rc-{}".format(next_release),
+                                 base="master",
+                                 body="RC {}".format(next_release))
 
             break
     else:
