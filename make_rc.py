@@ -153,6 +153,18 @@ def work_on_release(next_release):
             set_current_version(next_release)
             write_changelog(next_release, prs)
 
+            # Commit current and checkout rc branch
+            # TODO: May automate all of this.
+            os.system("git add CHANGELOG.md")
+            os.system("git add Conan.VisualStudio/source.extension.cs")
+            os.system("git add Conan.VisualStudio/source.extension.vsixmanifest")
+
+            if query_yes_no("Commit change to 'dev' branch"):
+                os.system('git commit -m "close milestone {}"'.format(next_release))
+                os.system('git checkout -b rc-{}'.format(next_release))
+
+                sys.stdout.write("Now commit this branch and make the PR to master")
+
             break
     else:
         sys.stderr.write("No milestone matching version {!r}. Open milestones found were '{}'\n".format(next_release, "', '".join([it.title for it in open_milestones])))
