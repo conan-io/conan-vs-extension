@@ -7,6 +7,7 @@ install:
 before_build:
     - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
     - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+    - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.vsixmanifest '<Identity Id="VSConanPackage.4d0379e2-2698-4e66-89de-6ead71165e9f" Version="([0-9\\.]+)"' '<Identity Id="VSConanPackage.4d0379e2-2698-4e66-89de-6ead71165e9f" Version="{version}"'
     - nuget restore
 build_script:
     msbuild /p:DeployExtension=false /p:verbosity=detailed
