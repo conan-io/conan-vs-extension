@@ -32,7 +32,7 @@ namespace Conan.VisualStudio.Core
                 arguments = $"install {Escape(project.Path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(configuration.InstallPath)} " +
-                            $"--profile {profile}";
+                            $"--profile {Escape(profile)}";
             }
             else if (_conanSettings != null)
             {
