@@ -66,6 +66,21 @@ namespace Conan.VisualStudio.Core
             return path;
         }
 
+        /// <summary>
+        /// Searches for conan.config.json in the directory or any of its' parent paths.
+        /// </summary>
+        /// <returns>Path to the nearest conan.config.json file</returns>
+        public static string GetNearestConanConfig(string path)
+        {
+            while (path != null)
+            {
+                string conan_config = Path.Combine(path, "conan.config.json");
+                if (File.Exists(conan_config)) return conan_config;
+                path = Directory.GetParent(path)?.FullName;
+            }
+            return path;
+        }
+
         public static async Task<string> GetNearestConanfilePathAsync(string path) => await Task.Run(() =>
         {
             return GetNearestConanfilePath(path);
