@@ -6,10 +6,7 @@ $vsix = (Get-Item .\Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix).Full
 Write-Host "vsix: $vsix"
 Write-Host "cert: $cert"
 
-$visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
-Write-Host "visualStudioInstallation: $visualStudioInstallation"
-
-$vsixSignTool = Join-Path $visualStudioInstallation 'VSSDK\VisualStudioIntegration\Tools\Bin\VSIXSignTool.exe'
+$vsixSignTool = Join-Path (Get-Item -Path ".\").FullName "packages\Microsoft.VSSDK.VsixSignTool.16.1.28916.169\tools\vssdk\vsixsigntool.exe"
 Write-Host "vsixSignTool: $vsixSignTool"
 
 . $vsixSignTool sign /?
