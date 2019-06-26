@@ -7,6 +7,10 @@ Write-Host "vsix: $vsix"
 Write-Host "cert: $cert"
 
 $visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
+Write-Host "visualStudioInstallation: $visualStudioInstallation"
+
 $vsixSignTool = Join-Path $visualStudioInstallation 'VSSDK\VisualStudioIntegration\Tools\Bin\VSIXSignTool.exe'
-. $vsixSignTool sign /f "$cert" /p $env:vsix_sign /fd sha256 "$vsix"
+Write-Host "vsixSignTool: $vsixSignTool"
+
+# . $vsixSignTool sign /f "$cert" /p $env:vsix_sign /fd sha256 "$vsix"
 
