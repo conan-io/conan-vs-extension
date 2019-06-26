@@ -29,7 +29,9 @@ for:
         - image: Visual Studio 2017
     build_script:
         - ps: write-host ">>> build script"
+        - ps: dir C:\projects
         - ps: .\vsix\download_artifact.ps1
+        - ps: dir C:\projects
     test_script:
       - ps: write-host "Visual Studio 2017"
 
