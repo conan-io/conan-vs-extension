@@ -19,4 +19,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="conanfile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\conan.config.json" />
+  </ItemGroup>
 </Project>
