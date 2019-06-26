@@ -1,6 +1,5 @@
 {
     "configurations": {
-        "Release|x644": "default - Copy",
-        "Debug|x64": "C:/myprofile"
+        "CustomDebug|x64": "custom_config.profile"
     }
 }

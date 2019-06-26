@@ -24,5 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\conan.config.json" />
+    <None Include="custom_config.profile" />
   </ItemGroup>
 </Project>

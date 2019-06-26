@@ -7,12 +7,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConanConfigExample", "Conan
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CustomDebug|x64 = CustomDebug|x64
+		CustomDebug|x86 = CustomDebug|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.CustomDebug|x64.ActiveCfg = CustomDebug|x64
+		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.CustomDebug|x64.Build.0 = CustomDebug|x64
+		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.CustomDebug|x86.ActiveCfg = CustomDebug|Win32
+		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.CustomDebug|x86.Build.0 = CustomDebug|Win32
 		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.Debug|x64.ActiveCfg = Debug|x64
 		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.Debug|x64.Build.0 = Debug|x64
 		{D7500D23-BA43-49FD-B62D-7264AE5B018D}.Debug|x86.ActiveCfg = Debug|Win32
