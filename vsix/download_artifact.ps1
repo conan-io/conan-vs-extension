@@ -21,7 +21,7 @@ $artifacts = Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifa
 
 # here we just take the first artifact, but you could specify its file name
 # $artifactFileName = 'Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix'
-$artifactFileName = $artifacts[0].fileName
+$artifactFileName = [uri]::EscapeDataString($artifacts[0].fileName)
 
 # artifact will be downloaded as
 $localArtifactPath = "$downloadLocation\$artifactFileName"
