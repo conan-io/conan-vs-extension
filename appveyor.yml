@@ -5,8 +5,6 @@ platform: Any CPU
 skip_branch_with_pr: true
 configuration: Release
 
-build_script:
-  - ps: write-host ">>> build script"
 matrix:
   fast_finish: true
 for:
@@ -14,13 +12,23 @@ for:
     matrix:
       only:
         - image: Visual Studio 2019 Preview
-    test_script:
-      - ps: write-host "Visual Studio 2019 Preview"
-
+    install:
+      - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+    before_build:
+      - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+      - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+      - nuget restore
+    build_script:
+      - msbuild /p:DeployExtension=false /p:verbosity=detailed
+    artifacts:
+      - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
+        name: Conan Visual Studio Extension
   -
     matrix:
       only:
         - image: Visual Studio 2017
+    build_script:
+        - ps: write-host ">>> build script"
     test_script:
       - ps: write-host "Visual Studio 2017"
 
