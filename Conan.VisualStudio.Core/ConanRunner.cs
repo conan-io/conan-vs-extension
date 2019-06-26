@@ -19,13 +19,13 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
-        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update)
+        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
             var arguments = string.Empty;
 
-            string profile = project.getProfile(configuration);
+            string profile = project.getProfile(configuration, errorListService);
             if (profile != null)
             {
                 string generatorName = generator.ToString();
