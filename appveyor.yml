@@ -9,7 +9,7 @@ before_build:
     - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
     - nuget restore
 build_script:
-    msbuild /p:DeployExtension=false /p:verbosity=detailed
+    - msbuild /p:DeployExtension=false /p:verbosity=detailed
 artifacts:
     - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
       name: Conan Visual Studio Extention
@@ -26,6 +26,6 @@ deploy:
       on:
         branch: publish-to-github  # https://www.appveyor.com/docs/deployment/github/
 deploy_script:
+    - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") .\vsix\sign.ps1
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
-after_test:
     - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix-PublishToGallery}
