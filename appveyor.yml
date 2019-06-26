@@ -34,4 +34,4 @@ for:
         - ps: dir C:\projects
     test_script:
       - ps: write-host "Visual Studio 2017"
-
+      - ps: .\vsix\install_vsix.ps1
