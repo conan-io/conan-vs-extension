@@ -10,7 +10,7 @@ before_build:
     - nuget restore
 build_script:
     - msbuild /p:DeployExtension=false /p:verbosity=detailed
-    - .\vsix\sign.ps1
+    - ps: .\vsix\sign.ps1
 artifacts:
     - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
       name: Conan Visual Studio Extention
