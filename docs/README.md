@@ -5,7 +5,7 @@ project and the [Conan C/C++ package manager](https://docs.conan.io/en/latest/in
 automates the retrieval of Conan dependencies matching the configuration of the Visual Studio
 project and adds the required include directories, linker ones and libraries.
 
-This extension uses under the hood one of the `visual_studio` generators that Conan provides,
+This extension uses under the hood the `visual_studio` generator that Conan provides,
 these generators create a _Visual Studio project properties_, the extension includes them
 in the corresponding project automatically, so the project has all the information needed
 to compile. Read more about these generators in the
