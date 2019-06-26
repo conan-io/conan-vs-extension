@@ -9,4 +9,5 @@ Write-Host "cert: $cert"
 $vsixSignTool = Join-Path (Get-Item -Path ".\").FullName "packages\Microsoft.VSSDK.VsixSignTool.16.1.28916.169\tools\vssdk\vsixsigntool.exe"
 # Write-Host "vsixSignTool: $vsixSignTool"
 
-. $vsixSignTool sign /f "$cert" /p $env:vsix_sign /v "$vsix"
+. $vsixSignTool sign /f "$cert" /p $env:vsix_sign "$vsix"
+$vsixSignTool sign /f "$cert" /p $env:vsix_sign "$vsix"
