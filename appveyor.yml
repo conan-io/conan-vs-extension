@@ -5,6 +5,8 @@ platform: Any CPU
 skip_branch_with_pr: true
 configuration: Release
 
+build_script:
+  - ps: write-host ">>> build script"
 matrix:
   fast_finish: true
 for:
