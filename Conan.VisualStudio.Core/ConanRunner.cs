@@ -29,10 +29,22 @@ namespace Conan.VisualStudio.Core
             if (profile != null)
             {
                 string generatorName = generator.ToString();
+                string options = "";
+                if (build != ConanBuildType.none)
+                {
+                    options += " --build " + build.ToString();
+                }
+                if (update)
+                {
+                    options += " --update";
+                }
+
                 arguments = $"install {Escape(project.Path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(configuration.InstallPath)} " +
-                            $"--profile {Escape(profile)}";
+                            $"--profile {Escape(profile)}" +
+                            $"{options}";
+
             }
             else if (_conanSettings != null)
             {
