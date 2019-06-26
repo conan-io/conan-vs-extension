@@ -12,5 +12,7 @@ Write-Host "visualStudioInstallation: $visualStudioInstallation"
 $vsixSignTool = Join-Path $visualStudioInstallation 'VSSDK\VisualStudioIntegration\Tools\Bin\VSIXSignTool.exe'
 Write-Host "vsixSignTool: $vsixSignTool"
 
-# . $vsixSignTool sign /f "$cert" /p $env:vsix_sign /fd sha256 "$vsix"
+. $vsixSignTool sign /?
+
+# . $vsixSignTool sign /f "$cert" /sha1 c7719dfd6dc759ac9de0a944a76ada5863e2bd85 /p $env:vsix_sign /fd sha256 "$vsix"
 
