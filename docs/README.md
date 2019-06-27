@@ -3,7 +3,7 @@
 Conan Extension for Visual Studio provides a transparent integration between a Visual Studio
 project and the [Conan C/C++ package manager](https://docs.conan.io/en/latest/index.html). It
 automates the retrieval of Conan dependencies matching the configuration of the Visual Studio
-project and add the required include directories, linker ones and libraries.
+project and adds the required include directories, linker ones and libraries.
 
 This extension uses under the hood one of the `visual_studio` generators that Conan provides,
 these generators create a _Visual Studio project properties_, the extension includes them
