@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Conan.VisualStudio.Core\Conan.VisualStudio.Core.csproj">
-      <Project>{8f310c87-5446-4edf-bfae-93f457bd00a5}</Project>
+      <Project>{704bddfb-cb01-4f8b-b2a0-60bcfa97f0c2}</Project>
       <Name>Conan.VisualStudio.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Conan.VisualStudio\Conan.VisualStudio.csproj">
@@ -108,7 +108,7 @@
       <Name>Conan.VisualStudio</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualStudio.OpenFolder\VisualStudio.OpenFolder.csproj">
-      <Project>{11d3f7ba-7426-4c99-add2-6de951c6102c}</Project>
+      <Project>{232a6411-5acd-49d0-b5b0-1f72b265b7d1}</Project>
       <Name>VisualStudio.OpenFolder</Name>
     </ProjectReference>
   </ItemGroup>

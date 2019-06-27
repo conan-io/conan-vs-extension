@@ -1,4 +1,4 @@
-namespace Conan.VisualStudio.Services
+namespace Conan.VisualStudio.Core
 {
     public interface IErrorListService
     {

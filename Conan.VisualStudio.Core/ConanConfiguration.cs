@@ -2,6 +2,7 @@ namespace Conan.VisualStudio.Core
 {
     public class ConanConfiguration
     {
+        public string VSName { get; set; }
         public string Architecture { get; set; }
         public string BuildType { get; set; }
         public string CompilerToolset { get; set; }

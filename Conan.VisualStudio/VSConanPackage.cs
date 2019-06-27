@@ -45,7 +45,7 @@ namespace Conan.VisualStudio
         private IVsSolutionBuildManager3 _solutionBuildManager;
         private ProjectItemsEvents _projectItemEvents;
         private DocumentEvents _documentEvents;
-        private IErrorListService _errorListService;
+        private Core.IErrorListService _errorListService;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
