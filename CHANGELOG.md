@@ -14,6 +14,23 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.1.0
+
+**2019-06-27**
+
+- Downgrade dependencies to match 15.0.0 (first VS2017) ([#112](https://github.com/conan-io/conan-vs-extension/pull/112))
+- Remove visual_studio_multi generator, it is not working for custom configurations ([#110](https://github.com/conan-io/conan-vs-extension/pull/110))
+- Document example about conan.config.json ([#109](https://github.com/conan-io/conan-vs-extension/pull/109))
+- Add very basic docs ([#106](https://github.com/conan-io/conan-vs-extension/pull/106))
+- Update manifest version on each build (will trigger updates) ([#101](https://github.com/conan-io/conan-vs-extension/pull/101))
+- Look for matching Conan profile in a config file for the running VS configuration ([#100](https://github.com/conan-io/conan-vs-extension/pull/100))
+- Use Visual Studio 2019 image ([#95](https://github.com/conan-io/conan-vs-extension/pull/95))
+- Remove unused assemblies ([#94](https://github.com/conan-io/conan-vs-extension/pull/94))
+- Publish to OpenVSIX gallery ([#92](https://github.com/conan-io/conan-vs-extension/pull/92))
+- Add .vsconfig to install required dependencies to build the extension ([#91](https://github.com/conan-io/conan-vs-extension/pull/91))
+- Convert .NET Standard Class libraries to .NET Framework Class libraries ([#89](https://github.com/conan-io/conan-vs-extension/pull/89))
+
+
 ## 1.0.0
 
 **2019-03-14**
