@@ -36,7 +36,7 @@ namespace Conan.VisualStudio
         [Description(@"Conan generator to use")]
         public ConanGeneratorType ConanGenerator
         {
-            get => _conanGenerator ?? ConanGeneratorType.visual_studio_multi;
+            get => _conanGenerator ?? ConanGeneratorType.visual_studio;
             set => _conanGenerator = value;
         }
 
