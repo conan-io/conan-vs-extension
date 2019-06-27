@@ -58,7 +58,7 @@ until the root one.
 Under the `"configurations"` key there is a dictionary with the correspondence between
 the Visual Studio configuration (key, on the left) and a Conan profile (value, on the right).
 
-It is important tto take into account:
+It is important to take into account:
  * Visual Studio creates the configuration name joining with a `|` character the name
    of the Configuration and the Platform.
  * For Conan profiles, the value declared will be used verbatim for the `--profile` argument
