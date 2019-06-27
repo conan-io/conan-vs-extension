@@ -60,6 +60,7 @@
     <Compile Include="ConanProject.cs" />
     <Compile Include="ConanRunner.cs" />
     <Compile Include="ConanSettings.cs" />
+    <Compile Include="IErrorListService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
