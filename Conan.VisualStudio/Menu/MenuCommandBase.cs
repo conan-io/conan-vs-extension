@@ -8,12 +8,12 @@ namespace Conan.VisualStudio.Menu
     /// <summary>Base class for a menu command.</summary>
     internal abstract class MenuCommandBase
     {
-        private readonly IErrorListService _errorListService;
+        private readonly Core.IErrorListService _errorListService;
         private readonly OleMenuCommand _menuCommand;
 
         protected abstract int CommandId { get; }
 
-        public MenuCommandBase(IMenuCommandService commandService, IErrorListService errorListService)
+        public MenuCommandBase(IMenuCommandService commandService, Core.IErrorListService errorListService)
         {
             _errorListService = errorListService;
             var menuCommandId = new CommandID(PackageGuids.guidVSConanPackageCmdSet, CommandId);

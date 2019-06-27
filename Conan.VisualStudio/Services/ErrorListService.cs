@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Conan.VisualStudio.Services
 {
-    public class ErrorListService : IServiceProvider, IErrorListService
+    public class ErrorListService : IServiceProvider, Core.IErrorListService
     {
         private static readonly Guid ErrorListProviderGuid = new Guid("{8F355B84-E2DE-4FE9-8482-BF7FC11A6059}");
 

@@ -15,14 +15,14 @@ namespace Conan.VisualStudio.Menu
     {
         protected override int CommandId => PackageIds.AddConanDependsConanfileId;
 
-        private readonly IErrorListService _errorListService;
+        private readonly Core.IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
         private readonly IConanService _conanService;
         private readonly DTE2 _dte2;
 
         public AddConanDependsConanfile(
             IMenuCommandService commandService,
-            IErrorListService errorListService,
+            Core.IErrorListService errorListService,
             IVcProjectService vcProjectService,
             IConanService conanService) : base(commandService, errorListService)
         {
