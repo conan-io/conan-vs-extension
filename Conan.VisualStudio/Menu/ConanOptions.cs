@@ -16,7 +16,7 @@ namespace Conan.VisualStudio.Menu
 
         public ConanOptions(
             IMenuCommandService commandService,
-            IErrorListService errorListService,
+            Core.IErrorListService errorListService,
             OptionsDelegate optionsDelegate)
             : base(commandService, errorListService)
         {
