@@ -10,10 +10,10 @@ namespace Conan.VisualStudio.Services
     internal class ConanService : IConanService
     {
         private readonly ISettingsService _settingsService;
-        private readonly IErrorListService _errorListService;
+        private readonly Core.IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
 
-        public ConanService(ISettingsService settingsService, IErrorListService errorListService, IVcProjectService vcProjectService)
+        public ConanService(ISettingsService settingsService, Core.IErrorListService errorListService, IVcProjectService vcProjectService)
         {
             _settingsService = settingsService;
             _errorListService = errorListService;
@@ -116,7 +116,8 @@ namespace Conan.VisualStudio.Services
                     ConanGeneratorType generator = _settingsService.GetConanGenerator();
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
-                    var process = await conan.Install(project, configuration, generator, build, update);
+                   
+                    var process = await conan.Install(project, configuration, generator, build, update, _errorListService);
 
                     string message = $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
                         $"with arguments '{process.StartInfo.Arguments}'";

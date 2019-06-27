@@ -19,12 +19,34 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
-        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update)
+        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
             var arguments = string.Empty;
-            if (_conanSettings != null)
+
+            string profile = project.getProfile(configuration, errorListService);
+            if (profile != null)
+            {
+                string generatorName = generator.ToString();
+                string options = "";
+                if (build != ConanBuildType.none)
+                {
+                    options += " --build " + build.ToString();
+                }
+                if (update)
+                {
+                    options += " --update";
+                }
+
+                arguments = $"install {Escape(project.Path)} " +
+                            $"-g {generatorName} " +
+                            $"--install-folder {Escape(configuration.InstallPath)} " +
+                            $"--profile {Escape(profile)}" +
+                            $"{options}";
+
+            }
+            else if (_conanSettings != null)
             {
                 var installConfig = _conanSettings.ConanCommands.FirstOrDefault(c => c.Name.Equals("install"));
                 arguments = installConfig.Args;
