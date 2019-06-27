@@ -24,7 +24,17 @@ namespace Conan.VisualStudio.Core
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
             var arguments = string.Empty;
-            if (_conanSettings != null)
+
+            string profile = project.getProfile(configuration);
+            if (profile != null)
+            {
+                string generatorName = generator.ToString();
+                arguments = $"install {Escape(project.Path)} " +
+                            $"-g {generatorName} " +
+                            $"--install-folder {Escape(configuration.InstallPath)} " +
+                            $"--profile {Escape(profile)}";
+            }
+            else if (_conanSettings != null)
             {
                 var installConfig = _conanSettings.ConanCommands.FirstOrDefault(c => c.Name.Equals("install"));
                 arguments = installConfig.Args;

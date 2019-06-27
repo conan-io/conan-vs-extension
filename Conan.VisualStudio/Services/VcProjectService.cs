@@ -57,9 +57,12 @@ namespace Conan.VisualStudio.Services
             {
                 return null;
             }
+
+            string projectConanConfig = ConanPathHelper.GetNearestConanConfig(vcProject.ProjectDirectory);
             var project = new ConanProject
             {
                 Path = projectPath,
+                ConfigFile = projectConanConfig
             };
 
             if (settingsService != null && settingsService.GetConanInstallOnlyActiveConfiguration())
@@ -150,6 +153,7 @@ namespace Conan.VisualStudio.Services
 
             return new ConanConfiguration
             {
+                VSName = configuration.Name,
                 Architecture = GetArchitecture(configuration.Platform.Name),
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = toolset,

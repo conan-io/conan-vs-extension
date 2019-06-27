@@ -53,9 +53,11 @@ namespace Conan.VisualStudio.Services
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
+            string projectConanConfig = ConanPathHelper.GetNearestConanConfig(project.FileName);
             var conanProject = new ConanProject
             {
-                Path = project.FileName
+                Path = project.FileName,
+                ConfigFile = projectConanConfig
             };
 
             await TaskScheduler.Default;
