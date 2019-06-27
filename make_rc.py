@@ -11,7 +11,7 @@ try:
     from github import Github
 except ImportError:
     sys.stderr.write("Install 'pip install PyGithub'")
-    exit()
+    sys.exit(1)
 
 
 me = os.path.dirname(__file__)
@@ -73,8 +73,17 @@ def set_current_version(version):
 def write_changelog(version, prs):
     print("*"*20)
     changelog = os.path.join(me, "CHANGELOG.md")
-    new_content = []
 
+    version_content = ["- {} ([#{}]({}))\n".format(pr.title, pr.number, pr.html_url) for pr in prs]
+    sys.stdout.write("*"*20)
+    sys.stdout.write("\n{}".format(''.join(version_content)))
+    sys.stdout.write("*"*20)
+    sys.stdout.write("\n\n")
+    if not query_yes_no("This is the list of items that will be added to the CHANGELOG"):
+        sys.stdout.write("Exit!")
+        sys.exit(1)
+
+    new_content = []
     changelog_found = False
     version_pattern = re.compile("## [\d\.]+")
     for line in open(changelog, "r").readlines():
@@ -85,8 +94,7 @@ def write_changelog(version, prs):
                 # Add before new content
                 new_content.append("## {}\n\n".format(version))
                 new_content.append("**{}**\n\n".format(date.today().strftime('%Y-%m-%d')))
-                for it in prs:
-                    new_content.append("- {}\n".format(it.title))
+                new_content += version_content
                 new_content.append("\n\n")
         new_content.append(line)
 
@@ -95,7 +103,10 @@ def write_changelog(version, prs):
 
 
 def get_git_current_branch():
-    return os.popen('git rev-parse --abbrev-ref HEAD').read()
+    return os.popen('git rev-parse --abbrev-ref HEAD').read().strip()
+
+def get_git_is_clean():
+    return len(os.popen('git status --untracked-files=no --porcelain').read().strip()) == 0
 
 def query_yes_no(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
@@ -122,8 +133,7 @@ def query_yes_no(question, default="yes"):
 def work_on_release(next_release):
     github_token = os.environ.get("GITHUB_TOKEN")
     if not github_token:
-        print(github_token)
-        sys.stderr.write("Please, provide a read-only token to access Github using environment variable 'GITHUB_TOKEN'")
+        sys.stderr.write("Please, provide a read-only token to access Github using environment variable 'GITHUB_TOKEN'\n")
 
     # Find matching milestone
     g = Github(github_token)
@@ -135,45 +145,50 @@ def work_on_release(next_release):
             prs = [it for it in repo.get_pulls(state="all") if it.milestone == milestone]
             sys.stdout.write("Found {} pull request for this milestone:\n".format(len(prs)))
             for p in prs:
-                status = "[!]" if not p.is_merged() else ""
-                sys.stdout.write("\t {}\t{}\n".format(status, p.title))
+                status = "[!]" if p.state != "closed" else ""
+                sys.stdout.write("\t {}\t#{} {}\n".format(status, p.number, p.title))
             
             # Gather issues
             issues = [it for it in repo.get_issues(milestone=milestone, state="all")]
             sys.stdout.write("Found {} issues for this milestone:\n".format(len(issues)))
             for issue in issues:
                 status = "[!]" if issue.state != "closed" else ""
-                sys.stdout.write("\t {}\t{}\n".format(status, issue.title))
+                sys.stdout.write("\t {}\t#{} {}\n".format(status, issue.number, issue.title))
             
             # Any open PR or issue?
-            if any([not p.is_merged() for p in prs]) or any([issue.state != "closed" for issue in issues]):
+            if any([p.state != "closed" for p in prs]) or any([issue.state != "closed" for issue in issues]):
                 sys.stderr.write("Close all PRs and issues belonging to the milestone before making the release")
                 return
             
+            # Checkout the release branch and commit the changes
+            os.system('git checkout -b release/{}'.format(next_release))
+
             # Modify the working directory
             set_current_version(next_release)
+            prs = [pr for pr in prs if pr.merged]
             write_changelog(next_release, prs)
 
-            # Commit current and checkout rc branch
-            # TODO: May work directly with the API
-            os.system("git add CHANGELOG.md")
-            os.system("git add Conan.VisualStudio/source.extension.cs")
-            os.system("git add Conan.VisualStudio/source.extension.vsixmanifest")
 
-            if query_yes_no("Commit change to 'dev' branch"):
-                os.system('git commit -m "close milestone {}"'.format(next_release))
-                os.system('git push')
+            if query_yes_no("Commit and push to 'conan' repository"):
+                os.system("git add CHANGELOG.md")
+                os.system("git add Conan.VisualStudio/source.extension.cs")
+                os.system("git add Conan.VisualStudio/source.extension.vsixmanifest")
 
-                os.system('git checkout -b rc-{}'.format(next_release))
-                os.system('git push')
+                os.system('git commit -m "Preparing release {}"'.format(next_release))
+                os.system('git push --set-upstream conan release/1.1.0')
 
-                sys.stdout.write("Now commit this branch and make the PR to master")
+                sys.stdout.write("Now create PR to 'master' and PR back to 'dev'")
+                pr = repo.create_pull(title="Release {}".format(next_release),
+                                      head="release/{}".format(next_release),
+                                      base="master",
+                                      body="Release {}. Don't forget to create the tag after merging!".format(next_release))
 
-                repo.create_pull(title="Release {}".format(next_release),
-                                 head="rc-{}".format(next_release),
-                                 base="master",
-                                 body="RC {}".format(next_release))
-
+                repo.create_pull(title="Merge back release branch {}".format(next_release),
+                                head="release/{}".format(next_release),
+                                base="dev",
+                                body="Merging back changes from release branch {}. Don't merge before #{}".format(next_release, pr.number))
+            else:
+                sys.stdout.write("You will need to commit and push yourself, and to create the PRs")
             break
     else:
         sys.stderr.write("No milestone matching version {!r}. Open milestones found were '{}'\n".format(next_release, "', '".join([it.title for it in open_milestones])))
@@ -182,8 +197,12 @@ def work_on_release(next_release):
 if __name__ == "__main__":
     current_branch = get_git_current_branch()
     if current_branch != "dev":
-        sys.stderr.write("Move to the 'dev' branch to work with this tool\n")
-        exit()
+        sys.stderr.write("Move to the 'dev' branch to work with this tool. You are in '{}'\n".format(current_branch))
+        sys.exit(1)
+    
+    if not get_git_is_clean():
+        sys.stderr.write("Current branch is not clean\n")
+        sys.exit(1)
 
     v = get_current_version()
     sys.stdout.write("Current version is {!r}\n".format(v))
