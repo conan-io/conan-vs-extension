@@ -51,16 +51,13 @@ It will output the `.vsix` file to:
 From there, you can share and/or install the `.vsix` file as desired. Here is a decent [blog post about working with `.vsix` files manually](https://weblog.west-wind.com/posts/2016/Mar/01/Registering-and-Unregistering-a-VSIX-Extension-from-the-Command-Line#Installing)
 
 #### Using the Extension with Changes
-Once you have the Visual Studio environment with the modified extension loaded, or have installed the extension from the `.vsix` file, you can test it by opening the example project:
+Once you have the Visual Studio environment with the modified extension loaded, or have installed the extension from the `.vsix` file, you can test it by opening one of the examples in the [`Conan.VisualStudio.Examples` directory](Conan.VisualStudio.Examples/):
 
-	Conan.VisualStudio.Examples/ExampleCLI/ExampleCLI.sln
 
-This example has a `conanfile.txt` with a dependency on the popular formatting library `fmt`. When the project is first opened, Visual Studio is unable to find the `fmt` project dependency. The extension should immediately run however, and Visual Studio should give you a toolbar dropdown message offering to refresh the project. After refreshing, the `fmt` headers should be found by the compiler, and the `lib` files should be found by the linker successfully.  
+Acknowledgements
+----------------
 
-Changelog
----------
-
-This extension started was started by community members like @sboullema, @SSE4, @ForNeVer and @solvingj, thanks to
+This extension was started by community members like @sboullema, @SSE4, @ForNeVer and @solvingj, thanks to
 them the first version of the extension was given birth and now [the Conan team is supporting it and pusing it
 forward](https://blog.conan.io/2019/06/17/Conan-extension-for-Visual-Studio.html). We still receive very valuable
 contributions from the community and we hope to continue to receive them.
