@@ -184,7 +184,7 @@ def work_on_release(next_release):
                                       body="Release {}. Don't forget to create the tag after merging!".format(next_release))
 
                 repo.create_pull(title="Merge back release branch {}".format(next_release),
-                                head="release/{}".format(next_release),
+                                head="master",  # So we get also the merge commit from 'master'
                                 base="dev",
                                 body="Merging back changes from release branch {}. Don't merge before #{}".format(next_release, pr.number))
             else:
@@ -192,6 +192,41 @@ def work_on_release(next_release):
             break
     else:
         sys.stderr.write("No milestone matching version {!r}. Open milestones found were '{}'\n".format(next_release, "', '".join([it.title for it in open_milestones])))
+
+def guess_next_release(current_release, head_branch):
+    major, minor, patch = map(int, current_release.split("."))
+
+    g = Github(github_token)
+    repo = g.get_repo('conan-io/conan-vs-extension')
+    open_milestones = repo.get_milestones(state='open')
+
+    # Look into open milestones with PRs already merged to 'head_branch' branch
+    ml_to_consider = []
+    for milestone in open_milestones:
+        prs = [it for it in repo.get_pulls(state="closed") if it.milestone == milestone]
+        merged_prs = [it.merged and it.head==head_branch for it in prs]
+        if merged_prs:
+            ml_to_consider.append((milestone, merged_prs))
+
+    # If we have more than one, we should warn the user
+    if len(ml_to_consider) > 1:
+        sys.stderr.write("There are several milestones with merged PRs into '{}' branch."
+                         " Cannot decide which one to use for next release. Please,"
+                         " reorganize milestones.\n".format(head_branch))
+        for ml, prs in ml_to_consider:
+            sys.stdout.write("Milestone: {}\n".format(milestone.title))
+            for it in prs:
+                sys.stdout.write("\t#{} {}\n".format(it.number, it.title))
+        sys.exit(1)
+
+    next_milestone, _ = ml_to_consider[0]
+
+    # Check it is a valid release and it is greater than the current one
+    next_major, next_minor, next_patch = next_milestone.title.split('.')
+    assert (next_major >= major) or \
+           (next_major == major and next_minor >= minor) or \
+           (next_major == major and next_minor == minor and next_patch >= patch), "{} < {}!!".format(next_milestone.title, current_release)
+    return next_milestone.title
 
 
 if __name__ == "__main__":
@@ -206,11 +241,8 @@ if __name__ == "__main__":
 
     v = get_current_version()
     sys.stdout.write("Current version is {!r}\n".format(v))
-
-    major, minor, _ = v.split(".")
-    next_release = ".".join([major, str(int(minor)+1), "0"])
+    next_release = guess_next_release(v)
     if query_yes_no("Next version will be {!r}".format(next_release)):
         work_on_release(next_release)
-        
     else:
         sys.stdout.write("Sorry, I cannot help you then...")
