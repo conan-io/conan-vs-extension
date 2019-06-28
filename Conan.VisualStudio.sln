@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio", "Conan.VisualStudio\Conan.VisualStudio.csproj", "{6FBEBC9C-6E86-4588-BCDA-83AC909C7EAC}"
 EndProject
@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.Core", "Conan.VisualStudio.Core\Conan.VisualStudio.Core.csproj", "{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudio.OpenFolder", "VisualStudio.OpenFolder\VisualStudio.OpenFolder.csproj", "{232A6411-5ACD-49D0-B5B0-1F72B265B7D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +32,6 @@ Global
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{232A6411-5ACD-49D0-B5B0-1F72B265B7D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{232A6411-5ACD-49D0-B5B0-1F72B265B7D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{232A6411-5ACD-49D0-B5B0-1F72B265B7D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{232A6411-5ACD-49D0-B5B0-1F72B265B7D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
