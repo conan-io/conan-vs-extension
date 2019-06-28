@@ -71,7 +71,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Menu\AddConanDependsConanfile.cs" />
     <Compile Include="Menu\AddConanDependsProject.cs" />
     <Compile Include="Menu\AddConanDependsSolution.cs" />
     <Compile Include="ConanOptionsPage.cs">
@@ -86,10 +85,8 @@
     <Compile Include="Services\InfoBarEventsHandler.cs" />
     <Compile Include="Services\InfobarService.cs" />
     <Compile Include="Services\SolutionEventsHandler.cs" />
-    <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IVcProjectService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
-    <Compile Include="Services\VisualStudioDialogService.cs" />
     <Compile Include="Services\VcProjectService.cs" />
     <Compile Include="Services\VisualStudioSettingService.cs" />
     <Compile Include="source.extension.cs">

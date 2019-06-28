@@ -32,7 +32,6 @@ namespace Conan.VisualStudio
     {
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
-        private AddConanDependsConanfile _addConanDependsConanfile;
         private ConanOptions _conanOptions;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
@@ -78,7 +77,6 @@ namespace Conan.VisualStudio
 
             _addConanDependsProject = new AddConanDependsProject(commandService, _errorListService, _vcProjectService, _conanService);
             _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
-            _addConanDependsConanfile = new AddConanDependsConanfile(commandService, _errorListService, _vcProjectService, _conanService);
 
             _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
 
