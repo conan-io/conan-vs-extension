@@ -22,6 +22,18 @@ source_extension_cs = os.path.join(me, "Conan.VisualStudio", "source.extension.c
 vsixmanifest_pattern = re.compile(r'\s+<Identity .*Version=\"(?P<v>[\d\.]+)\".*', re.MULTILINE)
 source_vsixmanifest_cs = os.path.join(me, "Conan.VisualStudio", "source.extension.vsixmanifest")
 
+# Get the github repository
+def get_github_repository():
+    github_token = os.environ.get("GITHUB_TOKEN")
+    if not github_token:
+        sys.stderr.write("Please, provide a read-only token to access Github using environment variable 'GITHUB_TOKEN'\n")
+
+    # Find matching milestone
+    g = Github(github_token)
+    return g.get_repo('conan-io/conan-vs-extension')
+
+repo = get_github_repository()
+
 
 def get_current_version():
     v_source_extension = None
@@ -71,9 +83,9 @@ def set_current_version(version):
 
 
 def write_changelog(version, prs):
-    print("*"*20)
     changelog = os.path.join(me, "CHANGELOG.md")
 
+    prs = [pr for pr in prs if "[skip changelog]" not in pr.title]
     version_content = ["- {} ([#{}]({}))\n".format(pr.title, pr.number, pr.html_url) for pr in prs]
     sys.stdout.write("*"*20)
     sys.stdout.write("\n{}".format(''.join(version_content)))
@@ -131,13 +143,6 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
 
 def work_on_release(next_release):
-    github_token = os.environ.get("GITHUB_TOKEN")
-    if not github_token:
-        sys.stderr.write("Please, provide a read-only token to access Github using environment variable 'GITHUB_TOKEN'\n")
-
-    # Find matching milestone
-    g = Github(github_token)
-    repo = g.get_repo('conan-io/conan-vs-extension')
     open_milestones = repo.get_milestones(state='open')
     for milestone in open_milestones:
         if str(milestone.title) == next_release:
@@ -196,21 +201,24 @@ def work_on_release(next_release):
 def guess_next_release(current_release, head_branch):
     major, minor, patch = map(int, current_release.split("."))
 
-    g = Github(github_token)
-    repo = g.get_repo('conan-io/conan-vs-extension')
     open_milestones = repo.get_milestones(state='open')
 
     # Look into open milestones with PRs already merged to 'head_branch' branch
     ml_to_consider = []
+    closed_prs = repo.get_pulls(state="closed")
     for milestone in open_milestones:
-        prs = [it for it in repo.get_pulls(state="closed") if it.milestone == milestone]
-        merged_prs = [it.merged and it.head==head_branch for it in prs]
+        prs = [it for it in closed_prs if it.milestone == milestone]
+        merged_prs = [it for it in prs if it.merged and it.base.ref==head_branch]
         if merged_prs:
             ml_to_consider.append((milestone, merged_prs))
 
+    # If no PR
+    if not ml_to_consider:
+        sys.stderr.write("Cannot find any milestone suitable for the operation\n")
+
     # If we have more than one, we should warn the user
     if len(ml_to_consider) > 1:
-        sys.stderr.write("There are several milestones with merged PRs into '{}' branch."
+        sys.stderr.write("There are several open milestones with merged PRs into '{}' branch."
                          " Cannot decide which one to use for next release. Please,"
                          " reorganize milestones.\n".format(head_branch))
         for ml, prs in ml_to_consider:
@@ -222,7 +230,7 @@ def guess_next_release(current_release, head_branch):
     next_milestone, _ = ml_to_consider[0]
 
     # Check it is a valid release and it is greater than the current one
-    next_major, next_minor, next_patch = next_milestone.title.split('.')
+    next_major, next_minor, next_patch = map(int, next_milestone.title.split('.'))
     assert (next_major >= major) or \
            (next_major == major and next_minor >= minor) or \
            (next_major == major and next_minor == minor and next_patch >= patch), "{} < {}!!".format(next_milestone.title, current_release)
@@ -241,7 +249,7 @@ if __name__ == "__main__":
 
     v = get_current_version()
     sys.stdout.write("Current version is {!r}\n".format(v))
-    next_release = guess_next_release(v)
+    next_release = guess_next_release(v, current_branch)
     if query_yes_no("Next version will be {!r}".format(next_release)):
         work_on_release(next_release)
     else:
