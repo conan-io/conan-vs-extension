@@ -98,7 +98,6 @@ namespace Conan.VisualStudio.Core
                 CreateNoWindow = true
             };
             return startInfo;
-            //return Task.Run(() => Process.Start(startInfo));
         }
 
         public Task<Process> Inspect(ConanProject project)
