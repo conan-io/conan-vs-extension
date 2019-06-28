@@ -97,7 +97,7 @@ namespace Conan.VisualStudio.Services
                 _errorListService.WriteError("Unable to extract conan project!");
                 return;
             }
-            var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);
+            var conan = new ConanRunner(conanPath);
 
             await InstallDependenciesAsync(conan, project);
         }

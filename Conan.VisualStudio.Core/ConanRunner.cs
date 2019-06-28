@@ -7,12 +7,10 @@ namespace Conan.VisualStudio.Core
 {
     public class ConanRunner
     {
-        private readonly ConanSettings _conanSettings;
         private readonly string _executablePath;
 
-        public ConanRunner(ConanSettings conanSettings, string executablePath)
+        public ConanRunner(string executablePath)
         {
-            _conanSettings = conanSettings;
             _executablePath = executablePath;
         }
 
@@ -45,11 +43,6 @@ namespace Conan.VisualStudio.Core
                             $"--profile {Escape(profile)}" +
                             $"{options}";
 
-            }
-            else if (_conanSettings != null)
-            {
-                var installConfig = _conanSettings.ConanCommands.FirstOrDefault(c => c.Name.Equals("install"));
-                arguments = installConfig.Args;
             }
             else
             {

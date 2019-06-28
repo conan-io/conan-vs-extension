@@ -24,12 +24,5 @@ namespace Conan.VisualStudio.Services
 
         ConanBuildType GetConanBuild();
         bool GetConanUpdate();
-
-        /// <summary>
-        /// Try and load a project-level conan-vs-settings.json file
-        /// </summary>
-        /// <param name="project">Project</param>
-        /// <returns>ConanSettings with overrides or null</returns>
-        ConanSettings LoadSettingFile(ConanProject project);
     }
 }
