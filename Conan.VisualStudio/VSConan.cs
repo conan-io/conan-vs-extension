@@ -28,7 +28,6 @@ namespace Conan.VisualStudio
         public const int ConanMenuGroup = 0x1020;
         public const int AddConanDependsProjectId = 0x0100;
         public const int AddConanDependsSolutiontId = 0x0101;
-        public const int AddConanDependsConanfileId = 0x0102;
         public const int ConanOptionsId = 0x0103;
         public const int ConanSubmenu = 0x1023;
         public const int ConanSubmenuGroup = 0x1024;

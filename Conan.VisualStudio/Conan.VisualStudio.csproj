@@ -71,7 +71,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Menu\AddConanDependsConanfile.cs" />
     <Compile Include="Menu\AddConanDependsProject.cs" />
     <Compile Include="Menu\AddConanDependsSolution.cs" />
     <Compile Include="ConanOptionsPage.cs">

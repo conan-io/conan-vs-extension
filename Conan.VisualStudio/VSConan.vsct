@@ -41,14 +41,6 @@
         </Groups>
 
         <Buttons>
-            <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsConanfileId" priority="0x0100" type="Button">
-                <Icon guid="guidImages" id="conanIcon" />
-                <CommandFlag>DefaultInvisible</CommandFlag>
-                <CommandFlag>DynamicVisibility</CommandFlag>
-                <Strings>
-                    <ButtonText>Install</ButtonText>
-                </Strings>
-            </Button>
             <Button guid="guidVSConanPackageCmdSet" id="AddConanDependsProjectId" priority="0x0100" type="Button">
                 <Icon guid="guidImages" id="conanIcon" />
                 <CommandFlag>DefaultDisabled</CommandFlag>
@@ -90,9 +82,6 @@
         <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsProjectId" priority="0x0100">
             <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" />
         </CommandPlacement>
-        <CommandPlacement guid="guidVSConanPackageCmdSet" id="AddConanDependsConanfileId" priority="0x0100">
-            <Parent guid="guidVSConanPackageCmdSet" id="ConanItemGroup" />
-        </CommandPlacement>
     </CommandPlacements>
 
     <Symbols>
@@ -103,7 +92,6 @@
             <IDSymbol name="ConanMenuGroup" value="0x1020" />
             <IDSymbol name="AddConanDependsProjectId" value="0x0100" />
             <IDSymbol name="AddConanDependsSolutiontId" value="0x0101" />
-            <IDSymbol name="AddConanDependsConanfileId" value="0x0102" />
             <IDSymbol name="ConanOptionsId" value="0x0103" />
             <IDSymbol name="ConanSubmenu" value="4131" />
             <IDSymbol name="ConanSubmenuGroup" value="4132" />
