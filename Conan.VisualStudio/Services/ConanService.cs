@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
@@ -117,43 +118,50 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
                    
-                    var process = await conan.Install(project, configuration, generator, build, update, _errorListService);
+                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
 
-                    string message = $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
-                        $"with arguments '{process.StartInfo.Arguments}'";
-
+                    string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
+                                     $"with arguments '{process.Arguments}'";
                     Logger.Log(message);
                     await logStream.WriteLineAsync(message);
 
-                    using (var reader = process.StandardOutput)
+                    using (Process exeProcess = Process.Start(process))
                     {
-                        string line;
-                        while ((line = await reader.ReadLineAsync()) != null)
+                        int exitCode = await exeProcess.WaitForExitAsync();
+
+                        string output = await exeProcess.StandardOutput.ReadToEndAsync();
+                        string error = await exeProcess.StandardError.ReadToEndAsync();
+
+                        if (output.Length > 0)
                         {
-                            await logStream.WriteLineAsync(line);
-
-                            Logger.Log(line);
+                            Logger.Log(output);
+                            await logStream.WriteLineAsync(output);
                         }
-                    }
 
-                    var exitCode = await process.WaitForExitAsync();
-                    if (exitCode != 0)
-                    {
-                        message = $"Conan has returned exit code '{exitCode}' " +
-                            $"while processing configuration '{configuration}'. " +
-                            $"Please check file '{logFilePath}' for details.";
+                        if (error.Length > 0)
+                        {
+                            Logger.Log(error);
+                            await logStream.WriteLineAsync(error);
+                        }
 
-                        Logger.Log(message);
-                        await logStream.WriteLineAsync(message);
-                        _errorListService.WriteError(message, logFilePath);
-                        return;
-                    }
-                    else
-                    {
-                        message = $"[Conan.VisualStudio] Conan has succsessfully installed configuration '{configuration}'";
-                        Logger.Log(message);
-                        await logStream.WriteLineAsync(message);
-                        _errorListService.WriteMessage(message);
+                        if (exitCode != 0) {
+                            message = $"Conan has returned exit code '{exitCode}' " +
+                                      $"while processing configuration '{configuration}'. " +
+                                      $"Please check file '{logFilePath}' for details.";
+
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                            return;
+                        }
+                        else
+                        {
+                            message = $"[Conan.VisualStudio] Conan has succsessfully " +
+                                      $"installed configuration '{configuration}'";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteMessage(message);
+                        }
                     }
                 }
             }

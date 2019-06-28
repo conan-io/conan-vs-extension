@@ -19,7 +19,7 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
-        public Task<Process> Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
+        public ProcessStartInfo Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
 
@@ -94,9 +94,11 @@ namespace Conan.VisualStudio.Core
                 UseShellExecute = false,
                 WorkingDirectory = Path.GetDirectoryName(project.Path),
                 RedirectStandardOutput = true,
+                RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            return Task.Run(() => Process.Start(startInfo));
+            return startInfo;
+            //return Task.Run(() => Process.Start(startInfo));
         }
 
         public Task<Process> Inspect(ConanProject project)
