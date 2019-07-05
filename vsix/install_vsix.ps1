@@ -7,4 +7,4 @@ $vsixInstaller = Join-Path $visualStudioInstallation 'Common7\IDE\VSIXInstaller.
 Write-Host "visualStudioInstallation: $visualStudioInstallation"
 Write-Host "vsixInstaller: $vsixInstaller"
 
-. $vsixInstaller /q /a $vsixPath
+& $vsixInstaller /q /a $vsixPath
