@@ -28,7 +28,7 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
-    [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, HelpString ="Print version of Conan.VisualStudio extension")]
+    [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, HelpString ="Print version of Conan.VisualStudio extension", PackageGuid = PackageGuids.guidVSConanPackageString)]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         private const string _cliSwitch = "ConanVisualStudioVersion";
