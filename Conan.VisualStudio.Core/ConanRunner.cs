@@ -99,22 +99,5 @@ namespace Conan.VisualStudio.Core
             };
             return startInfo;
         }
-
-        public Task<Process> Inspect(ConanProject project)
-        {
-            var path = project.Path;
-            var arguments = $"inspect {Escape(path)} -a name -j";
-
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = _executablePath,
-                Arguments = arguments,
-                UseShellExecute = false,
-                WorkingDirectory = Path.GetDirectoryName(path),
-                RedirectStandardOutput = true,
-                CreateNoWindow = true
-            };
-            return Task.Run(() => Process.Start(startInfo));
-        }
     }
 }
