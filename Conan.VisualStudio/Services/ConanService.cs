@@ -12,7 +12,7 @@ namespace Conan.VisualStudio.Services
     internal class ConanService : IConanService
     {
         private readonly ISettingsService _settingsService;
-        private readonly Core.IErrorListService _errorListService;
+        private readonly IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
 
         public ConanService(ISettingsService settingsService, Core.IErrorListService errorListService, IVcProjectService vcProjectService)
