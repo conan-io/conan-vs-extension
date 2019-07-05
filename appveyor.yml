@@ -28,11 +28,8 @@ for:
       only:
         - image: Visual Studio 2017
     build_script:
-        - ps: write-host ">>> build script"
-        - ps: dir C:\projects
         - ps: .\vsix\download_artifact.ps1
-        - ps: dir C:\projects
     test_script:
       - ps: write-host "Visual Studio 2017"
       - ps: .\vsix\install_vsix.ps1
-      - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" && devenv /ConanVisualStudioVersion
+      - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" && devenv /ConanVisualStudioVersion /?
