@@ -35,4 +35,4 @@ for:
     test_script:
       - ps: write-host "Visual Studio 2017"
       - ps: .\vsix\install_vsix.ps1
-      - devenv /ConanVisualStudioVersion
+      - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" && devenv /ConanVisualStudioVersion
