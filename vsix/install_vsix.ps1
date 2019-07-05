@@ -7,4 +7,5 @@ $vsixInstaller = Join-Path $visualStudioInstallation 'Common7\IDE\VSIXInstaller.
 Write-Host "visualStudioInstallation: $visualStudioInstallation"
 Write-Host "vsixInstaller: $vsixInstaller"
 
-& $vsixInstaller /q /a $vsixPath
+$result = Start-Process -FilePath "$vsixInstaller" -ArgumentList "/q /a $vsixPath" -Wait -PassThru;
+Write-Host "result: $result"
