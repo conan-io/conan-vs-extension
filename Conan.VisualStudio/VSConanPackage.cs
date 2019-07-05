@@ -28,8 +28,10 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
+    [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, HelpString ="Print version of Conan.VisualStudio extension")]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
+        private const string _cliSwitch = "ConanVisualStudioVersion";
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
         private ConanOptions _conanOptions;
@@ -55,6 +57,15 @@ namespace Conan.VisualStudio
             _dte = await GetServiceAsync<DTE>();
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            var cmdLine = await GetServiceAsync(typeof(SVsAppCommandLine)) as IVsAppCommandLine;
+
+            ErrorHandler.ThrowOnFailure(cmdLine.GetOption(_cliSwitch, out int isPresent, out string optionValue));
+
+            if (isPresent == 1)
+            {
+                System.Console.WriteLine(Vsix.Version);
+            }
 
             _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
             _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>() as IVsSolutionBuildManager3;
