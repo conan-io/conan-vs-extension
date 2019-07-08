@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Threading;
@@ -102,6 +103,22 @@ namespace Conan.VisualStudio.Services
 
             await InstallDependenciesAsync(conan, project);
         }
+        private static void AppendLinesFunc(object packedParams)
+        {
+            var paramsTuple = (Tuple<StreamWriter, StreamReader>)packedParams;
+            StreamWriter writer = paramsTuple.Item1;
+            StreamReader reader = paramsTuple.Item2;
+
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                lock (writer)
+                {
+                    Logger.Log(line);
+                    writer.WriteLine(line);
+                }
+            }
+        }
 
         private async Task InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
@@ -129,20 +146,17 @@ namespace Conan.VisualStudio.Services
                     {
                         int exitCode = await exeProcess.WaitForExitAsync();
 
-                        string output = await exeProcess.StandardOutput.ReadToEndAsync();
-                        string error = await exeProcess.StandardError.ReadToEndAsync();
+                        var tokenSource = new CancellationTokenSource();
+                        var token = tokenSource.Token;
 
-                        if (output.Length > 0)
-                        {
-                            Logger.Log(output);
-                            await logStream.WriteLineAsync(output);
-                        }
+                        Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
+                            Tuple.Create(logStream, exeProcess.StandardOutput),
+                            token, TaskCreationOptions.None, TaskScheduler.Default);
+                        Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
+                            Tuple.Create(logStream, exeProcess.StandardError),
+                            token, TaskCreationOptions.None, TaskScheduler.Default);
 
-                        if (error.Length > 0)
-                        {
-                            Logger.Log(error);
-                            await logStream.WriteLineAsync(error);
-                        }
+                        Task.WaitAll(outputReader, errorReader);
 
                         if (exitCode != 0) {
                             message = $"Conan has returned exit code '{exitCode}' " +
