@@ -1,4 +1,7 @@
+using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Shell;
 
@@ -12,6 +15,38 @@ namespace Conan.VisualStudio
         private bool? _conanInstallAutomatically;
         private ConanBuildType? _conanBuild;
         private bool? _conanUpdate;
+        private static bool ValidateConanExecutable(string exe)
+        {
+            if (exe == null || exe == "")
+                return true;
+            try
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = exe,
+                    Arguments = "--version",
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
+                var process = Process.Start(startInfo);
+
+                process.WaitForExit();
+
+                if (0 != process.ExitCode)
+                    MessageBox.Show($"invalid conan executable {exe}: conan --version failed with error {process.ExitCode}",
+                        "invalid conan executable", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return 0 == process.ExitCode;
+            }
+            catch (Win32Exception e)
+            {
+                MessageBox.Show($"invalid conan executable {exe}: {e.Message}", "invalid conan executable",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
 
         [Category("Conan")]
         [DisplayName("Conan executable")]
@@ -19,7 +54,7 @@ namespace Conan.VisualStudio
         public string ConanExecutablePath
         {
             get => _conanExecutablePath ?? (_conanExecutablePath = ConanPathHelper.DetermineConanPathFromEnvironment());
-            set => _conanExecutablePath = value;
+            set => _conanExecutablePath = ValidateConanExecutable(value) ? value : _conanExecutablePath;
         }
 
         [Category("Conan")]
