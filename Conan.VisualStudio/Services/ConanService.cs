@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
@@ -116,44 +117,56 @@ namespace Conan.VisualStudio.Services
                     ConanGeneratorType generator = _settingsService.GetConanGenerator();
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
-                   
-                    var process = await conan.Install(project, configuration, generator, build, update, _errorListService);
 
-                    string message = $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
-                        $"with arguments '{process.StartInfo.Arguments}'";
-
-                    Logger.Log(message);
-                    await logStream.WriteLineAsync(message);
-
-                    using (var reader = process.StandardOutput)
+                    try
                     {
-                        string line;
-                        while ((line = await reader.ReadLineAsync()) != null)
-                        {
-                            await logStream.WriteLineAsync(line);
+                        var process = await conan.Install(project, configuration, generator, build, update, _errorListService);
 
-                            Logger.Log(line);
+                        string message = $"[Conan.VisualStudio] Calling process '{process.StartInfo.FileName}' " +
+                            $"with arguments '{process.StartInfo.Arguments}'";
+
+                        Logger.Log(message);
+                        await logStream.WriteLineAsync(message);
+
+                        using (var reader = process.StandardOutput)
+                        {
+                            string line;
+                            while ((line = await reader.ReadLineAsync()) != null)
+                            {
+                                await logStream.WriteLineAsync(line);
+
+                                Logger.Log(line);
+                            }
+                        }
+
+                        var exitCode = await process.WaitForExitAsync();
+                        if (exitCode != 0)
+                        {
+                            message = $"Conan has returned exit code '{exitCode}' " +
+                                $"while processing configuration '{configuration}'. " +
+                                $"Please check file '{logFilePath}' for details.";
+
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                            return;
+                        }
+                        else
+                        {
+                            message = $"[Conan.VisualStudio] Conan has succsessfully installed configuration '{configuration}'";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteMessage(message);
                         }
                     }
-
-                    var exitCode = await process.WaitForExitAsync();
-                    if (exitCode != 0)
+                    catch (Win32Exception e)
                     {
-                        message = $"Conan has returned exit code '{exitCode}' " +
-                            $"while processing configuration '{configuration}'. " +
-                            $"Please check file '{logFilePath}' for details.";
-
+                        string message = $"Unable to start conan executable: '{e.Message}' " +
+                                $"while processing configuration '{configuration}'. " +
+                                $"Please check file '{logFilePath}' for details.";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message, logFilePath);
-                        return;
-                    }
-                    else
-                    {
-                        message = $"[Conan.VisualStudio] Conan has succsessfully installed configuration '{configuration}'";
-                        Logger.Log(message);
-                        await logStream.WriteLineAsync(message);
-                        _errorListService.WriteMessage(message);
                     }
                 }
             }
