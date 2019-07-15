@@ -53,9 +53,14 @@ namespace Conan.VisualStudio.Services
             foreach (VCPropertySheet sheet in configuration.PropertySheets)
             {
                 if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
+                {
+                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.project.Name}";
+                    Logger.Log(msg);
                     return;
+                }
             }
             configuration.AddPropertySheet(relativePropFilePath);
+            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.project.Name}");
             configuration.CollectIntelliSenseInfo();
         }
 
