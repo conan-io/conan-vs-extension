@@ -214,10 +214,14 @@ namespace Conan.VisualStudio.Services
                                 await logStream.WriteLineAsync(message);
                                 _errorListService.WriteError(message, logFilePath);
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 return false;
 =======
                                 return;
 >>>>>>> capture exception for iinvalid command
+=======
+                                return false;
+>>>>>>> return a success flag from InstallAsync function so we can decide to IntegrateAsync or not
                             }
                             else
                             {
@@ -241,9 +245,15 @@ namespace Conan.VisualStudio.Services
 =======
                     catch(System.ComponentModel.Win32Exception)
                     {
-                        message = $"Error running '{process.FileName}'. Is it a valid path to conan.exe?";
+                        message = $"[Conan.VisualStudio] Error running '{process.FileName}'. Is it a valid path to conan.exe?";
+                        Logger.Log(message);
+                        await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
+<<<<<<< HEAD
 >>>>>>> capture exception for iinvalid command
+=======
+                        return false;
+>>>>>>> return a success flag from InstallAsync function so we can decide to IntegrateAsync or not
                     }
                 }
             }
