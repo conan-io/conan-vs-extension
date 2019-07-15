@@ -185,9 +185,10 @@ namespace Conan.VisualStudio.Services
                             }
                         }
                     }
-                    catch(System.ComponentModel.Win32Exception)
+                    catch(System.ComponentModel.Win32Exception e)
                     {
-                        message = $"[Conan.VisualStudio] Error running '{process.FileName}'. Is it a valid path to conan.exe?";
+                        message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
+                                  $": {e.Message}. Check the executable path and also the output in '{logFilePath}'";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
