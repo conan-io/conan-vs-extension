@@ -88,7 +88,7 @@ namespace Conan.VisualStudio.Services
             }
         }
 
-        public async Task InstallAsync(VCProject vcProject)
+        public async Task<bool> InstallAsync(VCProject vcProject)
         {
             var conanPath = _settingsService.GetConanExecutablePath();
             if (conanPath == null || conanPath == "")
@@ -96,18 +96,18 @@ namespace Conan.VisualStudio.Services
                 _errorListService.WriteError(
                     "Conan executable path is not set and Conan executable wasn't found automatically. " +
                     "Please set it up in the Tools → Settings → Conan menu.");
-                return;
+                return false;
             }
 
             var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService);
             if (project == null)
             {
                 _errorListService.WriteError("Unable to extract conan project!");
-                return;
+                return false;
             }
             var conan = new ConanRunner(_settingsService.LoadSettingFile(project), conanPath);
 
-            await InstallDependenciesAsync(conan, project);
+            return await InstallDependenciesAsync(conan, project);
         }
         private static void AppendLinesFunc(object packedParams)
         {
@@ -126,7 +126,7 @@ namespace Conan.VisualStudio.Services
             }
         }
 
-        private async Task InstallDependenciesAsync(ConanRunner conan, ConanProject project)
+        private async Task<bool> InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
             foreach (var configuration in project.Configurations)
             {
@@ -173,7 +173,7 @@ namespace Conan.VisualStudio.Services
                                 Logger.Log(message);
                                 await logStream.WriteLineAsync(message);
                                 _errorListService.WriteError(message, logFilePath);
-                                return;
+                                return false;
                             }
                             else
                             {
@@ -187,11 +187,15 @@ namespace Conan.VisualStudio.Services
                     }
                     catch(System.ComponentModel.Win32Exception)
                     {
-                        message = $"Error running '{process.FileName}'. Is it a valid path to conan.exe?";
+                        message = $"[Conan.VisualStudio] Error running '{process.FileName}'. Is it a valid path to conan.exe?";
+                        Logger.Log(message);
+                        await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
+                        return false;
                     }
                 }
             }
+            return true;
         }
     }
 }
