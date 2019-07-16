@@ -173,6 +173,7 @@ namespace Conan.VisualStudio.Services
 =======
                             int exitCode = await exeProcess.WaitForExitAsync();
 
+<<<<<<< HEAD
                             string output = await exeProcess.StandardOutput.ReadToEndAsync();
                             string error = await exeProcess.StandardError.ReadToEndAsync();
 
@@ -189,6 +190,20 @@ namespace Conan.VisualStudio.Services
                             }
 
 >>>>>>> capture exception for iinvalid command
+=======
+                            var tokenSource = new CancellationTokenSource();
+                            var token = tokenSource.Token;
+
+                            Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
+                                Tuple.Create(logStream, exeProcess.StandardOutput),
+                                token, TaskCreationOptions.None, TaskScheduler.Default);
+                            Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
+                                Tuple.Create(logStream, exeProcess.StandardError),
+                                token, TaskCreationOptions.None, TaskScheduler.Default);
+
+                            Task.WaitAll(outputReader, errorReader);
+                            
+>>>>>>> failure on merge
                             if (exitCode != 0)
                             {
                                 message = $"Conan has returned exit code '{exitCode}' " +
