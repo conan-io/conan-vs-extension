@@ -41,7 +41,7 @@ for:
     test_script:
       - ps: write-host "Test scenario"
       - ps: .\vsix\install_vsix.ps1
-      - devenv /ConanVisualStudioVersion
+      - ps: .\vsix\check_installed.ps1
   -
     matrix:
       only:
