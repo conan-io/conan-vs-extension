@@ -36,7 +36,6 @@ namespace Conan.VisualStudio
         private DTE _dte;
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
-        private SolutionEventsHandler _solutionEventsHandler;
         private ISettingsService _settingsService;
         private IVcProjectService _vcProjectService;
         private IConanService _conanService;
@@ -71,9 +70,6 @@ namespace Conan.VisualStudio
             _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            _solutionEventsHandler = new SolutionEventsHandler(this);
-            _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
 
             _addConanDependsProject = new AddConanDependsProject(commandService, _errorListService, _vcProjectService, _conanService);
             _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
