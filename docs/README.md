@@ -71,3 +71,8 @@ There are several options available to the user to configure the extension, all 
 be accessed through the 'Tools' > 'Conan Package Management' > 'Options...' menu:
 
 ![Conan Extension Options](images/conan-vs-extension-options.png)
+
+ * **Conan installation directory**: path where the `conanbuildinfo.props` file will be
+   generated. This path is common for all the configurations so making use of Visual Studio
+   dynamic directories like `$(Platform)` or `$(Configuration)` will be needed to avoid
+   overriding the file for different configurations.
