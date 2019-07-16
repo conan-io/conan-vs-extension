@@ -82,8 +82,6 @@
     <Compile Include="Services\ConanService.cs" />
     <Compile Include="Services\ErrorListService.cs" />
     <Compile Include="Services\IConanService.cs" />
-    <Compile Include="Services\InfoBarEventsHandler.cs" />
-    <Compile Include="Services\InfobarService.cs" />
     <Compile Include="Services\IVcProjectService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\VcProjectService.cs" />
