@@ -58,6 +58,11 @@ namespace Conan.VisualStudio.Services
                 return null;
             }
 
+            if (vcProject.ActiveConfiguration == null) // project unloaded
+            {
+                return null;
+            }
+
             string projectConanConfig = ConanPathHelper.GetNearestConanConfig(vcProject.ProjectDirectory);
             var project = new ConanProject
             {
