@@ -19,6 +19,23 @@ namespace Conan.VisualStudio.Core
         private string Escape(string arg) =>
             arg.Contains(" ") ? $"\"{arg}\"" : arg;
 
+        private string BuildOptions(ConanBuildType build, bool update)
+        {
+            string options = "";
+            if (build != ConanBuildType.none)
+            {
+                if (build == ConanBuildType.always)
+                    options += " --build";
+                else
+                    options += " --build=" + build.ToString();
+            }
+            if (update)
+            {
+                options += " --update";
+            }
+            return options;
+        }
+
         public ProcessStartInfo Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";
@@ -29,21 +46,11 @@ namespace Conan.VisualStudio.Core
             if (profile != null)
             {
                 string generatorName = generator.ToString();
-                string options = "";
-                if (build != ConanBuildType.none)
-                {
-                    options += " --build " + build.ToString();
-                }
-                if (update)
-                {
-                    options += " --update";
-                }
-
                 arguments = $"install {Escape(project.Path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(configuration.InstallPath)} " +
                             $"--profile {Escape(profile)}" +
-                            $"{options}";
+                            $"{BuildOptions(build, update)}";
 
             }
             else if (_conanSettings != null)
@@ -65,16 +72,6 @@ namespace Conan.VisualStudio.Core
                 {
                     settingValues = settingValues.Concat(new[] { ("compiler.runtime", configuration.RuntimeLibrary) }).ToArray();
                 }
-                string options = "";
-                if (build != ConanBuildType.none)
-                {
-                    options += "--build " + build.ToString();
-                }
-
-                if (update)
-                {
-                    options += " --update";
-                }
 
                 var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
                 {
@@ -84,7 +81,7 @@ namespace Conan.VisualStudio.Core
                 arguments = $"install {Escape(project.Path)} " +
                             $"-g {generatorName} " +
                             $"--install-folder {Escape(configuration.InstallPath)} " +
-                            $"{settings} {options}";
+                            $"{settings} {BuildOptions(build, update)}";
             }
 
             var startInfo = new ProcessStartInfo

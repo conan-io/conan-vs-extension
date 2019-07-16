@@ -21,9 +21,11 @@ namespace Conan.VisualStudio.Core
 
     public enum ConanBuildType
     {
-        none,
-        missing,
         always,
-        outdated
+        never,
+        missing,
+        cascade,
+        outdated,
+        none
     }
 }
