@@ -152,21 +152,18 @@ namespace Conan.VisualStudio.Services
                         {
                             int exitCode = await exeProcess.WaitForExitAsync();
 
-                            string output = await exeProcess.StandardOutput.ReadToEndAsync();
-                            string error = await exeProcess.StandardError.ReadToEndAsync();
+                            var tokenSource = new CancellationTokenSource();
+                            var token = tokenSource.Token;
 
-                            if (output.Length > 0)
-                            {
-                                Logger.Log(output);
-                                await logStream.WriteLineAsync(output);
-                            }
+                            Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
+                                Tuple.Create(logStream, exeProcess.StandardOutput),
+                                token, TaskCreationOptions.None, TaskScheduler.Default);
+                            Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
+                                Tuple.Create(logStream, exeProcess.StandardError),
+                                token, TaskCreationOptions.None, TaskScheduler.Default);
 
-                            if (error.Length > 0)
-                            {
-                                Logger.Log(error);
-                                await logStream.WriteLineAsync(error);
-                            }
-
+                            Task.WaitAll(outputReader, errorReader);
+                            
                             if (exitCode != 0)
                             {
                                 message = $"Conan has returned exit code '{exitCode}' " +
