@@ -21,7 +21,7 @@ namespace Conan.VisualStudio
         {
             if (!ConanPathHelper.ValidateConanExecutable(exe, out string errorMessage))
             {
-                MessageBox.Show(errorMessage, "invalid conan executable",
+                MessageBox.Show(errorMessage, "Invalid conan executable",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
