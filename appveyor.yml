@@ -1,4 +1,5 @@
 ﻿environment:
+  APPVEYOR_RDP_PASSWORD: aA1bcde
   matrix:
     - stage: Build
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
@@ -36,6 +37,8 @@ for:
     matrix:
       only:
         - stage: Test
+    init:
+      - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
     build_script:
       - ps: .\vsix\download_artifact.ps1
     test_script:
