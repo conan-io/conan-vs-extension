@@ -1,8 +1,4 @@
-﻿image:
-  - Visual Studio 2019 Preview
-  - Visual Studio 2017
-  - Visual Studio 2015
-platform: Any CPU
+﻿platform: Any CPU
 skip_branch_with_pr: true
 configuration: Release
 environment:
@@ -10,6 +6,10 @@ environment:
     - stage: Build
     - stage: Test
     - stage: Deploy
+image:
+  - Visual Studio 2019 Preview
+  - Visual Studio 2017
+  - Visual Studio 2015
 
 matrix:
   fast_finish: true
