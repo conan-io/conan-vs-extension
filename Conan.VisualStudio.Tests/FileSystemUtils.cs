@@ -14,10 +14,13 @@ namespace Conan.VisualStudio.Tests
             return path;
         }
 
-        public static string CreateTempFile(string directory, string name)
+        public static string CreateTempFile(string directory, string name, string contents = "")
         {
             var path = Path.Combine(directory, name);
-            File.Create(path).Close();
+            FileStream f = File.Create(path);
+            byte[] info = new UTF8Encoding(true).GetBytes(contents);
+            f.Write(info, 0, info.Length);
+            f.Close();
             return path;
         }
 

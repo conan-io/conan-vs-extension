@@ -24,7 +24,7 @@ namespace Conan.VisualStudio.Tests.Core
         {
             var directory = FileSystemUtils.CreateTempDirectory();
             const string extension = ".cmd";
-            var conanShim = FileSystemUtils.CreateTempFile(directory, "conan" + extension);
+            var conanShim = FileSystemUtils.CreateTempFile(directory, "conan" + extension, "exit 0");
 
             Environment.SetEnvironmentVariable("PATH", directory);
             Environment.SetEnvironmentVariable("PATHEXT", extension);
@@ -36,16 +36,16 @@ namespace Conan.VisualStudio.Tests.Core
         public void PathDeterminerRespectPathExtOrder()
         {
             var directory = FileSystemUtils.CreateTempDirectory();
-            var comShim = FileSystemUtils.CreateTempFile(directory, "conan.com");
+            var comShim = FileSystemUtils.CreateTempFile(directory, "conan.cmd", "exit 0");
             FileSystemUtils.CreateTempFile(directory, "conan.exe");
-            var batShim = FileSystemUtils.CreateTempFile(directory, "conan.bat");
+            var batShim = FileSystemUtils.CreateTempFile(directory, "conan.bat", "exit 0");
 
             Environment.SetEnvironmentVariable("PATH", directory);
 
-            Environment.SetEnvironmentVariable("PATHEXT", ".COM;.EXE;.BAT");
+            Environment.SetEnvironmentVariable("PATHEXT", ".CMD;.EXE;.BAT");
             Assert.AreEqual(comShim, ConanPathHelper.DetermineConanPathFromEnvironment());
 
-            Environment.SetEnvironmentVariable("PATHEXT", ".BAT;.EXE;.COM");
+            Environment.SetEnvironmentVariable("PATHEXT", ".BAT;.EXE;.CMD");
             Assert.AreEqual(batShim, ConanPathHelper.DetermineConanPathFromEnvironment());
         }
 
