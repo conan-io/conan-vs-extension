@@ -4,10 +4,7 @@
   - Visual Studio 2015
 platform: Any CPU
 skip_branch_with_pr: true
-configuration:
-  - Build
-  - Test
-  - Deploy
+configuration: Release
 
 matrix:
   fast_finish: true
@@ -16,7 +13,6 @@ for:
     matrix:
       only:
         - image: Visual Studio 2019 Preview
-          configuration: Build
     install:
       - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
     before_build:
@@ -29,12 +25,8 @@ for:
       - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
         name: Conan Visual Studio Extension
   -
-    matrix:
-      only:
-        - configuration: Test
-    build_script:
-        - ps: .\vsix\download_artifact.ps1
     test_script:
+      - ps: .\vsix\download_artifact.ps1
       - ps: write-host "Visual Studio 2017"
       - ps: .\vsix\install_vsix.ps1
       - ps: .\vsix\check_installed.ps1
