@@ -58,6 +58,11 @@ namespace Conan.VisualStudio.Services
                 return null;
             }
 
+            if (vcProject.ActiveConfiguration == null) // project unloaded
+            {
+                return null;
+            }
+
             string projectConanConfig = ConanPathHelper.GetNearestConanConfig(vcProject.ProjectDirectory);
             var project = new ConanProject
             {
@@ -163,54 +168,6 @@ namespace Conan.VisualStudio.Services
                 InstallPath = installPath,
                 RuntimeLibrary = VCCLCompilerTool != null ? RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary) : null
             };
-        }
-
-        public Task AddPropsImportAsync(string projectPath, string propFilePath) => Task.Run(() =>
-        {
-            var xml = XDocument.Load(projectPath);
-            var project = xml.Root;
-            if (project == null)
-            {
-                throw new Exception($"Project {projectPath} is malformed: no root element");
-            }
-
-            XNamespace ns = "http://schemas.microsoft.com/developer/msbuild/2003";
-            var import = ns + "Import";
-            var existingImports = project.Descendants(import);
-            if (existingImports.Any(node => node.Attribute("Project")?.Value == propFilePath))
-            {
-                return;
-            }
-
-            var newImport = new XElement(import);
-            newImport.SetAttributeValue("Project", propFilePath);
-            newImport.SetAttributeValue("Condition", $"Exists('{propFilePath}')");
-            project.Add(newImport);
-
-            xml.Save(projectPath);
-        });
-
-        public Guid UnloadProject(VCProject project)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            var projectGuid = new Guid(project.ProjectGUID);
-            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
-
-            int hr = solution.UnloadProject(ref projectGuid, (uint)_VSProjectUnloadStatus.UNLOADSTATUS_UnloadedByUser);
-            ErrorHandler.ThrowOnFailure(hr);
-
-            return projectGuid;
-        }
-
-        public void ReloadProject(Guid projectGuid)
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            var solution = Package.GetGlobalService(typeof(SVsSolution)) as IVsSolution4;
-
-            int hr = solution.ReloadProject(ref projectGuid);
-            ErrorHandler.ThrowOnFailure(hr);
         }
     }
 }
