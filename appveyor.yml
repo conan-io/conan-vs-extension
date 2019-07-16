@@ -3,9 +3,9 @@
     - stage: Build
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
     - stage: Test
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
-    - stage: Test
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
     - stage: Test
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - stage: Deploy
