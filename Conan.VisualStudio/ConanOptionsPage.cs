@@ -16,12 +16,23 @@ namespace Conan.VisualStudio
         private ConanBuildType? _conanBuild;
         private bool? _conanUpdate;
 
+        protected override void OnApply(PageApplyEventArgs e)
+        {
+            if (!ValidateConanExecutableAndShowMessage(_conanExecutablePath))
+            {
+                e.ApplyBehavior = ApplyKind.Cancel;
+            }
+            else
+            {
+                base.OnApply(e);
+            }
+        }
 
         private bool ValidateConanExecutableAndShowMessage(string exe)
         {
             if (!ConanPathHelper.ValidateConanExecutable(exe, out string errorMessage))
             {
-                MessageBox.Show(errorMessage, "invalid conan executable",
+                MessageBox.Show(errorMessage, "Conan extension: invalid conan executable",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -34,7 +45,7 @@ namespace Conan.VisualStudio
         public string ConanExecutablePath
         {
             get => _conanExecutablePath ?? (_conanExecutablePath = ConanPathHelper.DetermineConanPathFromEnvironment());
-            set => _conanExecutablePath = ValidateConanExecutableAndShowMessage(value) ? value : _conanExecutablePath;
+            set => _conanExecutablePath = value;
         }
 
         [Category("Conan")]
