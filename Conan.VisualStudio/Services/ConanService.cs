@@ -142,10 +142,15 @@ namespace Conan.VisualStudio.Services
                     bool update = _settingsService.GetConanUpdate();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                     ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
 
 =======
 >>>>>>> capture exception for iinvalid command
+=======
+                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
+
+>>>>>>> revert deleted line
                     string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
                                      $"with arguments '{process.Arguments}'";
                     Logger.Log(message);
@@ -250,7 +255,7 @@ namespace Conan.VisualStudio.Services
 >>>>>>> improve message
                     {
                         message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
-                                  $": {e.Message}. Check the executable path and also the output in '{logFilePath}'";
+                                  $": {e.Message}. Check log file '{logFilePath}' for details";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
