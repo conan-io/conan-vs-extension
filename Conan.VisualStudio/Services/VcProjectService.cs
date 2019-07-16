@@ -106,11 +106,13 @@ namespace Conan.VisualStudio.Services
         private static string GetInstallationDirectoryImpl(ISettingsService settingsService, VCConfiguration configuration)
         {
             string installPath = ".conan";
-            if (settingsService != null && settingsService.GetConanGenerator() == ConanGeneratorType.visual_studio)
+            if (settingsService != null)
             {
                 IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
-                string outputDirectory = generalSettings.GetEvaluatedPropertyValue("OutDir");
-                return Path.Combine(outputDirectory, installPath);
+                installPath = configuration.Evaluate(settingsService.GetConanInstallationPath());
+                if (!Path.IsPathRooted(installPath))
+                    installPath = Path.Combine(configuration.project.ProjectDirectory, installPath);
+                return installPath;
             }
             return Path.Combine(configuration.project.ProjectDirectory, installPath);
         }
