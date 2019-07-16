@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -90,7 +91,7 @@ namespace Conan.VisualStudio.Services
         public async Task InstallAsync(VCProject vcProject)
         {
             var conanPath = _settingsService.GetConanExecutablePath();
-            if (conanPath == null)
+            if (conanPath == null || conanPath == "")
             {
                 _errorListService.WriteError(
                     "Conan executable path is not set and Conan executable wasn't found automatically. " +
@@ -139,48 +140,60 @@ namespace Conan.VisualStudio.Services
                     ConanGeneratorType generator = _settingsService.GetConanGenerator();
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
-                   
-                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
 
-                    string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
-                                     $"with arguments '{process.Arguments}'";
-                    Logger.Log(message);
-                    await logStream.WriteLineAsync(message);
-
-                    using (Process exeProcess = Process.Start(process))
+                    try
                     {
-                        int exitCode = await exeProcess.WaitForExitAsync();
+                      ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
 
-                        var tokenSource = new CancellationTokenSource();
-                        var token = tokenSource.Token;
+                      string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
+                                       $"with arguments '{process.Arguments}'";
+                      Logger.Log(message);
+                      await logStream.WriteLineAsync(message);
 
-                        Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
-                            Tuple.Create(logStream, exeProcess.StandardOutput),
-                            token, TaskCreationOptions.None, TaskScheduler.Default);
-                        Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
-                            Tuple.Create(logStream, exeProcess.StandardError),
-                            token, TaskCreationOptions.None, TaskScheduler.Default);
+                      using (Process exeProcess = Process.Start(process))
+                      {
+                          int exitCode = await exeProcess.WaitForExitAsync();
 
-                        Task.WaitAll(outputReader, errorReader);
+                          var tokenSource = new CancellationTokenSource();
+                          var token = tokenSource.Token;
 
-                        if (exitCode != 0) {
-                            message = $"Conan has returned exit code '{exitCode}' " +
-                                      $"while processing configuration '{configuration}'. " +
-                                      $"Please check file '{logFilePath}' for details.";
+                          Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
+                              Tuple.Create(logStream, exeProcess.StandardOutput),
+                              token, TaskCreationOptions.None, TaskScheduler.Default);
+                          Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
+                              Tuple.Create(logStream, exeProcess.StandardError),
+                              token, TaskCreationOptions.None, TaskScheduler.Default);
 
-                            Logger.Log(message);
-                            await logStream.WriteLineAsync(message);
-                            _errorListService.WriteError(message, logFilePath);
-                            return;
-                        }
-                        else
-                        {
-                            message = $"[Conan.VisualStudio] Conan has succsessfully " +
-                                      $"installed configuration '{configuration}'";
-                            Logger.Log(message);
-                            await logStream.WriteLineAsync(message);
-                            _errorListService.WriteMessage(message);
-                        }
+                          Task.WaitAll(outputReader, errorReader);
+
+                          if (exitCode != 0) {
+                              message = $"Conan has returned exit code '{exitCode}' " +
+                                        $"while processing configuration '{configuration}'. " +
+                                        $"Please check file '{logFilePath}' for details.";
+
+                              Logger.Log(message);
+                              await logStream.WriteLineAsync(message);
+                              _errorListService.WriteError(message, logFilePath);
+                              return;
+                          }
+                          else
+                          {
+                              message = $"[Conan.VisualStudio] Conan has succsessfully " +
+                                        $"installed configuration '{configuration}'";
+                              Logger.Log(message);
+                              await logStream.WriteLineAsync(message);
+                              _errorListService.WriteMessage(message);
+                          }
+                      }
+                    }
+                    catch (Win32Exception e)
+                    {
+                        string message = $"Unable to start conan executable: '{e.Message}' " +
+                                $"while processing configuration '{configuration}'. " +
+                                $"Please check file '{logFilePath}' for details.";
+                        Logger.Log(message);
+                        await logStream.WriteLineAsync(message);
+                        _errorListService.WriteError(message, logFilePath);
                     }
                 }
             }

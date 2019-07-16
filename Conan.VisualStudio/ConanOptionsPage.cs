@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Shell;
 
@@ -13,6 +15,29 @@ namespace Conan.VisualStudio
         private bool? _conanInstallAutomatically;
         private ConanBuildType? _conanBuild;
         private bool? _conanUpdate;
+
+        protected override void OnApply(PageApplyEventArgs e)
+        {
+            if (!ValidateConanExecutableAndShowMessage(_conanExecutablePath))
+            {
+                e.ApplyBehavior = ApplyKind.Cancel;
+            }
+            else
+            {
+                base.OnApply(e);
+            }
+        }
+
+        private bool ValidateConanExecutableAndShowMessage(string exe)
+        {
+            if (!ConanPathHelper.ValidateConanExecutable(exe, out string errorMessage))
+            {
+                MessageBox.Show(errorMessage, "Conan extension: invalid conan executable",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
 
         [Category("Conan")]
         [DisplayName("Conan executable")]
