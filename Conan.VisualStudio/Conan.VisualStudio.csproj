@@ -82,9 +82,6 @@
     <Compile Include="Services\ConanService.cs" />
     <Compile Include="Services\ErrorListService.cs" />
     <Compile Include="Services\IConanService.cs" />
-    <Compile Include="Services\InfoBarEventsHandler.cs" />
-    <Compile Include="Services\InfobarService.cs" />
-    <Compile Include="Services\SolutionEventsHandler.cs" />
     <Compile Include="Services\IVcProjectService.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\VcProjectService.cs" />
@@ -92,19 +89,6 @@
     <Compile Include="source.extension.cs">
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
-    <Compile Include="TaskRunner\BindingsPersister.cs" />
-    <Compile Include="TaskRunner\CommandTask.cs" />
-    <Compile Include="TaskRunner\FileTextUtil.cs" />
-    <Compile Include="TaskRunner\ITextUtil.cs" />
-    <Compile Include="TaskRunner\LineRange.cs" />
-    <Compile Include="TaskRunner\Range.cs" />
-    <Compile Include="TaskRunner\TaskParser.cs" />
-    <Compile Include="TaskRunner\TaskRunnerConfig.cs" />
-    <Compile Include="TaskRunner\TaskRunnerConfigBase.cs" />
-    <Compile Include="TaskRunner\TaskRunnerProvider.cs" />
-    <Compile Include="TaskRunner\TextUtilExtensions.cs" />
-    <Compile Include="TaskRunner\TextViewUtil.cs" />
-    <Compile Include="TaskRunner\VsTextViewTextUtil.cs" />
     <Compile Include="VSConanPackage.cs" />
     <Compile Include="VSConan.cs">
       <AutoGen>True</AutoGen>

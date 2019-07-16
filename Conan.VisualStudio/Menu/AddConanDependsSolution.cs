@@ -41,8 +41,11 @@ namespace Conan.VisualStudio.Menu
             {
                 if (_vcProjectService.IsConanProject(project))
                 {
-                    await _conanService.InstallAsync(_vcProjectService.AsVCProject(project));
-                    await _conanService.IntegrateAsync(_vcProjectService.AsVCProject(project));
+                    bool success = await _conanService.InstallAsync(_vcProjectService.AsVCProject(project));
+                    if (success)
+                    {
+                        await _conanService.IntegrateAsync(_vcProjectService.AsVCProject(project));
+                    }
                 }
             }
             await TaskScheduler.Default;

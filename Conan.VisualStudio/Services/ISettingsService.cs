@@ -8,6 +8,10 @@ namespace Conan.VisualStudio.Services
         /// <returns>Executable path. May be <c>null</c> if Conan not found.</returns>
         string GetConanExecutablePath();
 
+        /// <summary>Returns Conan installation path - to be used as target for the "conan install" command.</summary>
+        /// <returns>Installation path. Might contain visual studio macro definitions (like $(OutDir)). Relative path is evaluated against project directory</returns>
+        string GetConanInstallationPath();
+
         /// <summary>Returns True if install only active configuration, as defined in the project options.</summary>
         /// <returns>Boolean flag describing conan installation mode</returns>
         bool GetConanInstallOnlyActiveConfiguration();
