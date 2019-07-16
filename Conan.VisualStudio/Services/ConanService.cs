@@ -12,7 +12,7 @@ namespace Conan.VisualStudio.Services
     internal class ConanService : IConanService
     {
         private readonly ISettingsService _settingsService;
-        private readonly Core.IErrorListService _errorListService;
+        private readonly IErrorListService _errorListService;
         private readonly IVcProjectService _vcProjectService;
 
         public ConanService(ISettingsService settingsService, Core.IErrorListService errorListService, IVcProjectService vcProjectService)
@@ -53,9 +53,14 @@ namespace Conan.VisualStudio.Services
             foreach (VCPropertySheet sheet in configuration.PropertySheets)
             {
                 if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
+                {
+                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.project.Name}";
+                    Logger.Log(msg);
                     return;
+                }
             }
             configuration.AddPropertySheet(relativePropFilePath);
+            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.project.Name}");
             configuration.CollectIntelliSenseInfo();
         }
 
