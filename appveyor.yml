@@ -1,15 +1,18 @@
-﻿image:
-  - Visual Studio 2019 Preview
-  - Visual Studio 2017
-  - Visual Studio 2015
+﻿environment:
+  matrix:
+    - stage: Build
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    - stage: Deploy
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
 platform: Any CPU
 skip_branch_with_pr: true
 configuration: Release
-environment:
-  matrix:
-    - stage: Build
-    - stage: Test
-    - stage: Deploy
 
 matrix:
   fast_finish: true
@@ -17,8 +20,7 @@ for:
   -
     matrix:
       only:
-        - image: Visual Studio 2019 Preview
-          stage: Build
+        - stage: Build
     install:
       - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
     before_build:
@@ -37,6 +39,15 @@ for:
     build_script:
       - ps: .\vsix\download_artifact.ps1
     test_script:
-      - ps: write-host "Visual Studio 2017"
+      - ps: write-host "Test scenario"
       - ps: .\vsix\install_vsix.ps1
       - devenv /ConanVisualStudioVersion
+  -
+    matrix:
+      only:
+        - stage: Deploy
+    skip_non_tags: true
+    build_script:
+      - ps: .\vsix\download_artifact.ps1
+    test_script:
+      - ps: write-host "Deploy scenario"
