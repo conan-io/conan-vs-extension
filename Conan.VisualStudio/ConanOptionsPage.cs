@@ -10,6 +10,7 @@ namespace Conan.VisualStudio
     public class ConanOptionsPage : DialogPage
     {
         private string _conanExecutablePath;
+        private string _conanInstallationPath;
         private bool? _conanInstallOnlyActiveConfiguration;
         private ConanGeneratorType? _conanGenerator;
         private bool? _conanInstallAutomatically;
@@ -55,6 +56,15 @@ namespace Conan.VisualStudio
         {
             get => _conanExecutablePath ?? (_conanExecutablePath = ConanPathHelper.DetermineConanPathFromEnvironment());
             set => _conanExecutablePath = ValidateConanExecutable(value) ? value : _conanExecutablePath;
+        }
+
+        [Category("Conan")]
+        [DisplayName("Conan installation directory")]
+        [Description(@"Path to the conan installation directory, may use macro like $(OutDir) or $(ProjectDir). Absolute or relative to the project directory.")]
+        public string ConanInstallationPath
+        {
+            get => _conanInstallationPath ?? (_conanInstallationPath = "$(OutDir).conan");
+            set => _conanInstallationPath = value;
         }
 
         [Category("Conan")]
