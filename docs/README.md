@@ -63,3 +63,11 @@ It is important to take into account:
    of the Configuration and the Platform.
  * For Conan profiles, the value declared will be used verbatim for the `--profile` argument
    in the `conan install` command, and rules related to profile lookup applies.
+
+
+## Extension configuration
+
+There are several options available to the user to configure the extension, all of them can
+be accessed through the 'Tools' > 'Conan Package Management' > 'Options...' menu:
+
+![Conan Extension Options](images/conan-vs-extension-options.png)
