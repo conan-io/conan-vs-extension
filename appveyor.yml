@@ -1,9 +1,13 @@
 ﻿image:
   - Visual Studio 2019 Preview
   - Visual Studio 2017
+  - Visual Studio 2015
 platform: Any CPU
 skip_branch_with_pr: true
-configuration: Release
+configuration:
+  - Build
+  - Test
+  - Deploy
 
 matrix:
   fast_finish: true
@@ -12,6 +16,7 @@ for:
     matrix:
       only:
         - image: Visual Studio 2019 Preview
+          configuration: Build
     install:
       - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
     before_build:
@@ -26,7 +31,7 @@ for:
   -
     matrix:
       only:
-        - image: Visual Studio 2017
+        - configuration: Test
     build_script:
         - ps: .\vsix\download_artifact.ps1
     test_script:
