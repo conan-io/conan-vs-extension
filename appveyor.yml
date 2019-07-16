@@ -1,5 +1,4 @@
 ﻿environment:
-  APPVEYOR_RDP_PASSWORD: aA1bcde
   matrix:
     - stage: Build
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
