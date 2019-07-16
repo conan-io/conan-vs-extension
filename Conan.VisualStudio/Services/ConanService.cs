@@ -141,6 +141,8 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
 
+                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
+
                     string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
                                      $"with arguments '{process.Arguments}'";
                     Logger.Log(message);
@@ -188,7 +190,7 @@ namespace Conan.VisualStudio.Services
                     catch(System.ComponentModel.Win32Exception e)
                     {
                         message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
-                                  $": {e.Message}. Check the executable path and also the output in '{logFilePath}'";
+                                  $": {e.Message}. Check log file '{logFilePath}' for details";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
