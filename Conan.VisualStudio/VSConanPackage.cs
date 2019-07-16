@@ -186,8 +186,11 @@ namespace Conan.VisualStudio
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
-                    await _conanService.InstallAsync(vcProject);
-                    await _conanService.IntegrateAsync(vcProject);
+                    bool success = await _conanService.InstallAsync(vcProject);
+                    if (success)
+                    {
+                        await _conanService.IntegrateAsync(vcProject);
+                    }
                 }
             );
         }
