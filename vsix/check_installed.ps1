@@ -6,7 +6,8 @@ $devenv = Join-Path $visualStudioInstallation 'Common7\IDE\devenv.exe'
 Write-Host "vcvars64: $vcvars64"
 Write-Host "devenv: $devenv"
 
-$devenv_command = "$devenv /ConanVisualStudioVersion /?"
+Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
-iex $vcvars64
-iex $devenv_command
+#$devenv_command = "$devenv /ConanVisualStudioVersion /?"
+#iex $vcvars64
+#iex $devenv_command
