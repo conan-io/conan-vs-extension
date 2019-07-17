@@ -8,6 +8,5 @@ Write-Host "devenv: $devenv"
 
 Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
-#$devenv_command = "$devenv /ConanVisualStudioVersion /?"
-#iex $vcvars64
-#iex $devenv_command
+Invoke-Expression "& '$vcvars64'"
+Invoke-Expression "& '$devenv /ConanVisualStudioVersion /?'"
