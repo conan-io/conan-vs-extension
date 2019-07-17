@@ -18,4 +18,4 @@ Write-Host "APPVEYOR_BUILD_VERSION: ${env:APPVEYOR_BUILD_VERSION}"
 
 $pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+Microsoft Visual Studio"
 $aaa = $ss2 -match $pattern
-Write-Host "match $pattern: $aaa"
+Write-Host "match ${pattern}: $aaa"
