@@ -10,4 +10,10 @@ Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
 $ss1 = . "$vcvars64"
 $ss2 = . "$devenv" /ConanVisualStudioVersion /?
+
 Write-Host "output: $ss2"
+Write-Host "APPVEYOR_JOB_ID: ${env:APPVEYOR_JOB_ID}"
+Write-Host "APPVEYOR_BUILD_NUMBER: ${env:APPVEYOR_BUILD_NUMBER}"
+Write-Host "APPVEYOR_BUILD_VERSION: ${env:APPVEYOR_BUILD_VERSION}"
+
+#$ss2 -match '^'
