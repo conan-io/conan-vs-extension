@@ -8,5 +8,6 @@ Write-Host "devenv: $devenv"
 
 Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
-. "$vcvars64"
-. "$devenv" /ConanVisualStudioVersion /?
+. "$vcvars64" 
+$ss = . "$devenv" /ConanVisualStudioVersion /?
+Write-Host "output: $ss"
