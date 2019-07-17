@@ -6,4 +6,4 @@ $devenv = Join-Path $visualStudioInstallation 'Common7\IDE\devenv.exe'
 Write-Host "vcvars64: $vcvars64"
 Write-Host "devenv: $devenv"
 
-. $vcvars64 "&&" $devenv "Conan.VisualStudio.sln /ConanVisualStudioVersion";
+. $vcvars64 "&&" $devenv "/ConanVisualStudioVersion";
