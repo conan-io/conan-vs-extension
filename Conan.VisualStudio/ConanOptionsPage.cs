@@ -86,7 +86,7 @@ namespace Conan.VisualStudio
 
         [Category("Conan")]
         [DisplayName("Build policy")]
-        [Description(@"--build argument (missing, outdated, always or none)")]
+        [Description(@"--build argument (always, never, missing, cascade, outdated or none)")]
         public ConanBuildType ConanBuild
         {
             get => _conanBuild ?? ConanBuildType.missing;
