@@ -44,7 +44,7 @@ for:
       - ps: write-host "Test scenario"
       - ps: .\vsix\install_vsix.ps1
       - ps: .\vsix\check_installed.ps1
-      - call %vcvars64% && devenv /ConanVisualStudioVersion /?
+      - 'call "%vcvars64%" && devenv /ConanVisualStudioVersion /?'
       - ps: write-host "Done"
   -
     matrix:
