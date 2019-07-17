@@ -31,3 +31,4 @@ $localArtifactPath = "$downloadLocation\Conan.VisualStudio.vsix"
 # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
 Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" `
 -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
+"OK" | Write-Host -ForegroundColor Green

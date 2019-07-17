@@ -8,3 +8,4 @@ Write-Host "visualStudioInstallation: $visualStudioInstallation"
 Write-Host "vsixInstaller: $vsixInstaller"
 
 Start-Process -FilePath "$vsixInstaller" -ArgumentList "/q /a $vsixPath" -Wait -PassThru;
+"OK" | Write-Host -ForegroundColor Green
