@@ -43,6 +43,7 @@ for:
     test_script:
       - ps: write-host "Test scenario"
       - ps: .\vsix\install_vsix.ps1
+      - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat" && devenv /ConanVisualStudioVersion /?
       - ps: .\vsix\check_installed.ps1
   -
     matrix:
