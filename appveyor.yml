@@ -24,7 +24,7 @@ for:
     install:
       - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
     before_build:
-      - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+      - ps: Vsix-IncrementVsixVersion -versionType revision | Vsix-UpdateBuildVersion
       - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
       - nuget restore
     build_script:
@@ -40,11 +40,9 @@ for:
       - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
     build_script:
       - ps: .\vsix\download_artifact.ps1
-    test_script:
-      - ps: write-host "Test scenario"
       - ps: .\vsix\install_vsix.ps1
+    test_script:
       - ps: .\vsix\check_installed.ps1
-      - 'call "%vcvars64%" && devenv /ConanVisualStudioVersion /?'
       - ps: write-host "Done"
   -
     matrix:
