@@ -165,7 +165,10 @@ namespace Conan.VisualStudio.Services
                             int exitCode = await exeProcess.WaitForExitAsync();
 
                             Task.WaitAll(outputReader, errorReader);
-                            
+
+                            tokenSource.Dispose();
+
+
                             if (exitCode != 0)
                             {
                                 message = $"Conan has returned exit code '{exitCode}' " +
