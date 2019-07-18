@@ -91,7 +91,7 @@ namespace Conan.VisualStudio.Services
         public async Task<bool> InstallAsync(VCProject vcProject)
         {
             var conanPath = _settingsService.GetConanExecutablePath();
-            if (conanPath == null || conanPath == "")
+            if (string.IsNullOrEmpty(conanPath))
             {
                 _errorListService.WriteError(
                     "Conan executable path is not set and Conan executable wasn't found automatically. " +
