@@ -8,7 +8,7 @@ Write-Host "devenv: $devenv"
 
 Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
-. "$vcvars64"
+# . "$vcvars64"
 $output = . "$devenv" /ConanVisualStudioVersion /?
 
 $pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+Microsoft Visual Studio"  # Version + output from /? command
