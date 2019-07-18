@@ -16,10 +16,15 @@ Write-Host "APPVEYOR_JOB_ID: ${env:APPVEYOR_JOB_ID}"
 Write-Host "APPVEYOR_BUILD_NUMBER: ${env:APPVEYOR_BUILD_NUMBER}"
 Write-Host "APPVEYOR_BUILD_VERSION: ${env:APPVEYOR_BUILD_VERSION}"
 
-$pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+AAMicrosoft Visual Studio"
+$pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+aMicrosoft Visual Studio"
 $regex = New-Object System.Text.RegularExpressions.Regex $pattern
-
 $result = $regex.Matches($output)
+Write-Host "Matching string ${pattern}: $result"
 
-Write-Host "match ${pattern}: $result"
+if ([string]::IsNullOrEmpty($result))
+{
+    "FAILURE" | Write-Host -ForegroundColor Red
+    $host.SetShouldExit(-1)
+}
+
 "OK" | Write-Host -ForegroundColor Green
