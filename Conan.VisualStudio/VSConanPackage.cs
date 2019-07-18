@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.ComponentModel.Design;
 using System.Diagnostics.Contracts;
 using System.Diagnostics.CodeAnalysis;
@@ -141,7 +142,8 @@ namespace Conan.VisualStudio
         public static bool IsConanfile(string name)
         {
             Contract.Requires(name != null);
-            return (name.ToLower() == "conanfile.txt" || name.ToLower() == "conanfile.py");
+            return (name.ToLower(CultureInfo.CurrentCulture) == "conanfile.txt" ||
+                name.ToLower(CultureInfo.CurrentCulture) == "conanfile.py");
         }
 
         public void SolutionItemEventsItemAdded(ProjectItem ProjectItem)
