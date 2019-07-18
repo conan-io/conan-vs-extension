@@ -61,8 +61,6 @@ namespace Conan.VisualStudio
             _solution = await GetServiceAsync<SVsSolution>().ConfigureAwait(true) as IVsSolution;
             _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>().ConfigureAwait(true) as IVsSolutionBuildManager3;
 
-            var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
-
             await TaskScheduler.Default;
 
             var commandService = await GetServiceAsync<IMenuCommandService>().ConfigureAwait(true);
@@ -80,7 +78,7 @@ namespace Conan.VisualStudio
 
             await TaskScheduler.Default;
 
-            Logger.Initialize(serviceProvider, "Conan");
+            Logger.Initialize(this, "Conan");
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
