@@ -111,14 +111,15 @@ namespace Conan.VisualStudio.Services
         }
         private static void AppendLinesFunc(object packedParams)
         {
-            var paramsTuple = (Tuple<StreamWriter, StreamReader>)packedParams;
+            var paramsTuple = (Tuple<StreamWriter, StreamReader, object>)packedParams;
             StreamWriter writer = paramsTuple.Item1;
             StreamReader reader = paramsTuple.Item2;
+            object writeLock = paramsTuple.Item3;
 
             string line;
             while ((line = reader.ReadLine()) != null)
             {
-                lock (writer)
+                lock (writeLock)
                 {
                     Logger.Log(line);
                     writer.WriteLine(line);
@@ -154,12 +155,13 @@ namespace Conan.VisualStudio.Services
                         {
                             var tokenSource = new CancellationTokenSource();
                             var token = tokenSource.Token;
+                            object writeLock = new object();
 
                             Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardOutput),
+                                Tuple.Create(logStream, exeProcess.StandardOutput, writeLock),
                                 token, TaskCreationOptions.None, TaskScheduler.Default);
                             Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardError),
+                                Tuple.Create(logStream, exeProcess.StandardError, writeLock),
                                 token, TaskCreationOptions.None, TaskScheduler.Default);
 
                             int exitCode = await exeProcess.WaitForExitAsync().ConfigureAwait(true);
