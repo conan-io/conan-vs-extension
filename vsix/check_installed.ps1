@@ -11,20 +11,16 @@ Set-AppveyorBuildVariable "vcvars64" $vcvars64
 . "$vcvars64"
 $output = . "$devenv" /ConanVisualStudioVersion /?
 
-Write-Host "output: $ss2"
-Write-Host "APPVEYOR_JOB_ID: ${env:APPVEYOR_JOB_ID}"
-Write-Host "APPVEYOR_BUILD_NUMBER: ${env:APPVEYOR_BUILD_NUMBER}"
-Write-Host "APPVEYOR_BUILD_VERSION: ${env:APPVEYOR_BUILD_VERSION}"
-
-$pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+aMicrosoft Visual Studio"
+$pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+Microsoft Visual Studio"  # Version + output from /? command
 $regex = New-Object System.Text.RegularExpressions.Regex $pattern
 $result = $regex.Matches($output)
-Write-Host "Matching string ${pattern}: $result"
 
 if ([string]::IsNullOrEmpty($result))
 {
     "FAILURE" | Write-Host -ForegroundColor Red
-    $host.SetShouldExit(-1) 
+    Write-Host "Expected version: ${env:APPVEYOR_BUILD_VERSION}"
+    Write-Host "Output was: $output"
+    $host.SetShouldExit(-1)
     exit
 }
 "OK" | Write-Host -ForegroundColor Green
