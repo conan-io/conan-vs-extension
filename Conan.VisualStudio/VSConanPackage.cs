@@ -124,15 +124,15 @@ namespace Conan.VisualStudio
              * according to https://docs.microsoft.com/en-us/dotnet/api/envdte.solutioneventsclass.opened?view=visualstudiosdk-2017
              */
             _solutionEvents.Opened += SolutionEvents_Opened;
-            _solutionEvents.AfterClosing += SolutionEvents_AfterClosing;
-            _solutionEvents.ProjectAdded += SolutionEvents_ProjectAdded;
+            _solutionEvents.AfterClosing += SolutionEventsAfterClosing;
+            _solutionEvents.ProjectAdded += SolutionEventsProjectAdded;
 
             _projectItemEvents = (_dte.Events as EnvDTE80.Events2).ProjectItemsEvents;
-            _projectItemEvents.ItemAdded += SolutionItemEvents_ItemAdded;
-            _projectItemEvents.ItemRenamed += SolutionItemEvents_ItemRenamed;
+            _projectItemEvents.ItemAdded += SolutionItemEventsItemAdded;
+            _projectItemEvents.ItemRenamed += SolutionItemEventsItemRenamed;
 
             _documentEvents = _dte.Events.DocumentEvents;
-            _documentEvents.DocumentSaved += DocumentEvents_DocumentSaved;
+            _documentEvents.DocumentSaved += DocumentEventsDocumentSaved;
 
             if (_solutionBuildManager != null)
                 _solutionBuildManager.AdviseUpdateSolutionEvents3(this, out uint pdwcookie);
@@ -144,7 +144,7 @@ namespace Conan.VisualStudio
             return (name.ToLower() == "conanfile.txt" || name.ToLower() == "conanfile.py");
         }
 
-        public void SolutionItemEvents_ItemAdded(ProjectItem ProjectItem)
+        public void SolutionItemEventsItemAdded(ProjectItem ProjectItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -154,7 +154,7 @@ namespace Conan.VisualStudio
                 InstallConanDepsIfRequired(ProjectItem.ContainingProject);
         }
 
-        public void SolutionItemEvents_ItemRenamed(ProjectItem ProjectItem, string OldName)
+        public void SolutionItemEventsItemRenamed(ProjectItem ProjectItem, string OldName)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -164,7 +164,7 @@ namespace Conan.VisualStudio
                 InstallConanDepsIfRequired(ProjectItem.ContainingProject);
         }
 
-        public void DocumentEvents_DocumentSaved(Document document)
+        public void DocumentEventsDocumentSaved(Document document)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -203,12 +203,12 @@ namespace Conan.VisualStudio
             );
         }
 
-        private void SolutionEvents_AfterClosing()
+        private void SolutionEventsAfterClosing()
         {
             EnableMenus(false);
         }
 
-        private void SolutionEvents_ProjectAdded(Project project)
+        private void SolutionEventsProjectAdded(Project project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
