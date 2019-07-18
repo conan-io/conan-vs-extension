@@ -14,7 +14,7 @@ else
 # Write-Host "vcvars64: $vcvars64"
 Write-Host "devenv: $devenv"
 
-Set-AppveyorBuildVariable "vcvars64" $vcvars64
+# Set-AppveyorBuildVariable "vcvars64" $vcvars64
 
 # . "$vcvars64"
 $output = . "$devenv" /ConanVisualStudioVersion /?
