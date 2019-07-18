@@ -68,7 +68,7 @@ namespace Conan.VisualStudio.Services
         public async Task IntegrateAsync(VCProject vcProject)
         {
             var projectDirectory = vcProject.ProjectDirectory;
-            var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory);
+            var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory).ConfigureAwait(true);
             if (conanfileDirectory == null)
             {
                 _errorListService.WriteError("unable to locate conanfile directory!");
@@ -99,7 +99,7 @@ namespace Conan.VisualStudio.Services
                 return false;
             }
 
-            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService);
+            var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService).ConfigureAwait(true);
             if (project == null)
             {
                 _errorListService.WriteError("Unable to extract conan project!");
@@ -107,7 +107,7 @@ namespace Conan.VisualStudio.Services
             }
             var conan = new ConanRunner(conanPath);
 
-            return await InstallDependenciesAsync(conan, project);
+            return await InstallDependenciesAsync(conan, project).ConfigureAwait(true);
         }
         private static void AppendLinesFunc(object packedParams)
         {
@@ -131,7 +131,7 @@ namespace Conan.VisualStudio.Services
             foreach (var configuration in project.Configurations)
             {
                 var installPath = configuration.InstallPath;
-                await Task.Run(() => Directory.CreateDirectory(installPath));
+                await Task.Run(() => Directory.CreateDirectory(installPath)).ConfigureAwait(true);
                 var logFilePath = Path.Combine(installPath, $"conan_{Guid.NewGuid().ToString()}.log");
 
                 using (var logFile = File.Open(logFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
@@ -146,7 +146,7 @@ namespace Conan.VisualStudio.Services
                     string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
                                      $"with arguments '{process.Arguments}'";
                     Logger.Log(message);
-                    await logStream.WriteLineAsync(message);
+                    await logStream.WriteLineAsync(message).ConfigureAwait(true);
 
                     try
                     {
@@ -162,7 +162,7 @@ namespace Conan.VisualStudio.Services
                                 Tuple.Create(logStream, exeProcess.StandardError),
                                 token, TaskCreationOptions.None, TaskScheduler.Default);
 
-                            int exitCode = await exeProcess.WaitForExitAsync();
+                            int exitCode = await exeProcess.WaitForExitAsync().ConfigureAwait(true);
 
                             Task.WaitAll(outputReader, errorReader);
 
@@ -176,7 +176,7 @@ namespace Conan.VisualStudio.Services
                                           $"Please check file '{logFilePath}' for details.";
 
                                 Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
+                                await logStream.WriteLineAsync(message).ConfigureAwait(true);
                                 _errorListService.WriteError(message, logFilePath);
                                 return false;
                             }
@@ -185,7 +185,7 @@ namespace Conan.VisualStudio.Services
                                 message = $"[Conan.VisualStudio] Conan has succsessfully " +
                                           $"installed configuration '{configuration}'";
                                 Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
+                                await logStream.WriteLineAsync(message).ConfigureAwait(true);
                                 _errorListService.WriteMessage(message);
                             }
                         }
@@ -195,7 +195,7 @@ namespace Conan.VisualStudio.Services
                         message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
                                   $": {e.Message}. Check log file '{logFilePath}' for details";
                         Logger.Log(message);
-                        await logStream.WriteLineAsync(message);
+                        await logStream.WriteLineAsync(message).ConfigureAwait(true);
                         _errorListService.WriteError(message);
                         return false;
                     }

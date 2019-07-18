@@ -87,7 +87,7 @@ namespace Conan.VisualStudio.Services
         public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService) => await Task.Run(() =>
         {
             return ExtractConanProject(vcProject, settingsService);
-        });
+        }).ConfigureAwait(true);
 
         internal static string GetArchitecture(string platformName)
         {

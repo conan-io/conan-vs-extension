@@ -51,20 +51,20 @@ namespace Conan.VisualStudio
         /// </summary>
         protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            await base.InitializeAsync(cancellationToken, progress);
+            await base.InitializeAsync(cancellationToken, progress).ConfigureAwait(true);
 
-            _dte = await GetServiceAsync<DTE>();
+            _dte = await GetServiceAsync<DTE>().ConfigureAwait(true);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
-            _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>() as IVsSolutionBuildManager3;
+            _solution = await GetServiceAsync<SVsSolution>().ConfigureAwait(true) as IVsSolution;
+            _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>().ConfigureAwait(true) as IVsSolutionBuildManager3;
 
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
 
             await TaskScheduler.Default;
 
-            var commandService = await GetServiceAsync<IMenuCommandService>();
+            var commandService = await GetServiceAsync<IMenuCommandService>().ConfigureAwait(true);
             _vcProjectService = new VcProjectService();
             _settingsService = new VisualStudioSettingsService(this);
             _errorListService = new ErrorListService();
@@ -102,7 +102,7 @@ namespace Conan.VisualStudio
         }
 
         private async Task<T> GetServiceAsync<T>() where T : class =>
-            await GetServiceAsync(typeof(T)) as T ?? throw new Exception($"Cannot initialize service {typeof(T).FullName}");
+            await GetServiceAsync(typeof(T)).ConfigureAwait(true) as T ?? throw new Exception($"Cannot initialize service {typeof(T).FullName}");
 
         /// <summary>
         /// Use the DTE object to gain access to Solution events
@@ -194,10 +194,10 @@ namespace Conan.VisualStudio
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
-                    bool success = await _conanService.InstallAsync(vcProject);
+                    bool success = await _conanService.InstallAsync(vcProject).ConfigureAwait(true);
                     if (success)
                     {
-                        await _conanService.IntegrateAsync(vcProject);
+                        await _conanService.IntegrateAsync(vcProject).ConfigureAwait(true);
                     }
                 }
             );

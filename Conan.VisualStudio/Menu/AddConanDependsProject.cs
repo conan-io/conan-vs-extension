@@ -34,10 +34,10 @@ namespace Conan.VisualStudio.Menu
                 return;
             }
 
-            bool success = await _conanService.InstallAsync(vcProject);
+            bool success = await _conanService.InstallAsync(vcProject).ConfigureAwait(true);
             if (success)
             {
-                await _conanService.IntegrateAsync(vcProject);
+                await _conanService.IntegrateAsync(vcProject).ConfigureAwait(true);
             }
         }
     }
