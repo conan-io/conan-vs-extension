@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Conan.VisualStudio.Properties;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.VCProjectEngine;
@@ -71,7 +72,7 @@ namespace Conan.VisualStudio.Services
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory).ConfigureAwait(true);
             if (conanfileDirectory == null)
             {
-                _errorListService.WriteError("unable to locate conanfile directory!");
+                _errorListService.WriteError(Resources.no_conanfile_directory);
                 return;
             }
 
@@ -93,16 +94,14 @@ namespace Conan.VisualStudio.Services
             var conanPath = _settingsService.GetConanExecutablePath();
             if (string.IsNullOrEmpty(conanPath))
             {
-                _errorListService.WriteError(
-                    "Conan executable path is not set and Conan executable wasn't found automatically. " +
-                    "Please set it up in the Tools → Settings → Conan menu.");
+                _errorListService.WriteError(Resources.no_conan_exe);
                 return false;
             }
 
             var project = await _vcProjectService.ExtractConanProjectAsync(vcProject, _settingsService).ConfigureAwait(true);
             if (project == null)
             {
-                _errorListService.WriteError("Unable to extract conan project!");
+                _errorListService.WriteError(Resources.unable_to_extract);
                 return false;
             }
             var conan = new ConanRunner(conanPath);

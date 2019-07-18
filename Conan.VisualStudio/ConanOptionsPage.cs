@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Diagnostics.Contracts;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Conan.VisualStudio.Properties;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Shell;
 
@@ -34,8 +36,7 @@ namespace Conan.VisualStudio
         {
             if (!ConanPathHelper.ValidateConanExecutable(exe, out string errorMessage))
             {
-                MessageBox.Show(errorMessage, "Conan extension: invalid conan executable",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(errorMessage, Resources.invalid_exe, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
             return true;

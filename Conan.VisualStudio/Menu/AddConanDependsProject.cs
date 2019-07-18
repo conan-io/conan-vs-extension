@@ -1,4 +1,5 @@
 using System.ComponentModel.Design;
+using Conan.VisualStudio.Properties;
 using Conan.VisualStudio.Services;
 using Task = System.Threading.Tasks.Task;
 
@@ -30,7 +31,7 @@ namespace Conan.VisualStudio.Menu
             var vcProject = _vcProjectService.GetActiveProject();
             if (vcProject == null)
             {
-                _errorListService.WriteError("A C++ project with a conan file must be selected.");
+                _errorListService.WriteError(Resources.no_cpp_project);
                 return;
             }
 
