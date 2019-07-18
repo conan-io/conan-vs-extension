@@ -152,8 +152,6 @@ namespace Conan.VisualStudio.Services
                     {
                         using (Process exeProcess = Process.Start(process))
                         {
-                            int exitCode = await exeProcess.WaitForExitAsync();
-
                             var tokenSource = new CancellationTokenSource();
                             var token = tokenSource.Token;
 
@@ -163,6 +161,8 @@ namespace Conan.VisualStudio.Services
                             Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
                                 Tuple.Create(logStream, exeProcess.StandardError),
                                 token, TaskCreationOptions.None, TaskScheduler.Default);
+
+                            int exitCode = await exeProcess.WaitForExitAsync();
 
                             Task.WaitAll(outputReader, errorReader);
                             
