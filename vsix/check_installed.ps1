@@ -24,7 +24,6 @@ Write-Host "Matching string ${pattern}: $result"
 if ([string]::IsNullOrEmpty($result))
 {
     "FAILURE" | Write-Host -ForegroundColor Red
-    $host.SetShouldExit(-1)
+    exit -1
 }
-
 "OK" | Write-Host -ForegroundColor Green
