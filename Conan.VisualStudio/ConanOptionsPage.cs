@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Conan.VisualStudio.Core;
@@ -18,6 +19,7 @@ namespace Conan.VisualStudio
 
         protected override void OnApply(PageApplyEventArgs e)
         {
+            Contract.Requires(e != null);
             if (!ValidateConanExecutableAndShowMessage(_conanExecutablePath))
             {
                 e.ApplyBehavior = ApplyKind.Cancel;

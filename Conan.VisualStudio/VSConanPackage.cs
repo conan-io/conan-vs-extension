@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.Design;
+using System.Diagnostics.Contracts;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -139,12 +140,15 @@ namespace Conan.VisualStudio
 
         public static bool IsConanfile(string name)
         {
+            Contract.Requires(name != null);
             return (name.ToLower() == "conanfile.txt" || name.ToLower() == "conanfile.py");
         }
 
         public void SolutionItemEvents_ItemAdded(ProjectItem ProjectItem)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            Contract.Requires(ProjectItem != null);
 
             if (IsConanfile(ProjectItem.Name))
                 InstallConanDepsIfRequired(ProjectItem.ContainingProject);
@@ -154,6 +158,8 @@ namespace Conan.VisualStudio
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
+            Contract.Requires(ProjectItem != null);
+
             if (IsConanfile(ProjectItem.Name))
                 InstallConanDepsIfRequired(ProjectItem.ContainingProject);
         }
@@ -161,6 +167,8 @@ namespace Conan.VisualStudio
         public void DocumentEvents_DocumentSaved(Document document)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
+            Contract.Requires(document != null);
 
             if (IsConanfile(document.ProjectItem.Name))
                 InstallConanDepsIfRequired(document.ProjectItem.ContainingProject);
