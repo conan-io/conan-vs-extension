@@ -30,7 +30,7 @@ namespace Conan.VisualStudio.Menu
             {
                 await MenuItemCallbackAsync().ConfigureAwait(true);
             }
-            catch (Exception exception)
+            catch (NotSupportedException exception)
             {
                 _errorListService.WriteError(exception.ToString());
             }
