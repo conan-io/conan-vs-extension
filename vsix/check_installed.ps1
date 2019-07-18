@@ -1,6 +1,4 @@
 
-$visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
-# $vcvars64 = Join-Path $visualStudioInstallation 'VC\Auxiliary\Build\vcvars64.bat'
 
 if (${env:APPVEYOR_BUILD_WORKER_IMAGE} -eq "Visual Studio 2015")
 {
@@ -8,6 +6,8 @@ if (${env:APPVEYOR_BUILD_WORKER_IMAGE} -eq "Visual Studio 2015")
 }
 else
 {
+    $visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
+    # $vcvars64 = Join-Path $visualStudioInstallation 'VC\Auxiliary\Build\vcvars64.bat'
     $devenv = Join-Path $visualStudioInstallation 'Common7\IDE\devenv.com'
 }
 
