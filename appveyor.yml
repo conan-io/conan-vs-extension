@@ -1,15 +1,15 @@
 ﻿environment:
   matrix:
     - stage: Build
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     - stage: Test
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - stage: Test
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
     #- stage: Test
     #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - stage: Deploy
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 platform: Any CPU
 skip_branch_with_pr: false
 configuration: Release
