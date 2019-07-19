@@ -54,6 +54,6 @@ for:
     test_script:
       - ps: write-host "Deploy scenario"
     deploy_script:
-      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -neq "master") {.\vsix\publish.ps1}
       # - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix-PublishToGallery}
 
