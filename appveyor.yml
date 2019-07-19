@@ -6,8 +6,8 @@
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - stage: Test
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
-    - stage: Test
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    #- stage: Test
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - stage: Deploy
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019 Preview
 platform: Any CPU
@@ -43,13 +43,17 @@ for:
       - ps: .\vsix\install_vsix.ps1
     test_script:
       - ps: .\vsix\check_installed.ps1
-      - ps: write-host "Done"
+      - ps: write-host "Checked for ${env:APPVEYOR_BUILD_WORKER_IMAGE}"
   -
     matrix:
       only:
         - stage: Deploy
-    skip_non_tags: true
+    # skip_non_tags: true
     build_script:
       - ps: .\vsix\download_artifact.ps1
     test_script:
       - ps: write-host "Deploy scenario"
+    deploy_script:
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
+      # - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix-PublishToGallery}
+

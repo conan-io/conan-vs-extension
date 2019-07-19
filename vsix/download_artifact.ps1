@@ -25,6 +25,7 @@ $artifactFileName = [uri]::EscapeDataString($artifacts[0].fileName)
 
 # artifact will be downloaded as
 $localArtifactPath = "$downloadLocation\Conan.VisualStudio.vsix"
+Set-AppveyorBuildVariable "localArtifactPath" $localArtifactPath
 
 # download artifact
 # -OutFile - is local file name where artifact will be downloaded into
