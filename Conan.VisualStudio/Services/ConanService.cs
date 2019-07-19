@@ -141,16 +141,8 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
                     ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
 
-=======
->>>>>>> capture exception for iinvalid command
-=======
-                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
-
->>>>>>> revert deleted line
                     string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
                                      $"with arguments '{process.Arguments}'";
                     Logger.Log(message);
@@ -160,7 +152,6 @@ namespace Conan.VisualStudio.Services
                     {
                         using (Process exeProcess = Process.Start(process))
                         {
-<<<<<<< HEAD
                             var tokenSource = new CancellationTokenSource();
                             var token = tokenSource.Token;
 
@@ -175,40 +166,6 @@ namespace Conan.VisualStudio.Services
 
                             Task.WaitAll(outputReader, errorReader);
                             
-=======
-                            int exitCode = await exeProcess.WaitForExitAsync();
-
-<<<<<<< HEAD
-                            string output = await exeProcess.StandardOutput.ReadToEndAsync();
-                            string error = await exeProcess.StandardError.ReadToEndAsync();
-
-                            if (output.Length > 0)
-                            {
-                                Logger.Log(output);
-                                await logStream.WriteLineAsync(output);
-                            }
-
-                            if (error.Length > 0)
-                            {
-                                Logger.Log(error);
-                                await logStream.WriteLineAsync(error);
-                            }
-
->>>>>>> capture exception for iinvalid command
-=======
-                            var tokenSource = new CancellationTokenSource();
-                            var token = tokenSource.Token;
-
-                            Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardOutput),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
-                            Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardError),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
-
-                            Task.WaitAll(outputReader, errorReader);
-                            
->>>>>>> failure on merge
                             if (exitCode != 0)
                             {
                                 message = $"Conan has returned exit code '{exitCode}' " +
@@ -218,15 +175,7 @@ namespace Conan.VisualStudio.Services
                                 Logger.Log(message);
                                 await logStream.WriteLineAsync(message);
                                 _errorListService.WriteError(message, logFilePath);
-<<<<<<< HEAD
-<<<<<<< HEAD
                                 return false;
-=======
-                                return;
->>>>>>> capture exception for iinvalid command
-=======
-                                return false;
->>>>>>> return a success flag from InstallAsync function so we can decide to IntegrateAsync or not
                             }
                             else
                             {
@@ -238,8 +187,6 @@ namespace Conan.VisualStudio.Services
                             }
                         }
                     }
-<<<<<<< HEAD
-<<<<<<< HEAD
                     catch(System.ComponentModel.Win32Exception e)
                     {
                         message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
@@ -248,22 +195,6 @@ namespace Conan.VisualStudio.Services
                         await logStream.WriteLineAsync(message);
                         _errorListService.WriteError(message);
                         return false;
-=======
-                    catch(System.ComponentModel.Win32Exception)
-=======
-                    catch(System.ComponentModel.Win32Exception e)
->>>>>>> improve message
-                    {
-                        message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
-                                  $": {e.Message}. Check log file '{logFilePath}' for details";
-                        Logger.Log(message);
-                        await logStream.WriteLineAsync(message);
-                        _errorListService.WriteError(message);
-<<<<<<< HEAD
->>>>>>> capture exception for iinvalid command
-=======
-                        return false;
->>>>>>> return a success flag from InstallAsync function so we can decide to IntegrateAsync or not
                     }
                 }
             }
