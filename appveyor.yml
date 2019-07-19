@@ -48,12 +48,12 @@ for:
     matrix:
       only:
         - stage: Deploy
-    # skip_non_tags: true
+    skip_non_tags: true
     build_script:
       - ps: .\vsix\download_artifact.ps1
     test_script:
       - ps: write-host "Deploy scenario"
     deploy_script:
-      - ps: .\vsix\publish.ps1
-      # - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix- -path ${env:localArtifactPath}}
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix- -path ${env:localArtifactPath}}
 

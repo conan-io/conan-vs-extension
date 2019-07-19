@@ -11,4 +11,4 @@ Write-Host "vsix: ${env:localArtifactPath}"
 Write-Host "manifest: $manifest"
 
 . $vsixPublisher login -publisherName conan-io -personalAccessToken $env:vsmarketplacetoken
-#. $vsixPublisher publish -payload "${env:localArtifactPath}" -publishManifest "$manifest"
+. $vsixPublisher publish -payload "${env:localArtifactPath}" -publishManifest "$manifest"
