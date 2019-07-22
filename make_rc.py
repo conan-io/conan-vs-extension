@@ -180,7 +180,7 @@ def work_on_release(next_release):
                 os.system("git add Conan.VisualStudio/source.extension.vsixmanifest")
 
                 os.system('git commit -m "Preparing release {}"'.format(next_release))
-                os.system('git push --set-upstream conan release/1.1.0')
+                os.system('git push --set-upstream conan release/{}'.format(next_release))
 
                 sys.stdout.write("Now create PR to 'master' and PR back to 'dev'")
                 pr = repo.create_pull(title="Release {}".format(next_release),
@@ -188,10 +188,11 @@ def work_on_release(next_release):
                                       base="master",
                                       body="Release {}. Don't forget to create the tag after merging!".format(next_release))
 
-                repo.create_pull(title="Merge back release branch {}".format(next_release),
-                                head="master",  # So we get also the merge commit from 'master'
-                                base="dev",
-                                body="Merging back changes from release branch {}. Don't merge before #{}".format(next_release, pr.number))
+                # TOO DANGEROUS: a simple click on 'update with dev' will make a commit to 'master'
+                #repo.create_pull(title="Merge back release branch {}".format(next_release),
+                #                head="master",  # So we get also the merge commit from 'master'
+                #                base="dev",
+                #                body="Merging back changes from release branch {}. Don't merge before #{}".format(next_release, pr.number))
             else:
                 sys.stdout.write("You will need to commit and push yourself, and to create the PRs")
             break
