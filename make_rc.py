@@ -3,6 +3,7 @@
 import sys
 import os
 import re
+import textwrap
 
 from functools import partial
 from datetime import date
@@ -173,7 +174,6 @@ def work_on_release(next_release):
             prs = [pr for pr in prs if pr.merged]
             write_changelog(next_release, prs)
 
-
             if query_yes_no("Commit and push to 'conan' repository"):
                 os.system("git add CHANGELOG.md")
                 os.system("git add Conan.VisualStudio/source.extension.cs")
@@ -186,7 +186,16 @@ def work_on_release(next_release):
                 pr = repo.create_pull(title="Release {}".format(next_release),
                                       head="release/{}".format(next_release),
                                       base="master",
-                                      body="Release {}. Don't forget to create the tag after merging!".format(next_release))
+                                      body=textwrap.dedent("""
+                                      Release {}
+
+                                      Manual checking:
+                                      - [ ] VS 2019
+                                      - [ ] VS 2017
+                                      - [ ] General usability
+
+                                      After merging, don't forget to create the tag and merge back 'master' into 'dev'.
+                                      """.format(next_release)))
 
                 # TOO DANGEROUS: a simple click on 'update with dev' will make a commit to 'master'
                 #repo.create_pull(title="Merge back release branch {}".format(next_release),
