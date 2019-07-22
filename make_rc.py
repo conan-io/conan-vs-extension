@@ -9,7 +9,7 @@ from functools import partial
 from datetime import date
 
 try:
-    from github import Github
+    from github import Github, RateLimitExceededException
 except ImportError:
     sys.stderr.write("Install 'pip install PyGithub'")
     sys.exit(1)
@@ -23,14 +23,19 @@ source_extension_cs = os.path.join(me, "Conan.VisualStudio", "source.extension.c
 vsixmanifest_pattern = re.compile(r'\s+<Identity .*Version=\"(?P<v>[\d\.]+)\".*', re.MULTILINE)
 source_vsixmanifest_cs = os.path.join(me, "Conan.VisualStudio", "source.extension.vsixmanifest")
 
-# Get the github repository
-def get_github_repository():
+# Get the github client
+def get_github():
     github_token = os.environ.get("GITHUB_TOKEN")
     if not github_token:
         sys.stderr.write("Please, provide a read-only token to access Github using environment variable 'GITHUB_TOKEN'\n")
 
     # Find matching milestone
     g = Github(github_token)
+    return g
+
+# Get the github repository
+def get_github_repository():
+    g = get_github()
     return g.get_repo('conan-io/conan-vs-extension')
 
 repo = get_github_repository()
@@ -247,7 +252,7 @@ def guess_next_release(current_release, head_branch):
     return next_milestone.title
 
 
-if __name__ == "__main__":
+def main():
     current_branch = get_git_current_branch()
     if current_branch != "dev":
         sys.stderr.write("Move to the 'dev' branch to work with this tool. You are in '{}'\n".format(current_branch))
@@ -264,3 +269,14 @@ if __name__ == "__main__":
         work_on_release(next_release)
     else:
         sys.stdout.write("Sorry, I cannot help you then...")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except RateLimitExceededException:
+        sys.stderr.write("Rate limit!")
+        g = get_github()
+        r = g.get_rate_limit()
+        sys.stdout.write(" limit: {}".format(r.core.limit))
+        sys.stdout.write(" remaining: {}".format(r.core.remaining))
