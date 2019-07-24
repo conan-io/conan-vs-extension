@@ -103,9 +103,12 @@ def write_changelog(version, prs):
 
     new_content = []
     changelog_found = False
+    changelog_added = False
     version_pattern = re.compile("## [\d\.]+")
     for line in open(changelog, "r").readlines():
-        if not changelog_found:
+        if changelog_added:
+            pass
+        elif not changelog_found:
             changelog_found = bool(line.strip() == "# Changelog")
         else:
             if version_pattern.match(line):
@@ -114,6 +117,7 @@ def write_changelog(version, prs):
                 new_content.append("**{}**\n\n".format(date.today().strftime('%Y-%m-%d')))
                 new_content += version_content
                 new_content.append("\n\n")
+                changelog_added = True
         new_content.append(line)
 
     with open(changelog, "w") as f:
