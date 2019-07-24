@@ -44,19 +44,6 @@ on the official Visual Studio extension gallery.
 - Convert .NET Standard Class libraries to .NET Framework Class libraries ([#89](https://github.com/conan-io/conan-vs-extension/pull/89))
 
 
-## 1.2.0
-
-**2019-07-22**
-
-- Add all available options for 'build_policy' according to Conan documentation ([#142](https://github.com/conan-io/conan-vs-extension/pull/142))
-- Validate path to Conan executable ([#136](https://github.com/conan-io/conan-vs-extension/pull/136))
-- Add configuration option to customize installation directory ([#134](https://github.com/conan-io/conan-vs-extension/pull/134))
-- Capture any unhandled error during install command ([#126](https://github.com/conan-io/conan-vs-extension/pull/126))
-- Capture errors from Conan and log them to output window and log file ([#125](https://github.com/conan-io/conan-vs-extension/pull/125))
-- New version pattern: "major.minor.patch.build" ([#122](https://github.com/conan-io/conan-vs-extension/pull/122))
-- Remove 'conan-vs-settings.json' feature. ([#121](https://github.com/conan-io/conan-vs-extension/pull/121))
-
-
 ## 1.0.0
 
 **2019-03-14**
