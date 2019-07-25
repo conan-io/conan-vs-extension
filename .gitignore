@@ -5,6 +5,7 @@
 UpgradeLog.htm
 obj/
 bin/
+Conan.VisualStudio.Examples/**/x64/
 
 *.user
 .conan/
@@ -17,3 +18,4 @@ bin/
 *.iobj
 *.ipdb
 *.exe
+*.db

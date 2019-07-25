@@ -28,17 +28,14 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
-    [ProvideToolWindow(typeof(PackageListToolWindow))]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
-        private AddConanDependsConanfile _addConanDependsConanfile;
         private ConanOptions _conanOptions;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
-        private SolutionEventsHandler _solutionEventsHandler;
         private ISettingsService _settingsService;
         private IVcProjectService _vcProjectService;
         private IConanService _conanService;
@@ -74,12 +71,8 @@ namespace Conan.VisualStudio
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _solutionEventsHandler = new SolutionEventsHandler(this);
-            _solution.AdviseSolutionEvents(_solutionEventsHandler, out var _solutionEventsCookie);
-
             _addConanDependsProject = new AddConanDependsProject(commandService, _errorListService, _vcProjectService, _conanService);
             _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
-            _addConanDependsConanfile = new AddConanDependsConanfile(commandService, _errorListService, _vcProjectService, _conanService);
 
             _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
 
@@ -193,8 +186,11 @@ namespace Conan.VisualStudio
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
-                    await _conanService.InstallAsync(vcProject);
-                    await _conanService.IntegrateAsync(vcProject);
+                    bool success = await _conanService.InstallAsync(vcProject);
+                    if (success)
+                    {
+                        await _conanService.IntegrateAsync(vcProject);
+                    }
                 }
             );
         }

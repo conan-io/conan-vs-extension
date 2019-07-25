@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +25,37 @@ namespace Conan.VisualStudio.Core
             var relativeUri = baseUri.MakeRelativeUri(locationUri);
             return Uri.UnescapeDataString(relativeUri.ToString()).Replace('/', Path.DirectorySeparatorChar);
         }
+        public static bool ValidateConanExecutable(string exe, out string errorMessage)
+        {
+            errorMessage = null;
+            if (exe == null || exe == "")
+                return true;
+            try
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = exe,
+                    Arguments = "--version",
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
+                var process = Process.Start(startInfo);
+
+                process.WaitForExit();
+
+                if (0 != process.ExitCode)
+                    errorMessage = $"invalid conan executable {exe}: conan --version failed with error {process.ExitCode}";
+
+                return 0 == process.ExitCode;
+            }
+            catch (Win32Exception e)
+            {
+                errorMessage = $"invalid conan executable {exe}: {e.Message}";
+                return false;
+            }
+        }
 
         public static string DetermineConanPathFromEnvironment()
         {
@@ -36,7 +69,7 @@ namespace Conan.VisualStudio.Core
                 {
                     var fileName = Path.ChangeExtension("conan", extension);
                     var filePath = Path.Combine(directory, fileName);
-                    if (File.Exists(filePath))
+                    if (File.Exists(filePath) && ValidateConanExecutable(filePath, out string errorMessage))
                     {
                         // to get the proper file name case:
                         return Directory.GetFiles(directory, fileName).Single();
