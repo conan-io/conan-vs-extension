@@ -1,21 +1,19 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Conan.VisualStudio.Core;
 using EnvDTE;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.VCProjectEngine;
 using Task = System.Threading.Tasks.Task;
 
 namespace Conan.VisualStudio.Services
 {
     internal class VcProjectService : IVcProjectService
     {
-        public VCProject GetActiveProject()
+        public IVCProject GetActiveProject()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
@@ -36,21 +34,48 @@ namespace Conan.VisualStudio.Services
             return IsCppProject(project) && null != ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory);
         }
 
-        public VCProject AsVCProject(Project project)
+        private static IVCProject CreateVCProjectWrapper(Project project)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            return project.Object as VCProject;
+            int version = ConanCompilerVersion();
+            string wrapperDLL;
+
+            if (version == 14)
+                wrapperDLL = "Conan.VisualStudio.VCProjectWrapper14.dll";
+            else if (version >= 15)
+                wrapperDLL = "Conan.VisualStudio.VCProjectWrapper15.dll";
+            else
+                throw new NotSupportedException($"unsupported Visual Studio version: {version}");
+
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            path = Path.Combine(path, wrapperDLL);
+
+            var instance = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(path,
+                "Conan.VisualStudio.VCProjectWrapper.VCProjectWrapper",
+                false, BindingFlags.Default, null, new[] { project.Object }, null, null);
+
+            return instance as IVCProject;
         }
 
-        private static VCProject GetActiveProject(DTE dte)
+        private static IVCProject AsVCProjectImpl(Project project)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            return CreateVCProjectWrapper(project);
+        }
+
+        public IVCProject AsVCProject(Project project)
+        {
+            return AsVCProjectImpl(project);
+        }
+
+        private static IVCProject GetActiveProject(DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             var projects = (object[])dte.ActiveSolutionProjects;
-            return projects.Cast<Project>().Where(IsCppProject).Select(p => { Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread(); return p.Object; }).OfType<VCProject>().FirstOrDefault();
+            return AsVCProjectImpl(projects.Cast<Project>().Where(IsCppProject).FirstOrDefault());
         }
 
-        public ConanProject ExtractConanProject(VCProject vcProject, ISettingsService settingsService)
+        public ConanProject ExtractConanProject(IVCProject vcProject, ISettingsService settingsService)
         {
             var projectPath = ConanPathHelper.GetNearestConanfilePath(vcProject.ProjectDirectory); // TODO: Instead of nearest, use the one added to the project (be explicit)
             if (projectPath == null)
@@ -76,7 +101,7 @@ namespace Conan.VisualStudio.Services
             }
             else
             {
-                foreach (VCConfiguration configuration in vcProject.Configurations)
+                foreach (IVCConfiguration configuration in vcProject.Configurations)
                 {
                     project.Configurations.Add(ExtractConanConfiguration(settingsService, configuration));
                 }
@@ -84,7 +109,7 @@ namespace Conan.VisualStudio.Services
             return project;
         }
 
-        public async Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService) => await Task.Run(() =>
+        public async Task<ConanProject> ExtractConanProjectAsync(IVCProject vcProject, ISettingsService settingsService) => await Task.Run(() =>
         {
             return ExtractConanProject(vcProject, settingsService);
         });
@@ -103,70 +128,48 @@ namespace Conan.VisualStudio.Services
 
         internal static string GetBuildType(string configurationName) => configurationName;
 
-        private static string GetInstallationDirectoryImpl(ISettingsService settingsService, VCConfiguration configuration)
+        private static string GetInstallationDirectoryImpl(ISettingsService settingsService, IVCConfiguration configuration)
         {
             string installPath = ".conan";
             if (settingsService != null)
             {
-                IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
                 installPath = configuration.Evaluate(settingsService.GetConanInstallationPath());
                 if (!Path.IsPathRooted(installPath))
-                    installPath = Path.Combine(configuration.project.ProjectDirectory, installPath);
+                    installPath = Path.Combine(configuration.ProjectDirectory, installPath);
                 return installPath;
             }
-            return Path.Combine(configuration.project.ProjectDirectory, installPath);
+            return Path.Combine(configuration.ProjectDirectory, installPath);
         }
 
-        public string GetInstallationDirectory(ISettingsService settingsService, VCConfiguration configuration)
+        public string GetInstallationDirectory(ISettingsService settingsService, IVCConfiguration configuration)
         {
             return GetInstallationDirectoryImpl(settingsService, configuration);
         }
 
-        private static string RuntimeLibraryToString(runtimeLibraryOption RuntimeLibrary)
-        {
-            switch (RuntimeLibrary)
-            {
-                case runtimeLibraryOption.rtMultiThreaded:
-                    return "MT";
-                case runtimeLibraryOption.rtMultiThreadedDebug:
-                    return "MTd";
-                case runtimeLibraryOption.rtMultiThreadedDLL:
-                    return "MD";
-                case runtimeLibraryOption.rtMultiThreadedDebugDLL:
-                    return "MDd";
-                default:
-                    throw new NotSupportedException($"Runtime Library {RuntimeLibrary} is not supported by the Conan plugin");
-            }
-        }
-
-        private static string ConanCompilerVersion()
+        private static int ConanCompilerVersion()
         {
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
             if (File.Exists(path))
             {
                 System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
-                int verName = fvi.ProductMajorPart;
-                return verName.ToString();
+                return fvi.ProductMajorPart;
             }
             throw new NotSupportedException($"Cannot detect compiler version, file {path} missing");
         }
 
-        private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, VCConfiguration configuration)
+        private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, IVCConfiguration configuration)
         {
-            IVCRulePropertyStorage generalSettings = configuration.Rules.Item("ConfigurationGeneral");
-            var toolset = generalSettings.GetEvaluatedPropertyValue("PlatformToolset");
             string installPath = GetInstallationDirectoryImpl(settingsService, configuration);
-            var VCCLCompilerTool = configuration.Tools.Item("VCCLCompilerTool");
 
             return new ConanConfiguration
             {
                 VSName = configuration.Name,
-                Architecture = GetArchitecture(configuration.Platform.Name),
+                Architecture = GetArchitecture(configuration.PlatformName),
                 BuildType = GetBuildType(configuration.ConfigurationName),
-                CompilerToolset = toolset,
-                CompilerVersion = ConanCompilerVersion(),
+                CompilerToolset = configuration.Toolset,
+                CompilerVersion = ConanCompilerVersion().ToString(),
                 InstallPath = installPath,
-                RuntimeLibrary = VCCLCompilerTool != null ? RuntimeLibraryToString(VCCLCompilerTool.RuntimeLibrary) : null
+                RuntimeLibrary = configuration.RuntimeLibrary
             };
         }
     }

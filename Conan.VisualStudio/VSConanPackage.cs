@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
 using EnvDTE;
@@ -11,7 +12,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
-using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Conan.VisualStudio
 {
@@ -45,7 +45,7 @@ namespace Conan.VisualStudio
         private IVsSolutionBuildManager3 _solutionBuildManager;
         private ProjectItemsEvents _projectItemEvents;
         private DocumentEvents _documentEvents;
-        private Core.IErrorListService _errorListService;
+        private IErrorListService _errorListService;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -189,7 +189,7 @@ namespace Conan.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private void InstallConanDeps(VCProject vcProject)
+        private void InstallConanDeps(IVCProject vcProject)
         {
             _errorListService.Clear();
             ThreadHelper.JoinableTaskFactory.RunAsync(

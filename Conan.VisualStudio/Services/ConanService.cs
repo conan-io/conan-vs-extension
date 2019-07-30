@@ -1,12 +1,10 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
 using Microsoft.VisualStudio.Threading;
-using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Conan.VisualStudio.Services
 {
@@ -23,7 +21,7 @@ namespace Conan.VisualStudio.Services
             _vcProjectService = vcProjectService;
         }
 
-        private string GetPropsFilePath(VCConfiguration configuration)
+        private string GetPropsFilePath(IVCConfiguration configuration)
         {
             string installPath = _vcProjectService.GetInstallationDirectory(_settingsService, configuration);
             string propFileName;
@@ -35,37 +33,28 @@ namespace Conan.VisualStudio.Services
         }
 
 
-        private void IntegrateIntoConfiguration(VCConfiguration configuration)
+        private void IntegrateIntoConfiguration(IVCConfiguration configuration)
         {
             string absPropFilePath = GetPropsFilePath(configuration);
-            string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, absPropFilePath);
+            string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.ProjectDirectory, absPropFilePath);
 
-            IVCCollection tools = (IVCCollection)configuration.Tools;
-            if (tools != null)
-            {
-                VCLinkerTool ltool = (VCLinkerTool)tools.Item("VCLinkerTool");
-                if (ltool != null)
-                {
-                    string deps = ltool.AdditionalDependencies;
-                    ltool.AdditionalDependencies = deps.Replace("$(NOINHERIT)", "");
-                }
-            }
+            configuration.AdditionalDependencies = configuration.AdditionalDependencies.Replace("$(NOINHERIT)", "");
 
-            foreach (VCPropertySheet sheet in configuration.PropertySheets)
+            foreach (IVCPropertySheet sheet in configuration.PropertySheets)
             {
                 if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
                 {
-                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.project.Name}";
+                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.ProjectName}";
                     Logger.Log(msg);
                     return;
                 }
             }
             configuration.AddPropertySheet(relativePropFilePath);
-            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.project.Name}");
+            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.ProjectName}");
             configuration.CollectIntelliSenseInfo();
         }
 
-        public async Task IntegrateAsync(VCProject vcProject)
+        public async Task IntegrateAsync(IVCProject vcProject)
         {
             var projectDirectory = vcProject.ProjectDirectory;
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory);
@@ -81,14 +70,14 @@ namespace Conan.VisualStudio.Services
             }
             else
             {
-                foreach (VCConfiguration configuration in vcProject.Configurations)
+                foreach (IVCConfiguration configuration in vcProject.Configurations)
                 {
                     IntegrateIntoConfiguration(configuration);
                 }
             }
         }
 
-        public async Task<bool> InstallAsync(VCProject vcProject)
+        public async Task<bool> InstallAsync(IVCProject vcProject)
         {
             var conanPath = _settingsService.GetConanExecutablePath();
             if (conanPath == null || conanPath == "")
