@@ -46,6 +46,9 @@ for:
     matrix:
       only:
         - stage: Deploy
+    branches:
+      only:
+        - master
     skip_non_tags: true
     build_script:
       - ps: .\vsix\download_artifact.ps1
