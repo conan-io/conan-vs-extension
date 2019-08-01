@@ -31,12 +31,7 @@ Set-AppveyorBuildVariable "localArtifactPath" $localArtifactPath
 # download artifact
 # -OutFile - is local file name where artifact will be downloaded into
 # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
-$url = "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName"
-Write-Host "URL: $url"
 Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" `
 -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
-
-$fileSize = Get-Childitem -file $localArtifactPath | select length
-Write-Host "Size '$localArtifactPath': $fileSize"
 
 "OK" | Write-Host -ForegroundColor Green

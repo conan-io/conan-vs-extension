@@ -37,6 +37,6 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
     }
 }
 
-"FAILURE" | Write-Host -ForegroundColor Red
+"FAILURE: Should never get here!" | Write-Host -ForegroundColor Red
 $host.SetShouldExit(-1)
 exit
