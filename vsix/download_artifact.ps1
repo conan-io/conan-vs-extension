@@ -6,11 +6,12 @@ $headers = @{
 }
 $accountName = $env:APPVEYOR_ACCOUNT_NAME
 $projectSlug = $env:APPVEYOR_PROJECT_SLUG
+$buildId = $env:APPVEYOR_BUILD_ID
 
 $downloadLocation = 'C:\projects'
 
 # get project with last build details
-$project = Invoke-RestMethod -Method Get -Uri "$apiUrl/projects/$accountName/$projectSlug" -Headers $headers
+$project = Invoke-RestMethod -Method Get -Uri "$apiUrl/projects/$accountName/$projectSlug/builds/$buildId" -Headers $headers
 
 # we assume here that build has a single job
 # get this job id
@@ -30,6 +31,12 @@ Set-AppveyorBuildVariable "localArtifactPath" $localArtifactPath
 # download artifact
 # -OutFile - is local file name where artifact will be downloaded into
 # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
+$url = "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName"
+Write-Host "URL: $url"
 Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" `
 -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
+
+$fileSize = Get-Childitem -file $localArtifactPath | select length
+Write-Host "Size '$localArtifactPath': $fileSize"
+
 "OK" | Write-Host -ForegroundColor Green
