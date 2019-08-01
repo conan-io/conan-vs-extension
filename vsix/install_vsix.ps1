@@ -13,5 +13,5 @@ Start-Process -FilePath "$vsixInstaller" -ArgumentList "/q /a /sp /logFile:$logF
 $content = Get-Content -Path $logFile
 Write-Host "log output: $content"
 
-Start-Sleep -s 20
+Start-Sleep -s 60
 "OK" | Write-Host -ForegroundColor Green

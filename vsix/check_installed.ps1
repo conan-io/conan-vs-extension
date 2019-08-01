@@ -39,7 +39,7 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
         $host.SetShouldExit(0)
         exit
     }
-    Start-Sleep -s 5
+    Start-Sleep -s 20
 }
 
 "FAILURE" | Write-Host -ForegroundColor Red
