@@ -43,7 +43,7 @@ for:
       - ps: .\vsix\check_installed.ps1
       - ps: write-host "Checked for ${env:APPVEYOR_BUILD_WORKER_IMAGE}"
     after_test:
-      - ps: .\vsix\uninstall_vsix.ps1
+      - ps: .\vsix\uninstall_vsix.ps1  # TODO: Check it has been succesfully uninstalled
   -
     matrix:
       only:

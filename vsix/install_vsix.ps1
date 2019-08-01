@@ -6,6 +6,7 @@ Write-Host "visualStudioInstallation: $visualStudioInstallation"
 Write-Host "vsixInstaller: $vsixInstaller"
 Write-Host "localArtifactPath: ${env:localArtifactPath}"
 
-Start-Process -FilePath "$vsixInstaller" -ArgumentList "/q /a /sp ${env:localArtifactPath}" -Wait -PassThru;
+$process = (Start-Process -FilePath "$vsixInstaller" -ArgumentList "/q /a /sp ${env:localArtifactPath}" -Wait -PassThru)
+Write-Host "Install process finished with return code: " $process.ExitCode
 
 "OK" | Write-Host -ForegroundColor Green
