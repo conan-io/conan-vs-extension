@@ -29,6 +29,7 @@ for:
       - ps: Vsix-TokenReplacement Conan.VisualStudio\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
       - ps: Vsix-TokenReplacement Conan.VisualStudio.Core\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
       - ps: Vsix-TokenReplacement Conan.VisualStudio.Tests\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
+      - ps: Vsix-TokenReplacement Conan.VisualStudio\Properties\AssemblyInfo.cs '<git-sha>' $env:APPVEYOR_REPO_COMMIT
       - nuget restore
     build_script:
       - msbuild /p:DeployExtension=false /p:verbosity=detailed

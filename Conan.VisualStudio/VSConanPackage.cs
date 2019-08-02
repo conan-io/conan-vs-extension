@@ -35,6 +35,7 @@ namespace Conan.VisualStudio
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
         private ConanOptions _conanOptions;
+        private ConanAbout _conanAbout;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
@@ -82,6 +83,7 @@ namespace Conan.VisualStudio
             _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
 
             _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
+            _conanAbout = new ConanAbout(commandService, _errorListService);
 
             await TaskScheduler.Default;
 

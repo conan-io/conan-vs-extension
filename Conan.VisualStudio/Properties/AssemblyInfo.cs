@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Conan.VisualStudio")]
-[assembly: AssemblyDescription("Conan extension for Visual Studio")]
+[assembly: AssemblyDescription("<git-sha>")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JFrog LTD")]
 [assembly: AssemblyProduct("Conan.VisualStudio")]

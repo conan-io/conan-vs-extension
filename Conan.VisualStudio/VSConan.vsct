@@ -62,6 +62,13 @@
                     <ButtonText>Options...</ButtonText>
                 </Strings>
             </Button>
+            <Button guid="guidVSConanPackageCmdSet" id="ConanAboutId" priority="0x0100" type="Button">
+                <Parent guid="guidVSConanPackageCmdSet" id="ConanSubmenuGroup" />
+                <Icon guid="guidImages" id="conanIcon" />
+                <Strings>
+                    <ButtonText>About</ButtonText>
+                </Strings>
+            </Button>
         </Buttons>
 
         <Bitmaps>
@@ -93,6 +100,7 @@
             <IDSymbol name="AddConanDependsProjectId" value="0x0100" />
             <IDSymbol name="AddConanDependsSolutiontId" value="0x0101" />
             <IDSymbol name="ConanOptionsId" value="0x0103" />
+            <IDSymbol name="ConanAboutId" value="0x0104" />
             <IDSymbol name="ConanSubmenu" value="4131" />
             <IDSymbol name="ConanSubmenuGroup" value="4132" />
             <IDSymbol name="ConanProjectGroup" value="4133"/>
