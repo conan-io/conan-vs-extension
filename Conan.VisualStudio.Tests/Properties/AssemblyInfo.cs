@@ -2,8 +2,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Conan.VisualStudio.Tests")]
-[assembly: AssemblyProduct("Conan.VisualStudio.Tests")]
-[assembly: AssemblyCopyright("Copyright © Conan.VisualStudio developers 2017")]
+[assembly: AssemblyDescription("Conan extension for Visual Studio")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("JFrog LTD")]
+[assembly: AssemblyProduct("Conan.VisualStudio")]
+[assembly: AssemblyCopyright("Copyright © 2019 JFrog LTD")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 

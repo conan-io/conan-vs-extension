@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Conan.VisualStudio.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Conan extension for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Conan.VisualStudio.Core")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("JFrog LTD")]
+[assembly: AssemblyProduct("Conan.VisualStudio")]
+[assembly: AssemblyCopyright("Copyright © 2019 JFrog LTD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
