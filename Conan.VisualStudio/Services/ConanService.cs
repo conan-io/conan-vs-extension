@@ -109,22 +109,6 @@ namespace Conan.VisualStudio.Services
 
             return await InstallDependenciesAsync(conan, project);
         }
-        private static void AppendLinesFunc(object packedParams)
-        {
-            var paramsTuple = (Tuple<StreamWriter, StreamReader>)packedParams;
-            StreamWriter writer = paramsTuple.Item1;
-            StreamReader reader = paramsTuple.Item2;
-
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                lock (writer)
-                {
-                    Logger.Log(line);
-                    writer.WriteLine(line);
-                }
-            }
-        }
 
         private async Task<bool> InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
@@ -141,55 +125,47 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
 
-                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
-
-                    string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
-                                     $"with arguments '{process.Arguments}'";
-                    Logger.Log(message);
-                    await logStream.WriteLineAsync(message);
-
+                    ProcessStartInfo process = null;
                     try
                     {
-                        using (Process exeProcess = Process.Start(process))
+                        // Run 'conan --version' for log purposes 
+                        process = conan.Version();
+                        int exitCode = await Utils.RunProcessAsync(process, logStream);
+                        if (exitCode != 0)
                         {
-                            var tokenSource = new CancellationTokenSource();
-                            var token = tokenSource.Token;
+                            string message = "Cannot get Conan version, check that the " +
+                                "executable is pointing to a valid one";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                        }
 
-                            Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardOutput),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
-                            Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardError),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
+                        // Run the install
+                        process = conan.Install(project, configuration, generator, build, update, _errorListService);
+                        exitCode = await Utils.RunProcessAsync(process, logStream);
+                        if (exitCode != 0)
+                        {
+                            string message = $"Conan has returned exit code '{exitCode}' " +
+                                      $"while processing configuration '{configuration}'. " +
+                                      $"Please check file '{logFilePath}' for details.";
 
-                            int exitCode = await exeProcess.WaitForExitAsync();
-
-                            Task.WaitAll(outputReader, errorReader);
-                            
-                            if (exitCode != 0)
-                            {
-                                message = $"Conan has returned exit code '{exitCode}' " +
-                                          $"while processing configuration '{configuration}'. " +
-                                          $"Please check file '{logFilePath}' for details.";
-
-                                Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
-                                _errorListService.WriteError(message, logFilePath);
-                                return false;
-                            }
-                            else
-                            {
-                                message = $"[Conan.VisualStudio] Conan has succsessfully " +
-                                          $"installed configuration '{configuration}'";
-                                Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
-                                _errorListService.WriteMessage(message);
-                            }
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                            return false;
+                        }
+                        else
+                        {
+                            string message = $"[Conan.VisualStudio] Conan has succsessfully " +
+                                      $"installed configuration '{configuration}'";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteMessage(message);
                         }
                     }
-                    catch(System.ComponentModel.Win32Exception e)
+                    catch (System.ComponentModel.Win32Exception e)
                     {
-                        message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
+                        string message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
                                   $": {e.Message}. Check log file '{logFilePath}' for details";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);

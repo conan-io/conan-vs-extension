@@ -34,6 +34,20 @@ namespace Conan.VisualStudio.Core
             return options;
         }
 
+        public ProcessStartInfo Version()
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = _executablePath,
+                Arguments = "--version",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+            return startInfo;
+        }
+
         public ProcessStartInfo Install(ConanProject project, ConanConfiguration configuration, ConanGeneratorType generator, ConanBuildType build, bool update, Core.IErrorListService errorListService)
         {
             string ProcessArgument(string name, string value) => $"-s {name}={Escape(value)}";

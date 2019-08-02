@@ -32,15 +32,8 @@ namespace Conan.VisualStudio.Core
                 return true;
             try
             {
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = exe,
-                    Arguments = "--version",
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    CreateNoWindow = true
-                };
+                var conan = new ConanRunner(exe);
+                var startInfo = conan.Version();
                 var process = Process.Start(startInfo);
 
                 process.WaitForExit();
