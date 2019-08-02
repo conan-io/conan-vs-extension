@@ -1,5 +1,11 @@
-
-$visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
+if (${env:APPVEYOR_BUILD_WORKER_IMAGE} -eq "Visual Studio 2015")
+{
+    $visualStudioInstallation = "C:\Program Files (x86)\Microsoft Visual Studio 14.0"
+}
+else
+{
+    $visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
+}
 $vsixInstaller = Join-Path $visualStudioInstallation 'Common7\IDE\VSIXInstaller.exe'
 
 Write-Host "visualStudioInstallation: $visualStudioInstallation"
