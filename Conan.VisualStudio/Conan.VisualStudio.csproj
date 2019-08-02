@@ -76,6 +76,7 @@
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Menu\ConanAbout.cs" />
     <Compile Include="Menu\ConanOptions.cs" />
     <Compile Include="Menu\MenuCommandBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
