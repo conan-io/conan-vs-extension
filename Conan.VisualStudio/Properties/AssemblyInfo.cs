@@ -2,12 +2,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("ConanVisualStudio")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Conan.VisualStudio")]
+[assembly: AssemblyDescription("Conan extension for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ConanVisualStudio")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("JFrog LTD")]
+[assembly: AssemblyProduct("Conan.VisualStudio")]
+[assembly: AssemblyCopyright("Copyright (c) 2019 JFrog LTD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -26,6 +26,9 @@ for:
     before_build:
       - ps: Vsix-IncrementVsixVersion -versionType revision | Vsix-UpdateBuildVersion
       - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+      - ps: Vsix-TokenReplacement Conan.VisualStudio\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
+      - ps: Vsix-TokenReplacement Conan.VisualStudio.Core\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
+      - ps: Vsix-TokenReplacement Conan.VisualStudio.Tests\Properties\AssemblyInfo.cs '"1.0.0.0"' '"{version}"'
       - nuget restore
     build_script:
       - msbuild /p:DeployExtension=false /p:verbosity=detailed
