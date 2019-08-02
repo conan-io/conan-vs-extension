@@ -129,7 +129,7 @@ namespace Conan.VisualStudio.Services
                     try
                     {
                         // Run 'conan --version' for log purposes 
-                        process = conan.Version(project);
+                        process = conan.Version();
                         int exitCode = await Utils.RunProcessAsync(process, logStream);
                         if (exitCode != 0)
                         {
