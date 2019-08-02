@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JFrog LTD")]
 [assembly: AssemblyProduct("Conan.VisualStudio")]
-[assembly: AssemblyCopyright("Copyright © 2019 JFrog LTD")]
+[assembly: AssemblyCopyright("Copyright (c) 2019 JFrog LTD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
