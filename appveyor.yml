@@ -1,31 +1,61 @@
-﻿os: Visual Studio 2019
+﻿environment:
+  matrix:
+    - stage: Build
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - stage: Test
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    #- stage: Test
+    #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    - stage: Deploy
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 platform: Any CPU
 skip_branch_with_pr: true
 configuration: Release
-install:
-    - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
-before_build:
-    - ps: Vsix-IncrementVsixVersion -versionType revision | Vsix-UpdateBuildVersion
-    - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
-    - nuget restore
-build_script:
-    msbuild /p:DeployExtension=false /p:verbosity=detailed
-artifacts:
-    - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
-      name: Conan Visual Studio Extention
-deploy:
-    - provider: GitHub
-      tag: v$(appveyor_build_version)
-      release: Conan Visual Studio Extention v$(appveyor_build_version)
-      description: Conan Visual Studio Extention v$(appveyor_build_version)
-      auth_token:
-        secure: 2Eh4YpQsYERkDVSLjyc0iWEmCZ0VIa4iFxqOmcgsgr44x6Q6w8cYOzDaURRUFp30
-      draft: true
-      prerelease: true
-      force_update: false
-      on:
-        branch: publish-to-github  # https://www.appveyor.com/docs/deployment/github/
-deploy_script:
-    - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
-after_test:
-    - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix-PublishToGallery}
+
+matrix:
+  fast_finish: true
+for:
+  -
+    matrix:
+      only:
+        - stage: Build
+    install:
+      - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+    before_build:
+      - ps: Vsix-IncrementVsixVersion -versionType revision | Vsix-UpdateBuildVersion
+      - ps: Vsix-TokenReplacement Conan.VisualStudio\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+      - nuget restore
+    build_script:
+      - msbuild /p:DeployExtension=false /p:verbosity=detailed
+    artifacts:
+      - path: Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix
+        name: Conan Visual Studio Extension
+  -
+    matrix:
+      only:
+        - stage: Test
+    build_script:
+      - ps: .\vsix\download_artifact.ps1
+      - ps: .\vsix\install_vsix.ps1
+    test_script:
+      - ps: .\vsix\check_installed.ps1
+    after_test:
+      - ps: .\vsix\uninstall_vsix.ps1  # TODO: Check it has been succesfully uninstalled
+  -
+    matrix:
+      only:
+        - stage: Deploy
+    branches:
+      only:
+        - master
+    skip_non_tags: true
+    build_script:
+      - ps: .\vsix\download_artifact.ps1
+    test_script:
+      - ps: write-host "Deploy scenario"
+    deploy_script:
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix- -path ${env:localArtifactPath}}
+
