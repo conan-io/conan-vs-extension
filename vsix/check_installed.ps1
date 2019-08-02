@@ -16,7 +16,7 @@ $ntimes = 5
 For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
     $output = . "$devenv" /ConanVisualStudioVersion /?
 
-    $pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+Microsoft Visual Studio"  # Version + output from /? command
+    $pattern = "^${env:APPVEYOR_BUILD_VERSION}\s+"  # Version + output from /? command
     $regex = New-Object System.Text.RegularExpressions.Regex $pattern
     $result = $regex.Matches($output)
 
