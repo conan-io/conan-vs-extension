@@ -34,14 +34,13 @@ namespace Conan.VisualStudio.Core
             return options;
         }
 
-        public ProcessStartInfo Version(ConanProject project)
+        public ProcessStartInfo Version()
         {
             var startInfo = new ProcessStartInfo
             {
                 FileName = _executablePath,
                 Arguments = "--version",
                 UseShellExecute = false,
-                WorkingDirectory = Path.GetDirectoryName(project.Path),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
