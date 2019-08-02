@@ -11,7 +11,7 @@
     - stage: Deploy
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
 platform: Any CPU
-skip_branch_with_pr: false
+skip_branch_with_pr: true
 configuration: Release
 
 matrix:

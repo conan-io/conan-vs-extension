@@ -6,7 +6,6 @@ $visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\
 $vsixPublisher = Join-Path $visualStudioInstallation 'VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe'
 
 $manifest = (Get-Item .\vsix\publish-manifest.json).FullName
-# $vsix = (Get-Item .\Conan.VisualStudio\bin\Release\Conan.VisualStudio.vsix).FullName
 Write-Host "vsix: ${env:localArtifactPath}"
 Write-Host "manifest: $manifest"
 
