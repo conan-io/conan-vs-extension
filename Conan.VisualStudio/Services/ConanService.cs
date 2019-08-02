@@ -125,15 +125,24 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
 
-                    // Run 'conan --version' for log purposes 
-                    ProcessStartInfo pVersion = conan.Version(project);
-                    await Utils.RunProcessAsync(pVersion, logStream);
-
-                    // Run the install
-                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
+                    ProcessStartInfo process = null;
                     try
                     {
+                        // Run 'conan --version' for log purposes 
+                        process = conan.Version(project);
                         int exitCode = await Utils.RunProcessAsync(process, logStream);
+                        if (exitCode != 0)
+                        {
+                            string message = "Cannot get Conan version, check that the " +
+                                "executable is pointing to a valid one";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                        }
+
+                        // Run the install
+                        process = conan.Install(project, configuration, generator, build, update, _errorListService);
+                        exitCode = await Utils.RunProcessAsync(process, logStream);
                         if (exitCode != 0)
                         {
                             string message = $"Conan has returned exit code '{exitCode}' " +
