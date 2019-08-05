@@ -105,10 +105,9 @@ namespace Conan.VisualStudio
             ErrorHandler.ThrowOnFailure(cmdLine.GetOption("MySwitch", out int hasMySwitch, out string vsSolution));
             if (hasMySwitch == 1)
             {
-                //System.Console.WriteLine($"Here we are {vsSolution}");
-                // If opened from a URL, then "optionValue" is the URL string itself
+                System.Console.WriteLine($"Here we are {vsSolution}");
                 //System.Windows.Forms.MessageBox.Show(vsSolution);
-                //await _addConanDependsSolution.MenuItemCallbackAsync();
+                await _addConanDependsSolution.MenuItemCallbackAsync();
             }
         }
 
