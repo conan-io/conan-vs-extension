@@ -143,7 +143,7 @@ namespace Conan.VisualStudio
             ThreadHelper.ThrowIfNotOnUIThread();
 
             _buildEvents = _dte.Events.BuildEvents;
-            _buildEvents.OnBuildProjConfigDone += BuildEvents_ProjectConfigDone;
+            _buildEvents.OnBuildProjConfigBegin += BuildEvents_ProjectConfigBegin;
 
             _solutionEvents = _dte.Events.SolutionEvents;
 
@@ -215,19 +215,20 @@ namespace Conan.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private void InstallConanDeps(VCProject vcProject)
+        private async Task<bool> InstallConanDepsAsync(VCProject vcProject)
         {
             _errorListService.Clear();
-            ThreadHelper.JoinableTaskFactory.RunAsync(
-                async delegate
-                {
+            //ThreadHelper.JoinableTaskFactory.RunAsync(
+            //    async delegate
+            //    {
                     bool success = await _conanService.InstallAsync(vcProject);
                     if (success)
                     {
                         await _conanService.IntegrateAsync(vcProject);
                     }
-                }
-            );
+            return success;
+            //    }
+            //);
         }
 
         private void SolutionEvents_AfterClosing()
@@ -248,8 +249,8 @@ namespace Conan.VisualStudio
 
             if (_settingsService.GetConanInstallAutomatically())
             {
-                if (_vcProjectService.IsConanProject(project))
-                    InstallConanDeps(_vcProjectService.AsVCProject(project));
+                //if (_vcProjectService.IsConanProject(project))
+                    //InstallConanDeps(_vcProjectService.AsVCProject(project));
             }
         }
 
@@ -266,14 +267,14 @@ namespace Conan.VisualStudio
                     if (_vcProjectService.IsConanProject(project))
                     {
                         System.Console.WriteLine($"... ... which is a Conan one");
-                        InstallConanDeps(_vcProjectService.AsVCProject(project));
+                        //InstallConanDeps(_vcProjectService.AsVCProject(project));
                     }
                     System.Console.WriteLine($"<<<< ... for a project");
                 }
             }
         }
 
-        private void BuildEvents_ProjectConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
+        private void BuildEvents_ProjectConfigBegin(string Project, string ProjectConfig, string Platform, string SolutionConfig)
         {
             System.Console.WriteLine($"BuildEvents_ProjectConfigBegin()");
             if (_installAuto)
@@ -294,8 +295,12 @@ namespace Conan.VisualStudio
                     {
                         VCProject pp = _vcProjectService.AsVCProject(project);
                         var actConfig = pp.ActiveConfiguration;
-                        bool isConanProject = _vcProjectService.IsConanProject(project);
-                        //InstallConanDeps(pp);
+                        //bool isConanProject = _vcProjectService.IsConanProject(project);
+                        bool result = JoinableTaskFactory.Run(async delegate {
+                            bool r = await InstallConanDepsAsync(pp);
+                            return r;
+                        });
+
                     }
                 }
             }
