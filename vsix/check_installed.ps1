@@ -33,10 +33,8 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
     else {
         "OK" | Write-Host -ForegroundColor Green
         $host.SetShouldExit(0)
-        exit
     }
 }
 
-"FAILURE: Should never get here!" | Write-Host -ForegroundColor Red
-$host.SetShouldExit(-1)
-exit
+$sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
+$output = . $devenv $sln_file /MySwitch Conan
