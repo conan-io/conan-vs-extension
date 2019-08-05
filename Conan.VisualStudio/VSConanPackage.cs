@@ -29,6 +29,7 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
     [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, PackageGuid = PackageGuids.guidVSConanPackageString)]
+    [ProvideAppCommandLine("MySwitch", typeof(VSConanPackage), Arguments = "1", DemandLoad = 1)]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         private const string _cliSwitch = "ConanVisualStudioVersion";
@@ -69,6 +70,7 @@ namespace Conan.VisualStudio
 
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
 
+            //System.Console.WriteLine($"Before first TaskScheduler.Default");
             await TaskScheduler.Default;
 
             var commandService = await GetServiceAsync<IMenuCommandService>();
@@ -85,6 +87,7 @@ namespace Conan.VisualStudio
             _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
             _conanAbout = new ConanAbout(commandService, _errorListService);
 
+            //System.Console.WriteLine($"Before previous TaskScheduler.Default");
             await TaskScheduler.Default;
 
             Logger.Initialize(serviceProvider, "Conan");
@@ -95,7 +98,18 @@ namespace Conan.VisualStudio
 
             EnableMenus(_dte.Solution != null && _dte.Solution.IsOpen);
 
+            //System.Console.WriteLine($"Before last TaskScheduler.Default");
             await TaskScheduler.Default;
+
+            // More command line switches
+            ErrorHandler.ThrowOnFailure(cmdLine.GetOption("MySwitch", out int hasMySwitch, out string vsSolution));
+            if (hasMySwitch == 1)
+            {
+                //System.Console.WriteLine($"Here we are {vsSolution}");
+                // If opened from a URL, then "optionValue" is the URL string itself
+                //System.Windows.Forms.MessageBox.Show(vsSolution);
+                //await _addConanDependsSolution.MenuItemCallbackAsync();
+            }
         }
 
         private void ShowOptionPage()
