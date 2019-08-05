@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Conan.VisualStudio.Core;
+using Conan.VisualStudio.Core.VCInterfaces;
 
 namespace Conan.VisualStudio.Services
 {

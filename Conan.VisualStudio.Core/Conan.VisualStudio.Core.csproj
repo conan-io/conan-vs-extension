@@ -61,9 +61,9 @@
     <Compile Include="ConanRunner.cs" />
     <Compile Include="ConanSettings.cs" />
     <Compile Include="IErrorListService.cs" />
-    <Compile Include="IVCConfiguration.cs" />
-    <Compile Include="IVCProject.cs" />
-    <Compile Include="IVCPropertySheet.cs" />
+    <Compile Include="VCInterfaces\IVCConfiguration.cs" />
+    <Compile Include="VCInterfaces\IVCProject.cs" />
+    <Compile Include="VCInterfaces\IVCPropertySheet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

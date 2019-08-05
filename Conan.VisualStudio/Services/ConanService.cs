@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
+using Conan.VisualStudio.Core.VCInterfaces;
 using Microsoft.VisualStudio.Threading;
 
 namespace Conan.VisualStudio.Services

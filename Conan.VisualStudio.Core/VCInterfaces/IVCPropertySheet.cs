@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Conan.VisualStudio.Core
+namespace Conan.VisualStudio.Core.VCInterfaces
 {
     public interface IVCPropertySheet
     {

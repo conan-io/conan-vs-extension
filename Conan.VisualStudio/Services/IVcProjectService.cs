@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
+using Conan.VisualStudio.Core.VCInterfaces;
 using EnvDTE;
 
 namespace Conan.VisualStudio.Services
