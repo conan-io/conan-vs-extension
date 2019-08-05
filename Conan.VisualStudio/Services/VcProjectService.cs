@@ -37,7 +37,7 @@ namespace Conan.VisualStudio.Services
 
         private static IVCProject CreateVCProjectWrapper(Project project)
         {
-            int version = ConanCompilerVersion();
+            int version = VisualStudioVersion;
             string wrapperDLL;
 
             if (version == 14)
@@ -147,15 +147,18 @@ namespace Conan.VisualStudio.Services
             return GetInstallationDirectoryImpl(settingsService, configuration);
         }
 
-        private static int ConanCompilerVersion()
+        private static int VisualStudioVersion
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
-            if (File.Exists(path))
+            get
             {
-                System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
-                return fvi.ProductMajorPart;
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "msenv.dll");
+                if (File.Exists(path))
+                {
+                    System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
+                    return fvi.ProductMajorPart;
+                }
+                throw new NotSupportedException($"Cannot detect Visual Studio version, file {path} missing");
             }
-            throw new NotSupportedException($"Cannot detect compiler version, file {path} missing");
         }
 
         private static ConanConfiguration ExtractConanConfiguration(ISettingsService settingsService, IVCConfiguration configuration)
@@ -168,7 +171,7 @@ namespace Conan.VisualStudio.Services
                 Architecture = GetArchitecture(configuration.PlatformName),
                 BuildType = GetBuildType(configuration.ConfigurationName),
                 CompilerToolset = configuration.Toolset,
-                CompilerVersion = ConanCompilerVersion().ToString(),
+                CompilerVersion = VisualStudioVersion.ToString(),
                 InstallPath = installPath,
                 RuntimeLibrary = configuration.RuntimeLibrary
             };
