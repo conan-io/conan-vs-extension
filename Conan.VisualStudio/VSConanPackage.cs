@@ -101,6 +101,7 @@ namespace Conan.VisualStudio
             await TaskScheduler.Default;
 
             // More command line switches
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             ErrorHandler.ThrowOnFailure(cmdLine.GetOption(_cliSwitch, out int hasMySwitch, out string vsSolution));
             if (hasMySwitch == 1)
             {
