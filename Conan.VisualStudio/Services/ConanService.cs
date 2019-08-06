@@ -139,7 +139,7 @@ namespace Conan.VisualStudio.Services
                             await logStream.WriteLineAsync(message);
                             _errorListService.WriteError(message, logFilePath);
                         }
-                        
+
                         // Run the install
                         process = conan.Install(project, configuration, generator, build, update, _errorListService);
                         exitCode = await Utils.RunProcessAsync(process, logStream);

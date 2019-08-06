@@ -32,7 +32,6 @@ namespace Conan.VisualStudio.Services
 
         public bool IsConanProject(Project project)
         {
-            
             ThreadHelper.ThrowIfNotOnUIThread();
             return IsCppProject(project) && null != ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory);
         }
