@@ -38,3 +38,4 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
 
 $sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
 $output = . $devenv $sln_file /MySwitch Conan
+Write-Host "Output from 'test': " $output
