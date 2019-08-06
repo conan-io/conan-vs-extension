@@ -25,27 +25,14 @@ namespace Conan.VisualStudio.Services
         private static bool IsCppProject(Project project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            try
-            {
-                System.Console.WriteLine($"project: {project}");
-                System.Console.WriteLine($"project.CodeModel: {project.CodeModel}");
-                System.Console.WriteLine($"project.CodeModel.Language: {project.CodeModel.Language}");
-                return project != null && project.CodeModel != null
-                    && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
-                        || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
-            }
-            catch(Exception e)
-            {
-                System.Console.WriteLine($"Exception: {e}");
-            }
-            return false;
+            return project != null && project.CodeModel != null
+                && (project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageMC
+                    || project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageVC);
         }
 
         public bool IsConanProject(Project project)
         {
             
-            System.Console.WriteLine($"IsCppProject(project): {IsCppProject(project)}");
-            System.Console.WriteLine($"ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory): {ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory)}");
             ThreadHelper.ThrowIfNotOnUIThread();
             return IsCppProject(project) && null != ConanPathHelper.GetNearestConanfilePath(AsVCProject(project).ProjectDirectory);
         }

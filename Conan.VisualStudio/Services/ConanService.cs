@@ -112,7 +112,6 @@ namespace Conan.VisualStudio.Services
 
         private async Task<bool> InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
-            System.Console.WriteLine($"----------------------- InstallDependenciesAsync ------");
             foreach (var configuration in project.Configurations)
             {
                 var installPath = configuration.InstallPath;
@@ -136,13 +135,11 @@ namespace Conan.VisualStudio.Services
                         {
                             string message = "Cannot get Conan version, check that the " +
                                 "executable is pointing to a valid one";
-                            System.Console.WriteLine(message);
                             Logger.Log(message);
                             await logStream.WriteLineAsync(message);
                             _errorListService.WriteError(message, logFilePath);
                         }
-                        System.Console.WriteLine("conan --version SUCEEDED!!!");
-
+                        
                         // Run the install
                         process = conan.Install(project, configuration, generator, build, update, _errorListService);
                         exitCode = await Utils.RunProcessAsync(process, logStream);

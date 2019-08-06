@@ -80,7 +80,7 @@ namespace Conan.VisualStudio
         [Description(@"Install conan dependencies automatically on solution load")]
         public bool ConanInstallAutomatically
         {
-            get => _conanInstallAutomatically ?? true;
+            get => _conanInstallAutomatically ?? false;
             set => _conanInstallAutomatically = value;
         }
 
