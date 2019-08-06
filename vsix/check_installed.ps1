@@ -8,6 +8,7 @@ else
 {
     $visualStudioInstallation = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VSSDK -property installationPath
     $devenv = Join-Path $visualStudioInstallation 'Common7\IDE\devenv.com'
+    $vcvars64 = Join-Path $visualStudioInstallation 'VC\Auxiliary\Build\vcvars64.bat'
 }
 
 Write-Host "devenv: $devenv"
@@ -36,6 +37,7 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
     }
 }
 
+. "$vcvars64"
 $sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
 $output = . $devenv /MySwitch Conan /Build "Debug|x64" "$sln_file"
 Write-Host "Output from 'test': " $output
