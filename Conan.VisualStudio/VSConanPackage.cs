@@ -29,7 +29,7 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
     [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, PackageGuid = PackageGuids.guidVSConanPackageString)]
-    [ProvideAppCommandLine(CLISwitchRunInstall.Name, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1)]
+    [ProvideAppCommandLine(CLISwitchRunInstall.Name, typeof(VSConanPackage), Arguments = "1", DemandLoad = 1)]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         private const string _cliSwitch = "ConanVisualStudioVersion";
@@ -101,10 +101,10 @@ namespace Conan.VisualStudio
 
             // Command linee switch: ConanRunInstall
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            ErrorHandler.ThrowOnFailure(cmdLine.GetOption(CLISwitchRunInstall.Name, out int hasMySwitch, out string vsSolution));
+            ErrorHandler.ThrowOnFailure(cmdLine.GetOption(CLISwitchRunInstall.Name, out int hasMySwitch, out string pathToConan));
             if (hasMySwitch == 1)
             {
-                _cliSwitchRunInstall = new CLISwitchRunInstall(_dte, _solutionBuildManager, _vcProjectService, _conanService);
+                _cliSwitchRunInstall = new CLISwitchRunInstall(_dte, _solutionBuildManager, _vcProjectService, _conanService, pathToConan);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Conan.VisualStudio
             ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
-                    bool success = await _conanService.InstallAsync(vcProject);
+                    bool success = await _conanService.InstallAsync(vcProject, null);
                     if (success)
                     {
                         await _conanService.IntegrateAsync(vcProject);

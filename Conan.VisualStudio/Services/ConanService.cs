@@ -88,10 +88,10 @@ namespace Conan.VisualStudio.Services
             }
         }
 
-        public async Task<bool> InstallAsync(VCProject vcProject)
+        public async Task<bool> InstallAsync(VCProject vcProject, string pathToConan)
         {
-            var conanPath = _settingsService.GetConanExecutablePath();
-            System.Console.WriteLine($"Conan path ${conanPath}");
+            string conanPath = pathToConan ?? _settingsService.GetConanExecutablePath();
+            System.Console.WriteLine($"Conan path {conanPath}");
             if (conanPath == null || conanPath == "")
             {
                 _errorListService.WriteError(

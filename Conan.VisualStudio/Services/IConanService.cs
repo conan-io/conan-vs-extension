@@ -11,6 +11,6 @@ namespace Conan.VisualStudio.Services
     {
         Task IntegrateAsync(VCProject vcProject);
 
-        Task<bool> InstallAsync(VCProject vcProject);
+        Task<bool> InstallAsync(VCProject vcProject, string conanPath);
     }
 }

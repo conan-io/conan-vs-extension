@@ -38,7 +38,11 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
 }
 
 . "$vcvars64"
+
+$pathConan = (Get-Process -Name conan).path
+Write-Host "path to Conan: $pathConan"
+
 $sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
 Write-Host "sln_file: $sln_file"
-$output = . "$devenv" /ConanRunInstall /Build "Debug|x64" "$sln_file"
+$output = . "$devenv" /ConanRunInstall "$pathConan" /Build "Debug|x64" "$sln_file"
 Write-Host "Output from 'test': $output"

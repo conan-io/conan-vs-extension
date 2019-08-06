@@ -20,17 +20,20 @@ namespace Conan.VisualStudio
         private readonly DTE _dte;
         private readonly IVcProjectService _vcProjectService;
         private IConanService _conanService;
+        private string _conanPath;
 
         public CLISwitchRunInstall(
             DTE dte,
             IVsSolutionBuildManager3 service,
             IVcProjectService vcProjectService,
-            IConanService conanService)
+            IConanService conanService,
+            string conanPath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             _dte = dte;
             _vcProjectService = vcProjectService;
             _conanService = conanService;
+            _conanPath = conanPath;
 
             _buildEvents = _dte.Events.BuildEvents;
             _buildEvents.OnBuildProjConfigBegin += OnBuildProjConfigBegin;
@@ -48,7 +51,7 @@ namespace Conan.VisualStudio
                     VCProject vcProject = _vcProjectService.AsVCProject(project);
                     ThreadHelper.JoinableTaskFactory.Run(async delegate
                     {
-                        bool success = await _conanService.InstallAsync(vcProject);
+                        bool success = await _conanService.InstallAsync(vcProject, _conanPath);
                         if (success)
                         {
                             await _conanService.IntegrateAsync(vcProject);

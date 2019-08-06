@@ -41,7 +41,7 @@ namespace Conan.VisualStudio.Menu
             {
                 if (_vcProjectService.IsConanProject(project))
                 {
-                    bool success = await _conanService.InstallAsync(_vcProjectService.AsVCProject(project));
+                    bool success = await _conanService.InstallAsync(_vcProjectService.AsVCProject(project), null);
                     if (success)
                     {
                         await _conanService.IntegrateAsync(_vcProjectService.AsVCProject(project));
