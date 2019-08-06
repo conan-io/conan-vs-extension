@@ -107,7 +107,7 @@ namespace Conan.VisualStudio
             {
                 System.Console.WriteLine($"Here we are {vsSolution}");
                 //System.Windows.Forms.MessageBox.Show(vsSolution);
-                //await _addConanDependsSolution.MenuItemCallbackAsync();
+                await _addConanDependsSolution.MenuItemCallbackAsync();
             }
         }
 
