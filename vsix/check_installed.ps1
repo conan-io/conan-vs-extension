@@ -12,7 +12,7 @@ else
 
 Write-Host "devenv: $devenv"
 
-$ntimes = 5
+$ntimes = 1
 For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
     $output = . "$devenv" /ConanVisualStudioVersion /?
 

@@ -29,6 +29,7 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
     [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, PackageGuid = PackageGuids.guidVSConanPackageString)]
+    [ProvideAppCommandLine("MySwitch", typeof(VSConanPackage), Arguments = "1", DemandLoad = 1)]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
         private const string _cliSwitch = "ConanVisualStudioVersion";
@@ -102,7 +103,7 @@ namespace Conan.VisualStudio
 
             // More command line switches
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            ErrorHandler.ThrowOnFailure(cmdLine.GetOption(_cliSwitch, out int hasMySwitch, out string vsSolution));
+            ErrorHandler.ThrowOnFailure(cmdLine.GetOption("MySwitch", out int hasMySwitch, out string vsSolution));
             if (hasMySwitch == 1)
             {
                 System.Console.WriteLine($"Here we are {vsSolution}");
