@@ -39,5 +39,5 @@ For ($i=1; $i -le $ntimes; $i++) {  # Run 10 times
 
 . "$vcvars64"
 $sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
-$output = . $devenv /MySwitch Conan /Build "Debug|x64" "$sln_file"
+$output = . $devenv /ConanRunInstall /Build "Debug|x64" "$sln_file"
 Write-Host "Output from 'test': " $output

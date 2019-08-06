@@ -71,6 +71,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CLISwitchRunInstall.cs" />
     <Compile Include="Menu\AddConanDependsProject.cs" />
     <Compile Include="Menu\AddConanDependsSolution.cs" />
     <Compile Include="ConanOptionsPage.cs">
