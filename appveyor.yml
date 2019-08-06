@@ -43,6 +43,7 @@ for:
     build_script:
       - ps: .\vsix\download_artifact.ps1
       - ps: .\vsix\install_vsix.ps1
+      - pip install conan
     test_script:
       - ps: .\vsix\check_installed.ps1
     after_test:
