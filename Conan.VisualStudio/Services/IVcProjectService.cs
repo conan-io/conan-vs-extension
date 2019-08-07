@@ -1,18 +1,18 @@
 using System;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
-using Microsoft.VisualStudio.VCProjectEngine;
+using Conan.VisualStudio.Core.VCInterfaces;
 using EnvDTE;
 
 namespace Conan.VisualStudio.Services
 {
     public interface IVcProjectService
     {
-        VCProject GetActiveProject();
-        ConanProject ExtractConanProject(VCProject vcProject, ISettingsService settingsService);
-        Task<ConanProject> ExtractConanProjectAsync(VCProject vcProject, ISettingsService settingsService);
+        IVCProject GetActiveProject();
+        ConanProject ExtractConanProject(IVCProject vcProject, ISettingsService settingsService);
+        Task<ConanProject> ExtractConanProjectAsync(IVCProject vcProject, ISettingsService settingsService);
         bool IsConanProject(Project project);
-        VCProject AsVCProject(Project project);
-        string GetInstallationDirectory(ISettingsService settingsService, VCConfiguration configuration);
+        IVCProject AsVCProject(Project project);
+        string GetInstallationDirectory(ISettingsService settingsService, IVCConfiguration configuration);
     }
 }
