@@ -40,8 +40,6 @@ for:
     matrix:
       only:
         - stage: Test
-    init:
-      - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
     build_script:
       - ps: .\vsix\download_artifact.ps1
       - ps: .\vsix\install_vsix.ps1
@@ -51,6 +49,8 @@ for:
       - ps: .\vsix\check_installed.ps1
     after_test:
       - ps: .\vsix\uninstall_vsix.ps1  # TODO: Check it has been succesfully uninstalled
+    on_finish:
+      - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   -
     matrix:
       only:
