@@ -44,5 +44,10 @@ Write-Host "path to Conan: $pathConan"
 
 $sln_file = "C:\projects\conan-vs-extension\Conan.VisualStudio.Examples\ExampleCLI\ExampleCLI.sln"
 Write-Host "sln_file: $sln_file"
+
+$process = (Start-Process -FilePath "$devenv" -ArgumentList "$sln_file /ConanVisualStudioVersion /ConanRunInstall conan /Build Release|x64" -Wait -PassThru)
+Write-Host "ConanRunInstall finished with return code: " $process.ExitCode
+
+
 #$output = . "$devenv" /ConanRunInstall "conan" /Build "Release|x64" "$sln_file"
 #Write-Host "Output from 'test': $output"
