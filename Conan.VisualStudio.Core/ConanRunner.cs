@@ -101,7 +101,7 @@ namespace Conan.VisualStudio.Core
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            startInfo.EnvironmentVariables.Remove("VisualStudioVersion");
+            startInfo.EnvironmentVariables.Remove("VisualStudioVersion");  // FIXME: Hack for https://github.com/conan-io/conan/issues/5580
             return startInfo;
         }
     }
