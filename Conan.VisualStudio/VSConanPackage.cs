@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Conan.VisualStudio.Core;
+using Conan.VisualStudio.Core.VCInterfaces;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
 using EnvDTE;
@@ -11,7 +13,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Threading;
-using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Conan.VisualStudio
 {
@@ -28,11 +29,14 @@ namespace Conan.VisualStudio
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.EmptySolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(ConanOptionsPage), "Conan", "Main", 0, 0, true)]
+    [ProvideAppCommandLine(_cliSwitch, typeof(VSConanPackage), Arguments = "0", DemandLoad = 1, PackageGuid = PackageGuids.guidVSConanPackageString)]
     public sealed class VSConanPackage : AsyncPackage, IVsUpdateSolutionEvents3
     {
+        private const string _cliSwitch = "ConanVisualStudioVersion";
         private AddConanDependsProject _addConanDependsProject;
         private AddConanDependsSolution _addConanDependsSolution;
         private ConanOptions _conanOptions;
+        private ConanAbout _conanAbout;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
         private IVsSolution _solution;
@@ -42,7 +46,7 @@ namespace Conan.VisualStudio
         private IVsSolutionBuildManager3 _solutionBuildManager;
         private ProjectItemsEvents _projectItemEvents;
         private DocumentEvents _documentEvents;
-        private Core.IErrorListService _errorListService;
+        private IErrorListService _errorListService;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -50,11 +54,16 @@ namespace Conan.VisualStudio
         /// </summary>
         protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            await base.InitializeAsync(cancellationToken, progress);
+            // Handle commandline switch
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            var cmdLine = await GetServiceAsync(typeof(SVsAppCommandLine)) as IVsAppCommandLine;
+            ErrorHandler.ThrowOnFailure(cmdLine.GetOption(_cliSwitch, out int isPresent, out string optionValue));
+            if (isPresent == 1)
+            {
+                System.Console.WriteLine(Vsix.Version);
+            }
 
             _dte = await GetServiceAsync<DTE>();
-
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
             _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>() as IVsSolutionBuildManager3;
@@ -75,6 +84,7 @@ namespace Conan.VisualStudio
             _addConanDependsSolution = new AddConanDependsSolution(commandService, _errorListService, _vcProjectService,  _conanService);
 
             _conanOptions = new ConanOptions(commandService, _errorListService, ShowOptionPage);
+            _conanAbout = new ConanAbout(commandService, _errorListService);
 
             await TaskScheduler.Default;
 
@@ -180,7 +190,7 @@ namespace Conan.VisualStudio
             return VSConstants.S_OK;
         }
 
-        private void InstallConanDeps(VCProject vcProject)
+        private void InstallConanDeps(IVCProject vcProject)
         {
             _errorListService.Clear();
             ThreadHelper.JoinableTaskFactory.RunAsync(

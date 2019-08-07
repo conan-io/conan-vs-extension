@@ -1,12 +1,11 @@
-using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Conan.VisualStudio.Core")]
+[assembly: AssemblyTitle("Conan.VisualStudio.VCProjectWrapper")]
 [assembly: AssemblyDescription("Conan extension for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("JFrog LTD")]
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("704bddfb-cb01-4f8b-b2a0-60bcfa97f0c2")]
+[assembly: Guid("2b9a58f0-6002-4477-9552-1a58386eba96")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,5 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: NeutralResourcesLanguage("en-US")]
-

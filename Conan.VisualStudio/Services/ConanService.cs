@@ -1,12 +1,11 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Conan.VisualStudio.Core;
+using Conan.VisualStudio.Core.VCInterfaces;
 using Microsoft.VisualStudio.Threading;
-using Microsoft.VisualStudio.VCProjectEngine;
 
 namespace Conan.VisualStudio.Services
 {
@@ -23,7 +22,7 @@ namespace Conan.VisualStudio.Services
             _vcProjectService = vcProjectService;
         }
 
-        private string GetPropsFilePath(VCConfiguration configuration)
+        private string GetPropsFilePath(IVCConfiguration configuration)
         {
             string installPath = _vcProjectService.GetInstallationDirectory(_settingsService, configuration);
             string propFileName;
@@ -35,37 +34,28 @@ namespace Conan.VisualStudio.Services
         }
 
 
-        private void IntegrateIntoConfiguration(VCConfiguration configuration)
+        private void IntegrateIntoConfiguration(IVCConfiguration configuration)
         {
             string absPropFilePath = GetPropsFilePath(configuration);
-            string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.project.ProjectDirectory, absPropFilePath);
+            string relativePropFilePath = ConanPathHelper.GetRelativePath(configuration.ProjectDirectory, absPropFilePath);
 
-            IVCCollection tools = (IVCCollection)configuration.Tools;
-            if (tools != null)
-            {
-                VCLinkerTool ltool = (VCLinkerTool)tools.Item("VCLinkerTool");
-                if (ltool != null)
-                {
-                    string deps = ltool.AdditionalDependencies;
-                    ltool.AdditionalDependencies = deps.Replace("$(NOINHERIT)", "");
-                }
-            }
+            configuration.AdditionalDependencies = configuration.AdditionalDependencies.Replace("$(NOINHERIT)", "");
 
-            foreach (VCPropertySheet sheet in configuration.PropertySheets)
+            foreach (IVCPropertySheet sheet in configuration.PropertySheets)
             {
                 if (ConanPathHelper.NormalizePath(sheet.PropertySheetFile) == ConanPathHelper.NormalizePath(absPropFilePath))
                 {
-                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.project.Name}";
+                    string msg = $"[Conan.VisualStudio] Property sheet '{absPropFilePath}' already added to project {configuration.ProjectName}";
                     Logger.Log(msg);
                     return;
                 }
             }
             configuration.AddPropertySheet(relativePropFilePath);
-            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.project.Name}");
+            Logger.Log($"[Conan.VisualStudio] Property sheet '{absPropFilePath}' added to project {configuration.ProjectName}");
             configuration.CollectIntelliSenseInfo();
         }
 
-        public async Task IntegrateAsync(VCProject vcProject)
+        public async Task IntegrateAsync(IVCProject vcProject)
         {
             var projectDirectory = vcProject.ProjectDirectory;
             var conanfileDirectory = await ConanPathHelper.GetNearestConanfilePathAsync(projectDirectory);
@@ -81,14 +71,14 @@ namespace Conan.VisualStudio.Services
             }
             else
             {
-                foreach (VCConfiguration configuration in vcProject.Configurations)
+                foreach (IVCConfiguration configuration in vcProject.Configurations)
                 {
                     IntegrateIntoConfiguration(configuration);
                 }
             }
         }
 
-        public async Task<bool> InstallAsync(VCProject vcProject)
+        public async Task<bool> InstallAsync(IVCProject vcProject)
         {
             var conanPath = _settingsService.GetConanExecutablePath();
             if (conanPath == null || conanPath == "")
@@ -109,22 +99,6 @@ namespace Conan.VisualStudio.Services
 
             return await InstallDependenciesAsync(conan, project);
         }
-        private static void AppendLinesFunc(object packedParams)
-        {
-            var paramsTuple = (Tuple<StreamWriter, StreamReader>)packedParams;
-            StreamWriter writer = paramsTuple.Item1;
-            StreamReader reader = paramsTuple.Item2;
-
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                lock (writer)
-                {
-                    Logger.Log(line);
-                    writer.WriteLine(line);
-                }
-            }
-        }
 
         private async Task<bool> InstallDependenciesAsync(ConanRunner conan, ConanProject project)
         {
@@ -141,55 +115,47 @@ namespace Conan.VisualStudio.Services
                     ConanBuildType build = _settingsService.GetConanBuild();
                     bool update = _settingsService.GetConanUpdate();
 
-                    ProcessStartInfo process = conan.Install(project, configuration, generator, build, update, _errorListService);
-
-                    string message = $"[Conan.VisualStudio] Calling process '{process.FileName}' " +
-                                     $"with arguments '{process.Arguments}'";
-                    Logger.Log(message);
-                    await logStream.WriteLineAsync(message);
-
+                    ProcessStartInfo process = null;
                     try
                     {
-                        using (Process exeProcess = Process.Start(process))
+                        // Run 'conan --version' for log purposes 
+                        process = conan.Version();
+                        int exitCode = await Utils.RunProcessAsync(process, logStream);
+                        if (exitCode != 0)
                         {
-                            var tokenSource = new CancellationTokenSource();
-                            var token = tokenSource.Token;
+                            string message = "Cannot get Conan version, check that the " +
+                                "executable is pointing to a valid one";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                        }
 
-                            Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardOutput),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
-                            Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
-                                Tuple.Create(logStream, exeProcess.StandardError),
-                                token, TaskCreationOptions.None, TaskScheduler.Default);
+                        // Run the install
+                        process = conan.Install(project, configuration, generator, build, update, _errorListService);
+                        exitCode = await Utils.RunProcessAsync(process, logStream);
+                        if (exitCode != 0)
+                        {
+                            string message = $"Conan has returned exit code '{exitCode}' " +
+                                      $"while processing configuration '{configuration}'. " +
+                                      $"Please check file '{logFilePath}' for details.";
 
-                            int exitCode = await exeProcess.WaitForExitAsync();
-
-                            Task.WaitAll(outputReader, errorReader);
-                            
-                            if (exitCode != 0)
-                            {
-                                message = $"Conan has returned exit code '{exitCode}' " +
-                                          $"while processing configuration '{configuration}'. " +
-                                          $"Please check file '{logFilePath}' for details.";
-
-                                Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
-                                _errorListService.WriteError(message, logFilePath);
-                                return false;
-                            }
-                            else
-                            {
-                                message = $"[Conan.VisualStudio] Conan has succsessfully " +
-                                          $"installed configuration '{configuration}'";
-                                Logger.Log(message);
-                                await logStream.WriteLineAsync(message);
-                                _errorListService.WriteMessage(message);
-                            }
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteError(message, logFilePath);
+                            return false;
+                        }
+                        else
+                        {
+                            string message = $"[Conan.VisualStudio] Conan has succsessfully " +
+                                      $"installed configuration '{configuration}'";
+                            Logger.Log(message);
+                            await logStream.WriteLineAsync(message);
+                            _errorListService.WriteMessage(message);
                         }
                     }
-                    catch(System.ComponentModel.Win32Exception e)
+                    catch (System.ComponentModel.Win32Exception e)
                     {
-                        message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
+                        string message = $"[Conan.VisualStudio] Unhandled error running '{process.FileName}'" +
                                   $": {e.Message}. Check log file '{logFilePath}' for details";
                         Logger.Log(message);
                         await logStream.WriteLineAsync(message);
