@@ -101,6 +101,7 @@ namespace Conan.VisualStudio.Core
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+            startInfo.EnvironmentVariables.Remove("VisualStudioVersion");
             return startInfo;
         }
     }
