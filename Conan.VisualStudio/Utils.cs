@@ -35,19 +35,39 @@ namespace Conan.VisualStudio
 
             using (Process exeProcess = Process.Start(process))
             {
+                exeProcess.OutputDataReceived += (sender, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        Logger.Log(e.Data);
+                        logStream.WriteLine(e.Data);
+                    }
+                };
+                exeProcess.ErrorDataReceived += (sender, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        Logger.Log(e.Data);
+                        logStream.WriteLine(e.Data);
+                    }
+                };
+
+                exeProcess.BeginOutputReadLine();
+                exeProcess.BeginErrorReadLine();
+
                 var tokenSource = new CancellationTokenSource();
                 var token = tokenSource.Token;
 
-                Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
+                /*Task outputReader = Task.Factory.StartNew(AppendLinesFunc,
                     Tuple.Create(logStream, exeProcess.StandardOutput),
                     token, TaskCreationOptions.None, TaskScheduler.Default);
                 Task errorReader = Task.Factory.StartNew(AppendLinesFunc,
                     Tuple.Create(logStream, exeProcess.StandardError),
-                    token, TaskCreationOptions.None, TaskScheduler.Default);
+                    token, TaskCreationOptions.None, TaskScheduler.Default);*/
 
                 int exitCode = await exeProcess.WaitForExitAsync();
 
-                Task.WaitAll(outputReader, errorReader);
+                //Task.WaitAll(outputReader, errorReader);
 
                 return exitCode;
             }
