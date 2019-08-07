@@ -14,6 +14,19 @@ download in the
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+## 1.2.1
+
+**2019-08-07**
+
+- Fix environment before running Conan ([#162](https://github.com/conan-io/conan-vs-extension/pull/162))
+- Add menu option 'About' to show all information about the extension ([#158](https://github.com/conan-io/conan-vs-extension/pull/158))
+- Show metadata in DLL properties ([#157](https://github.com/conan-io/conan-vs-extension/pull/157))
+- Show Conan version in every log before running the install ([#156](https://github.com/conan-io/conan-vs-extension/pull/156))
+- Support all MSVC v16 version series ([#155](https://github.com/conan-io/conan-vs-extension/pull/155))
+- Add support for Visual Studio 2015 ([#154](https://github.com/conan-io/conan-vs-extension/pull/154))
+- Script to automate RC branch creation ([#97](https://github.com/conan-io/conan-vs-extension/pull/97))
+
+
 ## 1.2.0
 
 **2019-07-22**
