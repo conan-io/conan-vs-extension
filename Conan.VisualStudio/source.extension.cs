@@ -11,7 +11,7 @@ namespace Conan.VisualStudio
         public const string Name = "Conan Visual Studio Extension";
         public const string Description = @"The Conan Visual Studio Extention automates the use of the Conan C/C++ package manager for retrieving dependencies within Visual Studio projects.";
         public const string Language = "en-US";
-        public const string Version = "1.2.0";
+        public const string Version = "1.2.2";
         public const string Author = "Conan";
         public const string Tags = "conan c c++ packaging dependency management";
     }

@@ -56,11 +56,13 @@ for:
       only:
         - master
     skip_non_tags: true
+    install:
+      - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
     build_script:
       - ps: .\vsix\download_artifact.ps1
     test_script:
       - ps: write-host "Deploy scenario"
     deploy_script:
       - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {.\vsix\publish.ps1}
-      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix- -path ${env:localArtifactPath}}
+      - ps: IF ($env:APPVEYOR_REPO_BRANCH -eq "master") {Vsix-PublishToGallery -path ${env:localArtifactPath}}
 
