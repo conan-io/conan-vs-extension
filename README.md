@@ -58,7 +58,7 @@ Acknowledgements
 ----------------
 
 This extension was started by community members like @sboullema, @SSE4, @ForNeVer and @solvingj, thanks to
-them the first version of the extension was given birth and now [the Conan team is supporting it and pusing it
+them the first version of the extension was given birth and now [the Conan team is supporting it and pushing it
 forward](https://blog.conan.io/2019/06/17/Conan-extension-for-Visual-Studio.html). We still receive very valuable
 contributions from the community and we hope to continue to receive them.
 
