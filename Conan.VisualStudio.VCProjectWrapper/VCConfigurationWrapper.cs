@@ -33,6 +33,24 @@ namespace Conan.VisualStudio.VCProjectWrapper
             }
         }
 
+        private static string LanguageStandardToCppStd(string LanguageStandard)
+        {
+            switch (LanguageStandard)
+            {
+                case "stdcpplatest":
+                    return "20";
+                case "stdcpp17":
+                    return "17";
+                case "stdcpp14":
+                    return "14";
+                case "default":
+                    return null;
+                default:
+                    throw new NotSupportedException(
+                        $"Language Standard {LanguageStandard} is not supported by the Conan plugin");
+            }
+        }
+
         public string ProjectDirectory => _configuration.project.ProjectDirectory;
 
         public string ProjectName => _configuration.project.Name;
@@ -58,6 +76,16 @@ namespace Conan.VisualStudio.VCProjectWrapper
             {
                 IVCRulePropertyStorage generalSettings = _configuration.Rules.Item("ConfigurationGeneral");
                 return generalSettings.GetEvaluatedPropertyValue("PlatformToolset");
+            }
+        }
+
+        public string CppStd
+        {
+            get
+            {
+                IVCRulePropertyStorage generalSettings = _configuration.Rules.Item("ConfigurationGeneral");
+                return LanguageStandardToCppStd(
+                    generalSettings.GetEvaluatedPropertyValue("LanguageStandard"));
             }
         }
 

@@ -173,7 +173,8 @@ namespace Conan.VisualStudio.Services
                 CompilerToolset = configuration.Toolset,
                 CompilerVersion = VisualStudioVersion.ToString(),
                 InstallPath = installPath,
-                RuntimeLibrary = configuration.RuntimeLibrary
+                RuntimeLibrary = configuration.RuntimeLibrary,
+                CppStd = configuration.CppStd
             };
         }
     }

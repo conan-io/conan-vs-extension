@@ -22,6 +22,8 @@ namespace Conan.VisualStudio.Core.VCInterfaces
 
         string Toolset { get; }
 
+        string CppStd { get; }
+
         string Evaluate(string value);
 
         void AddPropertySheet(string sheet);
