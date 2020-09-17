@@ -19,6 +19,8 @@ namespace Conan.VisualStudio.Core
                            $"compiler version: {CompilerVersion};";
             if (RuntimeLibrary != null)
                 value += $", runtime library: {RuntimeLibrary}";
+            if (CppStd != null)
+                value += $", compiler cppstd: {CppStd}";
             return value;
         }
     }

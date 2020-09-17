@@ -79,6 +79,10 @@ namespace Conan.VisualStudio.Core
                 {
                     settingValues = settingValues.Concat(new[] { ("compiler.runtime", configuration.RuntimeLibrary) }).ToArray();
                 }
+                if (configuration.CppStd != null)
+                {
+                    settingValues = settingValues.Concat(new[] { ("compiler.cppstd", configuration.CppStd) }).ToArray();
+                }
 
                 var settings = string.Join(" ", settingValues.Where(pair => pair.Item2 != null).Select(pair =>
                 {
