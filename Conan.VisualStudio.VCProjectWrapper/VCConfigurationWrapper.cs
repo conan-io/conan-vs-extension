@@ -44,10 +44,39 @@ namespace Conan.VisualStudio.VCProjectWrapper
                 case "stdcpp14":
                     return "14";
                 case "default":
+                case null:
                     return null;
                 default:
                     throw new NotSupportedException(
                         $"Language Standard {LanguageStandard} is not supported by the Conan plugin");
+            }
+        }
+
+        private string GetEvaluatedPropertyValueFromTool(string propertyName, string toolName)
+        {
+            var properties = _configuration.Tools.Item(toolName) as IVCRulePropertyStorage;
+
+            try
+            {
+                return properties?.GetEvaluatedPropertyValue(propertyName);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private string GetEvaluatedPropertyValueFromRule(string propertyName, string ruleName)
+        {
+            var properties = _configuration.Rules.Item(ruleName) as IVCRulePropertyStorage;
+
+            try
+            {
+                return properties?.GetEvaluatedPropertyValue(propertyName);
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -83,9 +112,25 @@ namespace Conan.VisualStudio.VCProjectWrapper
         {
             get
             {
-                IVCRulePropertyStorage generalSettings = _configuration.Rules.Item("ConfigurationGeneral");
-                return LanguageStandardToCppStd(
-                    generalSettings.GetEvaluatedPropertyValue("LanguageStandard"));
+                var LanguageStandard = GetEvaluatedPropertyValueFromTool("LanguageStandard",
+                    "VCCLCompilerTool");
+
+                if (LanguageStandard != null)
+                {
+                    return LanguageStandardToCppStd(LanguageStandard);
+                }
+
+                LanguageStandard = GetEvaluatedPropertyValueFromRule("LanguageStandard", "CL");
+
+                if (LanguageStandard != null)
+                {
+                    return LanguageStandardToCppStd(LanguageStandard);
+                }
+
+                LanguageStandard = GetEvaluatedPropertyValueFromRule("LanguageStandard",
+                    "ConfigurationGeneral");
+
+                return LanguageStandardToCppStd(LanguageStandard);
             }
         }
 
