@@ -35,7 +35,7 @@ namespace Conan.VisualStudio.VCProjectWrapper
 
         private static string LanguageStandardToCppStd(string LanguageStandard)
         {
-            switch (LanguageStandard)
+            switch (LanguageStandard?.ToLower())
             {
                 case "stdcpplatest":
                     return "20";
