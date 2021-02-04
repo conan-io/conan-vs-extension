@@ -96,6 +96,9 @@ namespace Conan.VisualStudio
 
             EnableMenus(_dte.Solution != null && _dte.Solution.IsOpen);
 
+            if (_dte.Solution != null && _dte.Solution.IsOpen)
+                SolutionEvents_Opened();
+
             await TaskScheduler.Default;
         }
 
