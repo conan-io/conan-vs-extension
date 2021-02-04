@@ -68,6 +68,10 @@ namespace Conan.VisualStudio.VCProjectWrapper
 
         public void AddPropertySheet(string sheet)
         {
+            //This Add/Remove/Add ensures that Visual Studio refreshes its property sheets even if they were not accessible files 
+            //before conan install
+            VCPropertySheet VCsheet = _configuration.AddPropertySheet(sheet);
+            _configuration.RemovePropertySheet(VCsheet);
             _configuration.AddPropertySheet(sheet);
         }
 
