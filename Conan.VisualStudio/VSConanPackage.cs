@@ -76,7 +76,7 @@ namespace Conan.VisualStudio
             _vcProjectService = new VcProjectService();
             _settingsService = new VisualStudioSettingsService(this);
             _errorListService = new ErrorListService();
-            _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService, _solution);
+            _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService, _solution, _dte);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 

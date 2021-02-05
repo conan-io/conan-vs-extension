@@ -41,6 +41,8 @@ namespace Conan.VisualStudio.VCProjectWrapper
 
         public string ProjectDirectory => _configuration.project.ProjectDirectory;
 
+        public string ProjectFileName => _configuration.project.ProjectFile;
+
         public string ProjectName => _configuration.project.Name;
 
         public string Name => _configuration.Name;
@@ -72,10 +74,32 @@ namespace Conan.VisualStudio.VCProjectWrapper
             return _configuration.Evaluate(value);
         }
 
-        public bool AddPropertySheet(string sheet)
+        public bool IsPropertySheetPresent(string sheet)
         {
             string vcProjectFilename = Path.Combine(_configuration.project.ProjectDirectory, _configuration.project.ProjectFile);
             ProjectRootElement project = ProjectRootElement.Open(vcProjectFilename);
+            string configCondition = "'$(Configuration)|$(Platform)'=='" + _configuration.Name + "'";
+            bool bIsInVcxproj = false;
+            bool bIsLoaded = false;
+
+            foreach (ProjectImportGroupElement importGroup in project.ImportGroups)
+                if (importGroup.Label == "PropertySheets" && importGroup.Condition == configCondition)
+                    foreach (ProjectImportElement importElement in importGroup.Imports)
+                        if (importElement.Project == sheet && importElement.Condition == "Exists('" + sheet + "')")
+                            bIsInVcxproj = true;
+
+            foreach (VCPropertySheet VCsheet in _configuration.PropertySheets)
+            {
+                if (ConanPathHelper.GetRelativePath(ProjectDirectory, VCsheet.PropertySheetFile) == sheet)
+                    bIsLoaded = true;
+            }
+
+            return bIsLoaded && bIsInVcxproj;
+        }
+
+        public void AddPropertySheet(string sheet, string projectFileName)
+        {
+            ProjectRootElement project = ProjectRootElement.Open(projectFileName);
             string configCondition = "'$(Configuration)|$(Platform)'=='" + _configuration.Name + "'";
             bool bMustBeSaved = false;
             foreach (ProjectImportGroupElement importGroup in project.ImportGroups)
@@ -102,18 +126,7 @@ namespace Conan.VisualStudio.VCProjectWrapper
                 }
             }
             if (bMustBeSaved)
-            {
                 project.Save();
-            }
-            else
-            {
-                foreach (VCPropertySheet VCsheet in _configuration.PropertySheets)
-                {
-                    if (ConanPathHelper.GetRelativePath(ProjectDirectory, VCsheet.PropertySheetFile) == sheet)
-                        return false;
-                }
-            }
-            return true;
         }
 
         public void CollectIntelliSenseInfo()
@@ -155,5 +168,6 @@ namespace Conan.VisualStudio.VCProjectWrapper
                     LinkerTool.AdditionalDependencies = value;
             }
         }
+
     }
 }

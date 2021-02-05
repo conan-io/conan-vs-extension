@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Conan.VisualStudio.Core.VCInterfaces
 {
     public interface IVCConfiguration
     {
         string ProjectDirectory { get; }
+
+        string ProjectFileName { get; }
 
         string ProjectName { get; }
 
@@ -24,7 +28,9 @@ namespace Conan.VisualStudio.Core.VCInterfaces
 
         string Evaluate(string value);
 
-        bool AddPropertySheet(string sheet);
+        void AddPropertySheet(string sheet, string projectFileName);
+
+        bool IsPropertySheetPresent(string sheet);
 
         void CollectIntelliSenseInfo();
 
