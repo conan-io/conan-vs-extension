@@ -1,10 +1,16 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Conan.VisualStudio.Core;
 using Conan.VisualStudio.Core.VCInterfaces;
 using Microsoft.VisualStudio.VCProjectEngine;
+using Microsoft.Build.Construction;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Conan.VisualStudio.VCProjectWrapper
 {
@@ -66,13 +72,48 @@ namespace Conan.VisualStudio.VCProjectWrapper
             return _configuration.Evaluate(value);
         }
 
-        public void AddPropertySheet(string sheet)
+        public bool AddPropertySheet(string sheet)
         {
-            //This Add/Remove/Add ensures that Visual Studio refreshes its property sheets even if they were not accessible files 
-            //before conan install
-            VCPropertySheet VCsheet = _configuration.AddPropertySheet(sheet);
-            _configuration.RemovePropertySheet(VCsheet);
-            _configuration.AddPropertySheet(sheet);
+            string vcProjectFilename = Path.Combine(_configuration.project.ProjectDirectory, _configuration.project.ProjectFile);
+            ProjectRootElement project = ProjectRootElement.Open(vcProjectFilename);
+            string configCondition = "'$(Configuration)|$(Platform)'=='" + _configuration.Name + "'";
+            bool bMustBeSaved = false;
+            foreach (ProjectImportGroupElement importGroup in project.ImportGroups)
+            {
+                if (importGroup.Label == "PropertySheets" && importGroup.Condition == configCondition)
+                {
+                    bool bFound = false;
+                    foreach (ProjectImportElement importElement in importGroup.Imports)
+                        if (importElement.Project == sheet)
+                        {
+                            bFound = true;
+                            //Ensure that condition is present
+                            if(importElement.Condition != "Exists('" + sheet + "')")
+                            {
+                                importElement.Condition = "Exists('" + sheet + "')";
+                                bMustBeSaved = true;
+                            }
+                        }
+                    if (!bFound)
+                    {
+                        importGroup.AddImport(sheet).Condition = "Exists('" + sheet + "')";
+                        bMustBeSaved = true;
+                    }
+                }
+            }
+            if (bMustBeSaved)
+            {
+                project.Save();
+            }
+            else
+            {
+                foreach (VCPropertySheet VCsheet in _configuration.PropertySheets)
+                {
+                    if (ConanPathHelper.GetRelativePath(ProjectDirectory, VCsheet.PropertySheetFile) == sheet)
+                        return false;
+                }
+            }
+            return true;
         }
 
         public void CollectIntelliSenseInfo()

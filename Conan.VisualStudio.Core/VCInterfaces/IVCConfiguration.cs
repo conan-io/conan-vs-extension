@@ -24,7 +24,7 @@ namespace Conan.VisualStudio.Core.VCInterfaces
 
         string Evaluate(string value);
 
-        void AddPropertySheet(string sheet);
+        bool AddPropertySheet(string sheet);
 
         void CollectIntelliSenseInfo();
 

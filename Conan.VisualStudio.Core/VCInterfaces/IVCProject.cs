@@ -10,8 +10,16 @@ namespace Conan.VisualStudio.Core.VCInterfaces
     {
         string ProjectDirectory { get; }
 
+        string FullPath { get; }
+
+        string Guid { get; }
+
+        bool Saved { get; }
+
         List<IVCConfiguration> Configurations { get; }
 
         IVCConfiguration ActiveConfiguration { get; }
+
+        void Save();
     }
 }

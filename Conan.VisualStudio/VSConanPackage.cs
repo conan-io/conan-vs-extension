@@ -39,7 +39,7 @@ namespace Conan.VisualStudio
         private ConanAbout _conanAbout;
         private DTE _dte;
         private SolutionEvents _solutionEvents;
-        private IVsSolution _solution;
+        private IVsSolution4 _solution;
         private ISettingsService _settingsService;
         private IVcProjectService _vcProjectService;
         private IConanService _conanService;
@@ -65,7 +65,7 @@ namespace Conan.VisualStudio
 
             _dte = await GetServiceAsync<DTE>();
 
-            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution;
+            _solution = await GetServiceAsync<SVsSolution>() as IVsSolution4;
             _solutionBuildManager = await GetServiceAsync<IVsSolutionBuildManager>() as IVsSolutionBuildManager3;
 
             var serviceProvider = new ServiceProvider((Microsoft.VisualStudio.OLE.Interop.IServiceProvider)_dte);
@@ -76,7 +76,7 @@ namespace Conan.VisualStudio
             _vcProjectService = new VcProjectService();
             _settingsService = new VisualStudioSettingsService(this);
             _errorListService = new ErrorListService();
-            _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService);
+            _conanService = new ConanService(_settingsService, _errorListService, _vcProjectService, _solution);
 
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -214,7 +214,10 @@ namespace Conan.VisualStudio
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            InstallConanDepsIfRequired(project);
+            if (_conanService.RefreshingProjects.Contains(project.FullName))
+                _conanService.RefreshingProjects.Remove(project.FullName);
+            else
+                InstallConanDepsIfRequired(project);
         }
 
         private void InstallConanDepsIfRequired(Project project)

@@ -52,7 +52,7 @@ namespace Conan.VisualStudio.Services
 
             var instance = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(path,
                 "Conan.VisualStudio.VCProjectWrapper.VCProjectWrapper",
-                false, BindingFlags.Default, null, new[] { project.Object }, null, null);
+                false, BindingFlags.Default, null, new[] { project }, null, null);
 
             return instance as IVCProject;
         }

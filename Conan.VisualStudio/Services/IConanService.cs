@@ -9,6 +9,8 @@ namespace Conan.VisualStudio.Services
 {
     public interface IConanService
     {
+        List<string> RefreshingProjects { get; }
+
         Task IntegrateAsync(IVCProject vcProject);
 
         Task<bool> InstallAsync(IVCProject vcProject);
