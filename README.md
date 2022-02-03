@@ -1,3 +1,9 @@
+## This extension development and maintenance is "on hold" until Conan 2.0
+
+**Sorry, we don't have the resources at this moment to maintain this extension.
+There are some known issues, like this extension doesn't work with latest VS 2022.
+We will resume work as soon as possible, but that means most likely after 2.0 GA.**
+
 #### Build Status
 [![Build status](https://ci.appveyor.com/api/projects/status/8ddamkckmfgu618o/branch/master?svg=true)](https://ci.appveyor.com/project/ConanOrgCI/conan-vs-extension/branch/master)
 
