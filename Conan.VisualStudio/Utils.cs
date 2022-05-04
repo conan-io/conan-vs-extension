@@ -47,7 +47,9 @@ namespace Conan.VisualStudio
 
                 int exitCode = await exeProcess.WaitForExitAsync();
 
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
                 Task.WaitAll(outputReader, errorReader);
+#pragma warning restore VSTHRD103 // Call async methods when in an async method
 
                 return exitCode;
             }

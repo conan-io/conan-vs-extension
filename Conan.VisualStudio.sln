@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29009.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio", "Conan.VisualStudio\Conan.VisualStudio.csproj", "{6FBEBC9C-6E86-4588-BCDA-83AC909C7EAC}"
 EndProject
@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.Core", "Conan.VisualStudio.Core\Conan.VisualStudio.Core.csproj", "{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.VCProjectWrapper14", "Conan.VisualStudio.VCProjectWrapper\Conan.VisualStudio.VCProjectWrapper14.csproj", "{2B9A58F0-6002-4477-9552-1A58386EBA96}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.VCProjectWrapper15", "Conan.VisualStudio.VCProjectWrapper\Conan.VisualStudio.VCProjectWrapper15.csproj", "{896660CA-9830-425E-BC37-2928115D4FAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conan.VisualStudio.VCProjectWrapper14", "Conan.VisualStudio.VCProjectWrapper\Conan.VisualStudio.VCProjectWrapper14.csproj", "{2B9A58F0-6002-4477-9552-1A58386EBA96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,14 +36,14 @@ Global
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{704BDDFB-CB01-4F8B-B2A0-60BCFA97F0C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Release|Any CPU.Build.0 = Release|Any CPU
 		{896660CA-9830-425E-BC37-2928115D4FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{896660CA-9830-425E-BC37-2928115D4FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896660CA-9830-425E-BC37-2928115D4FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896660CA-9830-425E-BC37-2928115D4FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B9A58F0-6002-4477-9552-1A58386EBA96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

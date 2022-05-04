@@ -9,6 +9,7 @@ using Conan.VisualStudio.Core.VCInterfaces;
 using Conan.VisualStudio.Menu;
 using Conan.VisualStudio.Services;
 using EnvDTE;
+using Microsoft;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -57,6 +58,7 @@ namespace Conan.VisualStudio
             // Handle commandline switch
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             var cmdLine = await GetServiceAsync(typeof(SVsAppCommandLine)) as IVsAppCommandLine;
+            Assumes.Present(cmdLine);
             ErrorHandler.ThrowOnFailure(cmdLine.GetOption(_cliSwitch, out int isPresent, out string optionValue));
             if (isPresent == 1)
             {
@@ -193,7 +195,7 @@ namespace Conan.VisualStudio
         private void InstallConanDeps(IVCProject vcProject)
         {
             _errorListService.Clear();
-            ThreadHelper.JoinableTaskFactory.RunAsync(
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
                     bool success = await _conanService.InstallAsync(vcProject);

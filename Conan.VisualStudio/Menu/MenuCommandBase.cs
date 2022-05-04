@@ -38,7 +38,7 @@ namespace Conan.VisualStudio.Menu
 
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(
+            _ = ThreadHelper.JoinableTaskFactory.RunAsync(
                 async delegate
                 {
                     await CallMenuItemBallbackAsync();

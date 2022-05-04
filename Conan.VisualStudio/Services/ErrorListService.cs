@@ -51,7 +51,7 @@ namespace Conan.VisualStudio.Services
         private void NavigateDocument(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (sender is Task task)
+            if (sender is TaskListItem task)
                 OpenDocumentAndNavigateTo(task.Document, task.Line, task.Column);
         }
 

@@ -49,7 +49,7 @@ namespace Conan.VisualStudio.Services
 
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             path = Path.Combine(path, wrapperDLL);
-
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             var instance = AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(path,
                 "Conan.VisualStudio.VCProjectWrapper.VCProjectWrapper",
                 false, BindingFlags.Default, null, new[] { project.Object }, null, null);
@@ -65,6 +65,7 @@ namespace Conan.VisualStudio.Services
 
         public IVCProject AsVCProject(Project project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             return AsVCProjectImpl(project);
         }
 
