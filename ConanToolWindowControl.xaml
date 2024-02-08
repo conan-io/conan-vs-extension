@@ -35,7 +35,7 @@
             </Button>
         </StackPanel>
 
-        <ListView x:Name="PackagesListView" Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
+        <ListView x:Name="PackagesListView" SelectionChanged="ListView_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
             <!-- ListView configuration here -->
         </ListView>
 
