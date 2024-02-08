@@ -15,6 +15,12 @@ namespace conan_vs_extension
         public ConanToolWindowControl()
         {
             this.InitializeComponent();
+            this.LoadHtmlContent();
+        }
+        public void LoadHtmlContent()
+        {
+            string htmlContent = "<html><body><h1>Hello World!</h1>/body></html>";
+            myWebBrowser.NavigateToString(htmlContent);
         }
 
         /// <summary>
@@ -24,12 +30,6 @@ namespace conan_vs_extension
         /// <param name="e">The event args.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(
-                string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                "Conan C/C++ Package Manager");
-        }
 
         private void Configuration_Click(object sender, RoutedEventArgs e)
         {

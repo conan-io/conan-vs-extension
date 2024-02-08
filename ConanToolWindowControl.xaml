@@ -39,8 +39,7 @@
             <!-- ListView configuration here -->
         </ListView>
 
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="5">
-            <!-- Details Panel configuration here -->
-        </StackPanel>
+        <WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.ColumnSpan="2" Margin="5"/>
+
     </Grid>
 </UserControl>
