@@ -2,9 +2,31 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
 
 namespace conan_vs_extension
 {
+    public class Library
+    {
+        public string cmake_file_name { get; set; }
+        public string cmake_target_name { get; set; }
+        public string description { get; set; }
+        public List<string> license { get; set; }
+        public bool v2 { get; set; }
+        public List<string> versions { get; set; }
+    }
+
+    public class RootObject
+    {
+        public long date { get; set; }
+        public Dictionary<string, Library> libraries { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for ConanToolWindowControl.
     /// </summary>
@@ -16,23 +38,48 @@ namespace conan_vs_extension
         public ConanToolWindowControl()
         {
             this.InitializeComponent();
-            LoadItemsIntoListView();
-            LoadHtmlContent();
+            Task.Run(() => LoadLibrariesFromJsonAsync());
         }
 
-        private void LoadItemsIntoListView()
-        {
-            var items = new List<string>
-            {
-                "open-dis-cpp", "open-simulation-interface", "open62541", "openal-soft", "openapi-generator", "openassetio", "openblas", "opencascade",
-                "opencl-clhpp-headers", "opencl-headers", "opencl-icd-loader", "opencolorio", "opencore-amr", "opencv", "openddl-parser",
-                "openebs", "openexr", "openfbx", "openfst", "openfx", "opengl-registry", "opengr", "opengv", "openh264", "openimageio",
-                "openjdk", "openjpeg"
-            };
+        private RootObject jsonData;
 
-            foreach (var item in items)
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilterListView(SearchTextBox.Text);
+        }
+
+        private async Task LoadLibrariesFromJsonAsync()
+        {
+            string url = "https://raw.githubusercontent.com/conan-io/conan-clion-plugin/develop2/src/main/resources/conan/targets-data.json";
+            using (var httpClient = new HttpClient())
             {
-                PackagesListView.Items.Add(item);
+                var json = await httpClient.GetStringAsync(url);
+                jsonData = JsonConvert.DeserializeObject<RootObject>(json);
+
+                Dispatcher.Invoke(() =>
+                {
+                    PackagesListView.Items.Clear();
+                    foreach (var library in jsonData.libraries.Keys)
+                    {
+                        PackagesListView.Items.Add(library);
+                    }
+                });
+            }
+        }
+
+        private void FilterListView(string searchText)
+        {
+            if (jsonData == null || jsonData.libraries == null) return;
+
+            PackagesListView.Items.Clear();
+
+            var filteredLibraries = jsonData.libraries
+                .Where(kv => kv.Key.Contains(searchText))
+                .ToList();
+
+            foreach (var library in filteredLibraries)
+            {
+                PackagesListView.Items.Add(library.Key);
             }
         }
 
@@ -46,27 +93,55 @@ namespace conan_vs_extension
         {
             if (PackagesListView.SelectedItem is string selectedItem)
             {
-                LoadHtmlContentForItem(selectedItem);
+                var htmlContent = GenerateHtml(selectedItem);
+                myWebBrowser.NavigateToString(htmlContent);
             }
         }
 
-        private void LoadHtmlContentForItem(string item)
+        private string GenerateHtml(string name)
         {
-            string htmlTemplate = @"
-        <html>
-        <head>
-            <style>
-                body {{ font-family: 'Roboto', sans-serif; }}
-            </style>
-        </head>
-        <body>
-            <h1>{0}</h1>
-            <p>Hi! {0}.</p>
-        </body>
-        </html>";
-            string htmlContent = string.Format(htmlTemplate, item);
-            myWebBrowser.NavigateToString(htmlContent);
+            if (jsonData == null || !jsonData.libraries.ContainsKey(name)) return "";
+
+            var library = jsonData.libraries[name];
+            var description = library.description ?? "No description available.";
+            var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
+            var cmakeFileName = library.cmake_file_name ?? name;
+            var cmakeTargetName = library.cmake_target_name ?? $"{name}::{name}";
+
+            var warningSection = !library.v2 ? "<div class='warning'>Warning: This library is not compatible with Conan v2.</div>" : string.Empty;
+
+            var cmakeUsage = $@"
+<pre class='code'>
+# First, tell CMake to find the package.
+find_package({cmakeFileName})
+
+# Then, link your executable or library with the package target.
+target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
+</pre>";
+
+            var htmlTemplate = $@"
+<html>
+<head>
+    <style>
+        body {{ font-family: 'Roboto', sans-serif; }}
+        .code {{ background-color: lightgray; padding: 10px; border-radius: 5px; overflow: auto; white-space: pre; }}
+        .warning {{ background-color: yellow; padding: 10px; }}
+    </style>
+</head>
+<body>
+    <h1>{name}</h1>
+    <p>{description}</p>
+    <p>Licenses: {licenses}</p>
+    {warningSection}
+    <h2>Using {name} with CMake</h2>
+    {cmakeUsage}
+    <!-- Más información específica de la biblioteca puede ir aquí -->
+</body>
+</html>";
+
+            return htmlTemplate;
         }
+
 
 
         /// <summary>
