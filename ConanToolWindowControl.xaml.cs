@@ -28,7 +28,7 @@ namespace conan_vs_extension
         {
             MessageBox.Show(
                 string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                "ConanToolWindow");
+                "Conan C/C++ Package Manager");
         }
     }
 }

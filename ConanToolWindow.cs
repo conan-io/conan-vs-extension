@@ -23,7 +23,7 @@ namespace conan_vs_extension
         /// </summary>
         public ConanToolWindow() : base(null)
         {
-            this.Caption = "ConanToolWindow";
+            this.Caption = "Conan C/C++ Package Manager";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
