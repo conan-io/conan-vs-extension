@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "conan-vs-extension", "conan-vs-extension.csproj", "{72C8631C-34A2-487D-AB03-891CCE755E46}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|arm64 = Debug|arm64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|arm64 = Release|arm64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|arm64.ActiveCfg = Debug|arm64
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|arm64.Build.0 = Debug|arm64
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|x86.ActiveCfg = Debug|x86
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Debug|x86.Build.0 = Debug|x86
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|arm64.ActiveCfg = Release|arm64
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|arm64.Build.0 = Release|arm64
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|x86.ActiveCfg = Release|x86
+		{72C8631C-34A2-487D-AB03-891CCE755E46}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {615CD52C-88DB-4412-B1B4-DE644B324E1F}
+	EndGlobalSection
+EndGlobal
