@@ -30,5 +30,26 @@ namespace conan_vs_extension
                 string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
                 "Conan C/C++ Package Manager");
         }
+
+        private void Configuration_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
+    "Conan C/C++ Package Manager");
+        }
+
+        private void ShowPackages_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
+    "Conan C/C++ Package Manager");
+        }
+
+        private void Update_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(
+    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
+    "Conan C/C++ Package Manager");
+        }
     }
 }

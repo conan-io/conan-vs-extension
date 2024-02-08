@@ -81,6 +81,9 @@
     </VSCTCompile>
     <Content Include="Resources\ConanToolWindowCommand.png" />
     <Content Include="Resources\ConanToolWindowPackage.ico" />
+    <Resource Include="Resources\eye.png" />
+    <Resource Include="Resources\gear.png" />
+    <Resource Include="Resources\refresh.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">
