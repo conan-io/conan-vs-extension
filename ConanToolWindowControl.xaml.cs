@@ -11,6 +11,11 @@ using Newtonsoft.Json;
 
 namespace conan_vs_extension
 {
+    public class Component
+    {
+        public string cmake_target_name { get; set; }
+    }
+
     public class Library
     {
         public string cmake_file_name { get; set; }
@@ -19,6 +24,7 @@ namespace conan_vs_extension
         public List<string> license { get; set; }
         public bool v2 { get; set; }
         public List<string> versions { get; set; }
+        public Dictionary<string, Component> components { get; set; } = new Dictionary<string, Component>();
     }
 
     public class RootObject
@@ -107,17 +113,23 @@ namespace conan_vs_extension
             var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
             var cmakeFileName = library.cmake_file_name ?? name;
             var cmakeTargetName = library.cmake_target_name ?? $"{name}::{name}";
-
             var warningSection = !library.v2 ? "<div class='warning'>Warning: This library is not compatible with Conan v2.</div>" : string.Empty;
 
-            var cmakeUsage = $@"
-<pre class='code'>
-# First, tell CMake to find the package.
-find_package({cmakeFileName})
+            var additionalInfo = $@"
+        <p>Please, be aware that this information is generated automatically and it may contain some mistakes. If you have any problem, you can check the <a href='https://github.com/conan-io/conan-center-index/tree/master/recipes/{name}'>upstream recipe</a> to confirm the information. Also, for more detailed information on how to consume Conan packages, please <a href='https://docs.conan.io/2/tutorial/consuming_packages.html'>check the Conan documentation</a>.</p>";
 
-# Then, link your executable or library with the package target.
-target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
-</pre>";
+            var componentsSection = string.Empty;
+            if (library.components != null && library.components.Count > 0)
+            {
+                componentsSection += "<h2>Declared components for " + name + "</h2>";
+                componentsSection += "<p>This library declares components, so you can use the components targets in your project instead of the global target. There are the declared CMake target names for the library's components:<br><ul>";
+                foreach (var component in library.components)
+                {
+                    var componentCmakeTargetName = component.Value.cmake_target_name ?? $"{name}::{component.Key}";
+                    componentsSection += $"<li>{component.Key}: <code>{componentCmakeTargetName}</code></li>";
+                }
+                componentsSection += "</ul></p>";
+            }
 
             var htmlTemplate = $@"
 <html>
@@ -134,13 +146,20 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
     <p>Licenses: {licenses}</p>
     {warningSection}
     <h2>Using {name} with CMake</h2>
-    {cmakeUsage}
-    <!-- Más información específica de la biblioteca puede ir aquí -->
+<pre class='code'>
+# First, tell CMake to find the package.
+find_package({cmakeFileName})
+
+# Then, link your executable or library with the package target.
+target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
+</pre>
+    {additionalInfo}
+    {componentsSection}
 </body>
 </html>";
-
             return htmlTemplate;
         }
+
 
 
 
