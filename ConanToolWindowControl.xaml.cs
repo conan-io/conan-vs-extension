@@ -212,11 +212,30 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
 
+        private void ShowConfigurationDialog()
+        {
+            var conanConfiguration = new ConanConfiguration();
+            var dialogWindow = new System.Windows.Window
+            {
+                Title = "Conan Extension Configuration Dialog",
+                Content = conanConfiguration,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ResizeMode = ResizeMode.NoResize
+            };
+            
+            bool? dialogResult = dialogWindow.ShowDialog();
+
+            if (dialogResult == true)
+            {
+                string conanPath = conanConfiguration.ConanExecutablePath;
+                bool useSystemConan = conanConfiguration.UseSystemConan;
+            }
+
+        }
+
         private void Configuration_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-    "Conan C/C++ Package Manager");
+            ShowConfigurationDialog();
         }
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
