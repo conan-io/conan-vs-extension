@@ -13,7 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -39,7 +40,23 @@
             <!-- ListView configuration here -->
         </ListView>
 
-        <WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.ColumnSpan="2" Margin="5"/>
+        <StackPanel x:Name="LibraryHeader" Orientation="Vertical" Grid.Row="2" Grid.ColumnSpan="2" Margin="5">
+            <Label x:Name="LibraryNameLabel" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Content="Library Name"/>
+            <TextBlock x:Name="DescriptionTextBlock" FontSize="18" Margin="5" TextWrapping="Wrap" Text="This is a library that makes one two three..."/>
+            <TextBlock x:Name="LicenseTextBlock" Margin="5,0,5,5" FontSize="16">
+                <TextBlock.Inlines>
+                    <Run Text="⚖️ "/>
+                    <Run x:Name="LicenseText" Text="With license GPL"/>
+                </TextBlock.Inlines>
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <ComboBox x:Name="VersionsComboBox" Width="150" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button x:Name="InstallButton" Content="Install" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="RemoveButton" Content="Remove" Margin="5,0" Click="RemoveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+        <WebBrowser x:Name="myWebBrowser" Grid.Row="3" Grid.ColumnSpan="2"/>
+
 
     </Grid>
 </UserControl>

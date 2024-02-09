@@ -44,6 +44,8 @@ namespace conan_vs_extension
         public ConanToolWindowControl()
         {
             this.InitializeComponent();
+            LibraryHeader.Visibility = Visibility.Collapsed;
+            myWebBrowser.Visibility = Visibility.Collapsed;
             Task.Run(() => LoadLibrariesFromJsonAsync());
         }
 
@@ -89,12 +91,6 @@ namespace conan_vs_extension
             }
         }
 
-        public void LoadHtmlContent()
-        {
-            string htmlContent = "<html><body><h1>Hello World!</h1>/body></html>";
-            myWebBrowser.NavigateToString(htmlContent);
-        }
-
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (PackagesListView.SelectedItem is string selectedItem)
@@ -104,16 +100,64 @@ namespace conan_vs_extension
             }
         }
 
+        public void UpdatePanel(string name, string description, string licenses, List<string> versions)
+        {
+            LibraryNameLabel.Content = name;
+            VersionsComboBox.ItemsSource = versions;
+            VersionsComboBox.SelectedIndex = 0;
+
+            DescriptionTextBlock.Text = description ?? "No description available.";
+            LicenseText.Text = licenses ?? "No description available.";
+
+            // Inicialmente, puedes ocultar el botón Remove y mostrar el botón Install
+            InstallButton.Visibility = Visibility.Visible;
+            RemoveButton.Visibility = Visibility.Collapsed;
+
+            LibraryHeader.Visibility = Visibility.Visible;
+            myWebBrowser.Visibility = Visibility.Visible;
+
+        }
+
+        private void InstallButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedLibrary = LibraryNameLabel.Content.ToString();
+            var selectedVersion = VersionsComboBox.SelectedItem.ToString();
+
+            // Lógica para instalar la librería
+            MessageBox.Show($"Installing {selectedLibrary} version {selectedVersion}");
+
+            // Actualiza la UI según sea necesario
+            InstallButton.Visibility = Visibility.Collapsed;
+            RemoveButton.Visibility = Visibility.Visible;
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedLibrary = LibraryNameLabel.Content.ToString();
+            var selectedVersion = VersionsComboBox.SelectedItem.ToString();
+
+            // Lógica para remover la librería
+            MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}");
+
+            // Actualiza la UI según sea necesario
+            InstallButton.Visibility = Visibility.Visible;
+            RemoveButton.Visibility = Visibility.Collapsed;
+        }
+
+
         private string GenerateHtml(string name)
         {
             if (jsonData == null || !jsonData.libraries.ContainsKey(name)) return "";
 
             var library = jsonData.libraries[name];
+            var versions = library.versions;
             var description = library.description ?? "No description available.";
             var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
             var cmakeFileName = library.cmake_file_name ?? name;
             var cmakeTargetName = library.cmake_target_name ?? $"{name}::{name}";
             var warningSection = !library.v2 ? "<div class='warning'>Warning: This library is not compatible with Conan v2.</div>" : string.Empty;
+
+            UpdatePanel(name, description, licenses, versions);
 
             var additionalInfo = $@"
         <p>Please, be aware that this information is generated automatically and it may contain some mistakes. If you have any problem, you can check the <a href='https://github.com/conan-io/conan-center-index/tree/master/recipes/{name}'>upstream recipe</a> to confirm the information. Also, for more detailed information on how to consume Conan packages, please <a href='https://docs.conan.io/2/tutorial/consuming_packages.html'>check the Conan documentation</a>.</p>";
@@ -141,9 +185,6 @@ namespace conan_vs_extension
     </style>
 </head>
 <body>
-    <h1>{name}</h1>
-    <p>{description}</p>
-    <p>Licenses: {licenses}</p>
     {warningSection}
     <h2>Using {name} with CMake</h2>
 <pre class='code'>
