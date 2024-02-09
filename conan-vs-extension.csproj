@@ -54,6 +54,9 @@
     <Compile Include="ConanConfiguration.xaml.cs">
       <DependentUpon>ConanConfiguration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ConanOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ConanToolWindow.cs" />
     <Compile Include="ConanToolWindowCommand.cs" />
     <Compile Include="ConanToolWindowControl.xaml.cs">

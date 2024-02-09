@@ -7,6 +7,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell;
 
 
 namespace conan_vs_extension
@@ -235,9 +237,14 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-    "Conan C/C++ Package Manager");
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+
+            if (dte != null)
+            {
+                dte.ExecuteCommand("Tools.Options", "cc176b0a-2eea-4433-a2d6-155c3d52e794");
+            }
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
