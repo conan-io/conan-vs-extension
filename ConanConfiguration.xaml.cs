@@ -32,12 +32,15 @@ namespace conan_vs_extension
         private void UseSystemConanCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             PathTextBox.IsEnabled = false;
+            BrowseButton.IsEnabled = false;
             PathTextBox.Clear();
+
         }
 
         private void UseSystemConanCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             PathTextBox.IsEnabled = true;
+            BrowseButton.IsEnabled = true;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

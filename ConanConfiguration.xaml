@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel Orientation="Vertical" Margin="10">
             <TextBox x:Name="PathTextBox" Margin="0,0,0,10"/>
-            <Button Content="Browse..." Click="BrowseButton_Click" Margin="0,0,0,10"/>
+            <Button x:Name="BrowseButton" Content="Browse..." Click="BrowseButton_Click" Margin="0,0,0,10"/>
             <CheckBox x:Name="UseSystemConanCheckBox" Content="Use Conan installed in the system" Checked="UseSystemConanCheckBox_Checked" Unchecked="UseSystemConanCheckBox_Unchecked"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                 <Button Content="OK" Click="OkButton_Click" Margin="0,0,10,0"/>
