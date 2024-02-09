@@ -109,7 +109,6 @@ namespace conan_vs_extension
             DescriptionTextBlock.Text = description ?? "No description available.";
             LicenseText.Text = licenses ?? "No description available.";
 
-            // Inicialmente, puedes ocultar el botón Remove y mostrar el botón Install
             InstallButton.Visibility = Visibility.Visible;
             RemoveButton.Visibility = Visibility.Collapsed;
 
@@ -123,10 +122,8 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            // Lógica para instalar la librería
             MessageBox.Show($"Installing {selectedLibrary} version {selectedVersion}");
 
-            // Actualiza la UI según sea necesario
             InstallButton.Visibility = Visibility.Collapsed;
             RemoveButton.Visibility = Visibility.Visible;
         }
@@ -136,10 +133,8 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            // Lógica para remover la librería
             MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}");
 
-            // Actualiza la UI según sea necesario
             InstallButton.Visibility = Visibility.Visible;
             RemoveButton.Visibility = Visibility.Collapsed;
         }
