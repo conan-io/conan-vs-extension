@@ -211,21 +211,13 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
         private void ShowConfigurationDialog()
         {
-            var conanConfiguration = new ConanConfiguration();
-            var dialogWindow = new System.Windows.Window
-            {
-                Title = "Conan Extension Configuration Dialog",
-                Content = conanConfiguration,
-                SizeToContent = SizeToContent.WidthAndHeight,
-                ResizeMode = ResizeMode.NoResize
-            };
-            
-            bool? dialogResult = dialogWindow.ShowDialog();
+            ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (dialogResult == true)
+            DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
+
+            if (dte != null)
             {
-                string conanPath = conanConfiguration.ConanExecutablePath;
-                bool useSystemConan = conanConfiguration.UseSystemConan;
+                dte.ExecuteCommand("Tools.Options", "cc176b0a-2eea-4433-a2d6-155c3d52e794");
             }
 
         }
@@ -237,14 +229,6 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
-
-            if (dte != null)
-            {
-                dte.ExecuteCommand("Tools.Options", "cc176b0a-2eea-4433-a2d6-155c3d52e794");
-            }
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)

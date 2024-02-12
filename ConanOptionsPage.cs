@@ -13,7 +13,11 @@ public class ConanOptionsPage : DialogPage
     public string ConanExecutablePath
     {
         get => _conanExecutablePath;
-        set => _conanExecutablePath = value;
+        set
+        {
+            _useSystemConan = false;
+            _conanExecutablePath = value;
+        }
     }
 
     [DisplayName("Use System Conan")]

@@ -51,9 +51,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConanConfiguration.xaml.cs">
-      <DependentUpon>ConanConfiguration.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -76,10 +73,6 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.8.2368" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ConanConfiguration.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ConanToolWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
