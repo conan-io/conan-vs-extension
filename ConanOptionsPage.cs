@@ -1,8 +1,9 @@
+using conan_vs_extension;
 using Microsoft.VisualStudio.Shell;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-[Guid("cc176b0a-2eea-4433-a2d6-155c3d52e794")]
+[Guid(GuidList.strConanOptionsPage)]
 public class ConanOptionsPage : DialogPage
 {
     private string _conanExecutablePath;

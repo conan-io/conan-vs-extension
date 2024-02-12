@@ -217,7 +217,7 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
             if (dte != null)
             {
-                dte.ExecuteCommand("Tools.Options", "cc176b0a-2eea-4433-a2d6-155c3d52e794");
+                dte.ExecuteCommand("Tools.Options", GuidList.strConanOptionsPage);
             }
 
         }
