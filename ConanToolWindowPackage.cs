@@ -71,6 +71,9 @@ namespace conan_vs_extension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await ConanToolWindowCommand.InitializeAsync(this);
+
+            ConanOptionsPage optionsPage = (ConanOptionsPage)GetDialogPage(typeof(ConanOptionsPage));
+            GlobalSettings.ConanExecutablePath = optionsPage.ConanExecutablePath;
         }
 
         #endregion

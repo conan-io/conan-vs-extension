@@ -13,11 +13,15 @@ public class ConanOptionsPage : DialogPage
     [Description("Path to the Conan executable.")]
     public string ConanExecutablePath
     {
-        get => _conanExecutablePath;
+        get
+        {
+            return _conanExecutablePath;
+        }
         set
         {
             _useSystemConan = false;
             _conanExecutablePath = value;
+            GlobalSettings.ConanExecutablePath = _conanExecutablePath;
         }
     }
 
