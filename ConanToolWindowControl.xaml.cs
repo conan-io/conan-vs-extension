@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using EnvDTE80;
+using System.IO;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.VCProjectEngine;
+using System.Collections;
+using System.Diagnostics;
 
 
 namespace conan_vs_extension
@@ -229,6 +236,76 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                DTE2 dte = (DTE2)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+                if (dte != null && dte.Solution != null && dte.Solution.Projects != null)
+                {
+                    string projectDirectory = System.IO.Path.GetDirectoryName(dte.Solution.FullName);
+                    string conanProjectDirectory = System.IO.Path.Combine(projectDirectory, ".conan");
+
+                    if (!Directory.Exists(conanProjectDirectory))
+                    {
+                        Directory.CreateDirectory(conanProjectDirectory);
+                    }
+
+                    string fileName = "conan.config.json";
+                    string filePath = System.IO.Path.Combine(conanProjectDirectory, fileName);
+
+                    if (!File.Exists(filePath))
+                    {
+                        String toolset = "";
+                        foreach (Project project in dte.Solution.Projects)
+                        {
+                            if (project.Object is VCProject vcProject)
+                            {
+
+                                foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
+                                {
+                                    // TODO: Make the proper conversion from toolset to msvc conan versioning
+                                    toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
+                                    // var cppstd = vcConfig.Evaluate("$(ClCompile-LanguageStandard)");
+                                    break;
+                                }
+                            }
+                        }
+
+                        var conan_config = new Dictionary<string, Dictionary<string, string>>();
+                        string releaseProfileName = "release_x86_64";
+                        string debugProfileName = "debug_x86_64";
+                        conan_config["configurations"] = new Dictionary<string, string>();
+                        conan_config["configurations"]["Release|x86_64"] = releaseProfileName;
+                        conan_config["configurations"] = new Dictionary<string, string>();
+                        conan_config["configurations"]["Debug|x86_64"] = debugProfileName;
+                        var jsonContent = JsonConvert.SerializeObject(conan_config, Formatting.Indented);
+                        File.WriteAllText(filePath, jsonContent);
+
+                        string releaseProfilePath = System.IO.Path.Combine(conanProjectDirectory, releaseProfileName);
+                        string releaseProfileContent = "[settings]\narch=x86_64\nbuild_type=Release\ncompiler=msvc\ncompiler.cppstd=14\ncompiler.runtime=dynamic\n" +
+                            $"compiler.runtime_type=Release\ncompiler.version={toolset}\nos=Windows";
+                        File.WriteAllText(releaseProfilePath, releaseProfileContent);
+
+                        string debugProfilePath = System.IO.Path.Combine(conanProjectDirectory, debugProfileName);
+                        string debugProfileContent = "[settings]\narch=x86_64\nbuild_type=Debug\ncompiler=msvc\ncompiler.cppstd=14\ncompiler.runtime=dynamic\n" +
+                            $"compiler.runtime_type=Release\ncompiler.version={toolset}\nos=Windows";
+                        File.WriteAllText(debugProfilePath, debugProfileContent);
+
+                        MessageBox.Show($"Generated '{fileName}' for actual project.", "Conan config file generated", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Conan config file '{fileName}' found for actual project.", "Conan config file found", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Could not get current active project", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"There was a problem generating the file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
