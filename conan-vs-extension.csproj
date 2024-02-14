@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
+    <EmbeddedResource Include="Resources\targets-data.json" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

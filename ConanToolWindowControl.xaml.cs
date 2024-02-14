@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 
 
 namespace conan_vs_extension
@@ -70,7 +71,33 @@ namespace conan_vs_extension
                 throw new InvalidOperationException("Cannot access DTE service.");
             }
 
+            await CopyJsonFileFromResourceIfNeededAsync();
             await LoadLibrariesFromJsonAsync();
+        }
+        private async Task CopyJsonFileFromResourceIfNeededAsync()
+        {
+            string userConanFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".conan-vs-extension");
+            string jsonFilePath = Path.Combine(userConanFolder, "targets-data.json");
+
+            if (!File.Exists(jsonFilePath))
+            {
+                if (!Directory.Exists(userConanFolder))
+                {
+                    Directory.CreateDirectory(userConanFolder);
+                }
+
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "conan_vs_extension.Resources.targets-data.json";
+                using (var stream = assembly.GetManifestResourceStream(resourceName))
+                using (var reader = new StreamReader(stream))
+                {
+                    string jsonContent = await reader.ReadToEndAsync();
+                    using (var writer = new StreamWriter(jsonFilePath))
+                    {
+                        await writer.WriteAsync(jsonContent);
+                    }
+                }
+            }
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -80,21 +107,20 @@ namespace conan_vs_extension
 
         private async Task LoadLibrariesFromJsonAsync()
         {
-            string url = "https://raw.githubusercontent.com/conan-io/conan-clion-plugin/develop2/src/main/resources/conan/targets-data.json";
-            using (var httpClient = new HttpClient())
-            {
-                var json = await httpClient.GetStringAsync(url);
-                _jsonData = JsonConvert.DeserializeObject<RootObject>(json);
+            string userConanFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".conan-vs-extension");
+            string jsonFilePath = Path.Combine(userConanFolder, "targets-data.json");
 
-                Dispatcher.Invoke(() =>
+            string json = await Task.Run(() => File.ReadAllText(jsonFilePath));
+            _jsonData = JsonConvert.DeserializeObject<RootObject>(json);
+
+            Dispatcher.Invoke(() =>
+            {
+                PackagesListView.Items.Clear();
+                foreach (var library in _jsonData.libraries.Keys)
                 {
-                    PackagesListView.Items.Clear();
-                    foreach (var library in _jsonData.libraries.Keys)
-                    {
-                        PackagesListView.Items.Add(library);
-                    }
-                });
-            }
+                    PackagesListView.Items.Add(library);
+                }
+            });
         }
 
         private void FilterListView(string searchText)
@@ -277,11 +303,33 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
         {
         }
 
+        private async Task UpdateJsonDataAsync()
+        {
+            string jsonUrl = "https://raw.githubusercontent.com/conan-io/conan-clion-plugin/develop2/src/main/resources/conan/targets-data.json";
+
+            string userConanFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".conan-vs-extension");
+            string jsonFilePath = Path.Combine(userConanFolder, "targets-data.json");
+
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    string jsonContent = await httpClient.GetStringAsync(jsonUrl);
+
+                    File.WriteAllText(jsonFilePath, jsonContent);
+
+                    MessageBox.Show("Libraries data file updated.", "Libraries data file updated.", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating: {ex.Message}", "Error updating", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(
-    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-    "Conan C/C++ Package Manager");
+            _ = UpdateJsonDataAsync();
         }
     }
 }
