@@ -9,13 +9,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using System.Runtime.InteropServices;
-using System.Reflection;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System.Collections;
-using Microsoft.VisualStudio.Shell.Interop;
-using EnvDTE80;
-using System.Globalization;
+using System.IO;
 
 
 namespace conan_vs_extension
@@ -47,6 +43,10 @@ namespace conan_vs_extension
     /// </summary>
     public partial class ConanToolWindowControl : UserControl
     {
+        private ProjectConfigurationManager _manager;
+        private DTE _dte;
+        private RootObject _jsonData;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConanToolWindowControl"/> class.
         /// </summary>
@@ -55,10 +55,23 @@ namespace conan_vs_extension
             this.InitializeComponent();
             LibraryHeader.Visibility = Visibility.Collapsed;
             myWebBrowser.Visibility = Visibility.Collapsed;
-            Task.Run(() => LoadLibrariesFromJsonAsync());
+            _manager = new ProjectConfigurationManager();
+            _ = InitializeAsync();
         }
 
-        private RootObject jsonData;
+
+        private async Task InitializeAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            _dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
+            if (_dte == null)
+            {
+                throw new InvalidOperationException("Cannot access DTE service.");
+            }
+
+            await LoadLibrariesFromJsonAsync();
+        }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -71,12 +84,12 @@ namespace conan_vs_extension
             using (var httpClient = new HttpClient())
             {
                 var json = await httpClient.GetStringAsync(url);
-                jsonData = JsonConvert.DeserializeObject<RootObject>(json);
+                _jsonData = JsonConvert.DeserializeObject<RootObject>(json);
 
                 Dispatcher.Invoke(() =>
                 {
                     PackagesListView.Items.Clear();
-                    foreach (var library in jsonData.libraries.Keys)
+                    foreach (var library in _jsonData.libraries.Keys)
                     {
                         PackagesListView.Items.Add(library);
                     }
@@ -86,11 +99,11 @@ namespace conan_vs_extension
 
         private void FilterListView(string searchText)
         {
-            if (jsonData == null || jsonData.libraries == null) return;
+            if (_jsonData == null || _jsonData.libraries == null) return;
 
             PackagesListView.Items.Clear();
 
-            var filteredLibraries = jsonData.libraries
+            var filteredLibraries = _jsonData.libraries
                 .Where(kv => kv.Key.Contains(searchText))
                 .ToList();
 
@@ -151,9 +164,9 @@ namespace conan_vs_extension
 
         private string GenerateHtml(string name)
         {
-            if (jsonData == null || !jsonData.libraries.ContainsKey(name)) return "";
+            if (_jsonData == null || !_jsonData.libraries.ContainsKey(name)) return "";
 
-            var library = jsonData.libraries[name];
+            var library = _jsonData.libraries[name];
             var versions = library.versions;
             var description = library.description ?? "No description available.";
             var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
@@ -205,9 +218,6 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
             return htmlTemplate;
         }
 
-
-
-
         /// <summary>
         /// Handles click on the button by displaying a message box.
         /// </summary>
@@ -216,63 +226,51 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
 
-        public async Task SaveConanPrebuildEventAsync()
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            DTE dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
-            if (dte == null)
-            {
-                System.Diagnostics.Debug.WriteLine("Can't get the DTE.");
-                return;
-            }
-
-            string conanPath = GlobalSettings.ConanExecutablePath;
-
-            // TODO: Do this only for the current/active project?
-            foreach (Project project in dte.Solution.Projects)
-            {
-                if (project.Object is VCProject vcProject)
-                {
-                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                    {
-                        IVCCollection tools = (IVCCollection)vcConfig.Tools;
-                        VCPreBuildEventTool preBuildTool = (VCPreBuildEventTool)tools.Item("VCPreBuildEventTool");
-
-                        if (preBuildTool != null)
-                        {
-                            string conanInstallCommand = $"\"{conanPath}\" install --requires=fmt/10.2.1 -g=MSBuildDeps -s=build_type=$(Configuration) --build=missing";
-                            string currentPreBuildEvent = preBuildTool.CommandLine;
-
-                            // FIXME: maybe better to call a script that has always the same name so we can change the script
-                            // if needed without changing the prebuild event.
-                            if (!currentPreBuildEvent.Contains("conan"))
-                            {
-                                preBuildTool.CommandLine = conanInstallCommand + Environment.NewLine + currentPreBuildEvent;
-                                project.Save();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void ShowConfigurationDialog()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            DTE dte = Package.GetGlobalService(typeof(DTE)) as DTE;
-            if (dte == null)
-            {
-                System.Diagnostics.Debug.WriteLine("Can't get the DTE.");
-                return;
-            }
-            dte.ExecuteCommand("Tools.Options", GuidList.strConanOptionsPage);
+            _dte.ExecuteCommand("Tools.Options", GuidList.strConanOptionsPage);
         }
         
         private void Configuration_Click(object sender, RoutedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             ShowConfigurationDialog();
-            _ = SaveConanPrebuildEventAsync();
+
+            string conanPath = GlobalSettings.ConanExecutablePath;
+
+            foreach (Project project in _dte.Solution.Projects)
+            {
+                if (project.Object is VCProject vcProject)
+                {
+                    string projectFilePath = project.FullName;
+                    string projectDirectory = Path.GetDirectoryName(projectFilePath);
+                    string propsFilePath = Path.Combine(projectDirectory, "conandeps.props");
+                    string conanInstallCommand = $"\"{conanPath}\" install --requires=fmt/10.2.1 -g=MSBuildDeps -s=build_type=$(Configuration) --build=missing";
+
+                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
+                    {
+                        _ = _manager.SaveConanPrebuildEventAsync(vcProject, vcConfig, conanInstallCommand);
+                    }
+                }
+            }
+
+            foreach (Project project in _dte.Solution.Projects)
+            {
+                if (project.Object is VCProject vcProject)
+                {
+                    string projectFilePath = project.FullName;
+                    string projectDirectory = Path.GetDirectoryName(projectFilePath);
+                    string propsFilePath = Path.Combine(projectDirectory, "conandeps.props");
+
+                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
+                    {
+                        _ = _manager.InjectConanDepsAsync(vcProject, vcConfig, propsFilePath);
+                    }
+                }
+            }
+
         }
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
