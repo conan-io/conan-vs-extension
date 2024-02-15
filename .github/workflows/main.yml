@@ -1,0 +1,43 @@
+name: Build conan-vs-extension
+
+on:
+  push:
+    branches: [ develop2 ]
+  pull_request:
+    branches: [ develop2 ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~\nuget\packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.config') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet
+        run: nuget restore
+
+      - name: Build conan-vs-extension
+        run: msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal
+
+      - name: Upload VSIX as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: conan-vs-extension.vsix
+          path: bin\Release\conan-vs-extension.vsix
+          if-no-files-found: error
