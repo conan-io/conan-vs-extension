@@ -7,18 +7,12 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using EnvDTE80;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
-using Microsoft.VisualStudio;
 using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
+using EnvDTE;
 
 
 namespace conan_vs_extension
@@ -71,7 +65,7 @@ namespace conan_vs_extension
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
+            _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
             if (_dte == null)
             {
                 throw new InvalidOperationException("Cannot access DTE service.");
@@ -329,12 +323,12 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
-                DTE2 dte = (DTE2)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
-                if (dte != null && dte.Solution != null && dte.Solution.Projects != null)
+                if (_dte != null && _dte.Solution != null && _dte.Solution.Projects != null)
                 {
-                    foreach (Project project in dte.Solution.Projects)
+                    foreach (Project project in _dte.Solution.Projects)
                     {
                         if (project.Object is VCProject vcProject)
                         {
