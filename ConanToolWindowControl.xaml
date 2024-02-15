@@ -28,7 +28,7 @@
             <Button ToolTip="Configure Conan" Click="Configuration_Click" BorderThickness="0" Background="{x:Null}">
                 <Image Source="./Resources/gear.png" Stretch="None"/>
             </Button>
-            <Button ToolTip="Update package list" Click="ShowPackages_Click" BorderThickness="0" Background="{x:Null}">
+            <Button ToolTip="Show profiles configuration" Click="ShowPackages_Click" BorderThickness="0" Background="{x:Null}">
                 <Image Source="./Resources/eye.png" Stretch="None"/>
             </Button>
             <Button ToolTip="Show used packages" Click="Update_Click" BorderThickness="0" Background="{x:Null}">
