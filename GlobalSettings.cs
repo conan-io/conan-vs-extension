@@ -17,7 +17,8 @@ namespace conan_vs_extension{
             }
             set
             {
-                if (string.IsNullOrEmpty(value) || value == "System")
+
+                if (value == "System")
                 {
                     _conanExecutablePath = "conan";
                 }

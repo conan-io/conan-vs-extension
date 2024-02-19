@@ -78,6 +78,9 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
     </PackageReference>
+    <PackageReference Include="YamlDotNet">
+      <Version>15.1.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="ConanToolWindowControl.xaml">

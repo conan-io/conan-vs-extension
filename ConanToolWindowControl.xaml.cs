@@ -13,7 +13,13 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using EnvDTE;
-
+using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Threading;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization;
+using VSLangProj;
+using System.Windows.Navigation;
 
 namespace conan_vs_extension
 {
@@ -39,6 +45,19 @@ namespace conan_vs_extension
         public Dictionary<string, Library> libraries { get; set; }
     }
 
+    public class Requirements
+    {
+        public Requirements(string[] requirements)
+        {
+            this.requirements = requirements;
+        }
+        public Requirements()
+        {
+            this.requirements = new string[] { };
+        }
+        public string[] requirements { get; set; }
+    }
+
     /// <summary>
     /// Interaction logic for ConanToolWindowControl.
     /// </summary>
@@ -48,6 +67,8 @@ namespace conan_vs_extension
         private DTE _dte;
         private RootObject _jsonData;
 
+        private string _modifyCommentGuard = "# This is a Conan Plugin Managed File blah balh blhaaah";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConanToolWindowControl"/> class.
         /// </summary>
@@ -56,10 +77,12 @@ namespace conan_vs_extension
             this.InitializeComponent();
             LibraryHeader.Visibility = Visibility.Collapsed;
             myWebBrowser.Visibility = Visibility.Collapsed;
+
+            ToggleUIEnableState(IsConanInitialized());
+
             _manager = new ProjectConfigurationManager();
             _ = InitializeAsync();
         }
-
 
         private async Task InitializeAsync()
         {
@@ -102,7 +125,7 @@ namespace conan_vs_extension
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FilterListView(SearchTextBox.Text);
+            FilterListView(LibrarySearchTextBox.Text);
         }
 
         private async Task LoadLibrariesFromJsonAsync()
@@ -157,8 +180,19 @@ namespace conan_vs_extension
             DescriptionTextBlock.Text = description ?? "No description available.";
             LicenseText.Text = licenses ?? "No description available.";
 
-            InstallButton.Visibility = Visibility.Visible;
-            RemoveButton.Visibility = Visibility.Collapsed;
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
+            Project activeProject = activeSolutionProjects.GetValue(0) as Project;
+
+            string projectFilePath = activeProject.FullName;
+            string projectDirectory = Path.GetDirectoryName(projectFilePath);
+
+            var requirements = GetConandataRequirements(projectDirectory);
+            bool isInstalled = requirements.Any(e => e.StartsWith(name + "/"));
+
+            InstallButton.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
+            RemoveButton.Visibility = isInstalled ? Visibility.Visible : Visibility.Collapsed;
 
             LibraryHeader.Visibility = Visibility.Visible;
             myWebBrowser.Visibility = Visibility.Visible;
@@ -174,6 +208,16 @@ namespace conan_vs_extension
 
             InstallButton.Visibility = Visibility.Collapsed;
             RemoveButton.Visibility = Visibility.Visible;
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
+            Project activeProject = activeSolutionProjects.GetValue(0) as Project;
+
+            string projectFilePath = activeProject.FullName;
+            string projectDirectory = Path.GetDirectoryName(projectFilePath);
+
+            WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -185,6 +229,16 @@ namespace conan_vs_extension
 
             InstallButton.Visibility = Visibility.Visible;
             RemoveButton.Visibility = Visibility.Collapsed;
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
+            Project activeProject = activeSolutionProjects.GetValue(0) as Project;
+
+            string projectFilePath = activeProject.FullName;
+            string projectDirectory = Path.GetDirectoryName(projectFilePath);
+
+            RemoveRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
         }
 
 
@@ -257,7 +311,153 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
             ThreadHelper.ThrowIfNotOnUIThread();
             _dte.ExecuteCommand("Tools.Options", GuidList.strConanOptionsPage);
         }
-        
+
+        private bool IsConanInitialized()
+        {
+            bool initialized = GlobalSettings.ConanExecutablePath != null && GlobalSettings.ConanExecutablePath.Length > 0;
+            return initialized;
+        }
+
+        private bool IsFileCommentGuarded(string path)
+        {
+            if (File.Exists(path))
+            {
+                string[] guardComment = _modifyCommentGuard.Split('\n');
+                string[] fileContents = File.ReadAllLines(path);
+                if (fileContents.Length > guardComment.Length && fileContents.AsSpan(0, guardComment.Length).SequenceEqual(guardComment))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void WriteConanfileIfNecessary(string projectDirectory)
+        {
+            string path = Path.Combine(projectDirectory, "conanfile.py");
+            if (!IsFileCommentGuarded(path))
+            {
+                StreamWriter conanfileWriter = File.CreateText(path);
+                conanfileWriter.Write(_modifyCommentGuard +  "\n");
+
+                conanfileWriter.Write(@"
+from conan import ConanFile
+from conan.tools.microsoft import vs_layout, MSBuildDeps
+class ConanApplication(ConanFile):
+    package_type = ""application""
+    settings = ""os"", ""compiler"", ""build_type"", ""arch""
+
+    def layout(self):
+        vs_layout(self)
+
+    def generate(self):
+        deps = MSBuildDeps(self)
+        deps.generate()
+
+    def requirements(self):
+        requirements = self.conan_data.get('requirements', [])
+        for requirement in requirements:
+            self.requires(requirement)");
+                conanfileWriter.Close();
+            }
+        }
+
+        private void WriteConandataIfNecessary(string projectDirectory)
+        {
+            string path = Path.Combine(projectDirectory, "conandata.yml");
+            if (!IsFileCommentGuarded(path))
+            {
+                StreamWriter conandataWriter = File.CreateText(path);
+                conandataWriter.Write(_modifyCommentGuard + "\n");
+
+                conandataWriter.Write("requirements:\n");
+
+                conandataWriter.Close();
+            }
+        }
+
+        private void WriteNecessaryConanGuardedFiles(string projectDirectory)
+        {
+            WriteConanfileIfNecessary(projectDirectory);
+            WriteConandataIfNecessary(projectDirectory);
+        }
+
+        private string[] GetConandataRequirements(string projectDirectory)
+        {
+            string path = Path.Combine(projectDirectory, "conandata.yml");
+            if (IsFileCommentGuarded(path))
+            {
+                string[] conandataContents = File.ReadAllLines(path);
+
+                var deserializer = new DeserializerBuilder()
+                    .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                    .Build();
+
+                var result = deserializer.Deserialize<Requirements>(string.Join("\n", conandataContents));
+
+                if (result.requirements != null)
+                {
+                    return result.requirements;
+                }
+            }
+            return new string[] { };
+        }
+
+        private void WriteNewRequirement(string projectDirectory, string newRequirement)
+        {
+            string path = Path.Combine(projectDirectory, "conandata.yml");
+            if (IsFileCommentGuarded(path))
+            {
+                string[] requirements = GetConandataRequirements(projectDirectory);
+                if (!requirements.Contains(newRequirement))
+                {
+                    var newRequirements = requirements.Append(newRequirement);
+                    var conandata = File.CreateText(path);
+                    conandata.Write(_modifyCommentGuard + "\n");
+                    var serializer = new SerializerBuilder()
+                        .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                        .Build();
+                    var yaml = serializer.Serialize(new Requirements(newRequirements.ToArray()));
+                    conandata.Write(yaml);
+                    conandata.Close();
+                }
+            }
+        }
+
+        private void RemoveRequirement(string projectDirectory, string oldRequirement)
+        {
+            string path = Path.Combine(projectDirectory, "conandata.yml");
+            if (IsFileCommentGuarded(path))
+            {
+                string[] requirements = GetConandataRequirements(projectDirectory);
+                if (requirements.Contains(oldRequirement))
+                {
+                    var newRequirements = requirements.Where(req => req != oldRequirement).ToArray();
+                    var conandata = File.CreateText(path);
+                    conandata.Write(_modifyCommentGuard + "\n");
+                    var serializer = new SerializerBuilder()
+                        .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                        .Build();
+                    var yaml = serializer.Serialize(new Requirements(newRequirements));
+                    conandata.Write(yaml);
+                    conandata.Close();
+                }
+            }
+        }
+
+        private void ToggleUIEnableState(bool enabled)
+        {
+            LibrarySearchTextBox.IsEnabled = enabled;
+
+            ShowPackagesButton.IsEnabled = enabled;
+            UpdateButton.IsEnabled = enabled;
+
+            PackagesListView.IsEnabled = enabled;
+            LibraryHeader.IsEnabled = enabled;
+            myWebBrowser.IsEnabled = enabled;
+        }
+
+
         private void Configuration_Click(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -274,6 +474,8 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
                     string projectDirectory = Path.GetDirectoryName(projectFilePath);
                     string propsFilePath = Path.Combine(projectDirectory, "conandeps.props");
                     string conanInstallCommand = $"\"{conanPath}\" install --requires=fmt/10.2.1 -g=MSBuildDeps -s=build_type=$(Configuration) --build=missing";
+
+                    WriteNecessaryConanGuardedFiles(projectDirectory);
 
                     foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
                     {
@@ -297,6 +499,8 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
                 }
             }
 
+            ToggleUIEnableState(true);
+
         }
 
         private string getProfileName(string vcConfigName)
@@ -309,6 +513,7 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
             var archMap = new Dictionary<string, string>();
             archMap["x64"] = "x86_64";
             archMap["Win32"] = "x86";
+            archMap["ARM64"] = "armv8";
             return archMap[platform];
         }
 
@@ -334,7 +539,7 @@ target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
                         {
                             string projectDirectory = System.IO.Path.GetDirectoryName(project.FullName);
                             string conanProjectDirectory = System.IO.Path.Combine(projectDirectory, ".conan");
-
+                            MessageBox.Show(string.Join("\n", GetConandataRequirements(projectDirectory)));
                             if (!Directory.Exists(conanProjectDirectory))
                             {
                                 Directory.CreateDirectory(conanProjectDirectory);
