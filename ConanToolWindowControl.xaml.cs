@@ -526,6 +526,27 @@ class ConanApplication(ConanFile):
             return msvcVersionMap[platformToolset];
         }
 
+        private string getConanCppstd(string languageStandard)
+        {
+            // https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170
+
+            if (languageStandard.ToLower().Contains("default"))
+            {
+                return "14";
+            }
+
+            List<string> cppStdValues = new List<string>() { "14", "17", "20", "23" };
+
+            foreach (string cppStdValue in cppStdValues)
+            {
+                if (languageStandard.Contains(cppStdValue))
+                {
+                    return cppStdValue;
+                }
+            }
+            return "null";
+        }
+
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -555,8 +576,11 @@ class ConanApplication(ConanFile):
                                     string toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
                                     string compilerVersion = getConanCompilerVersion(toolset);
                                     string arch = getConanArch(vcConfig.Evaluate("$(PlatformName)").ToString());
+                                    IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
+                                    string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
+                                    string cppStd = getConanCppstd(languageStandard);
                                     string buildType = vcConfig.ConfigurationName;
-                                    string profileContent = $"[settings]\narch={arch}\nbuild_type={buildType}\ncompiler=msvc\ncompiler.cppstd=14\ncompiler.runtime=dynamic\n" +
+                                    string profileContent = $"[settings]\narch={arch}\nbuild_type={buildType}\ncompiler=msvc\ncompiler.cppstd={cppStd}\ncompiler.runtime=dynamic\n" +
                                         $"compiler.runtime_type={buildType}\ncompiler.version={compilerVersion}\nos=Windows";
                                     File.WriteAllText(profilePath, profileContent);
                                 }
