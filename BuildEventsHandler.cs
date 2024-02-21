@@ -31,8 +31,8 @@ namespace conan_vs_extension
         {
             // here we generate profiles for all projects but we probably should only generate profiles for 
             // the project marked as startup project
-            Project startupProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
-            _profiles_manager.GenerateProfilesForProject(startupProject);
+            Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
+            _profiles_manager.GenerateProfilesForProject(invokedProject);
         }
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
@@ -40,13 +40,13 @@ namespace conan_vs_extension
             //ThreadHelper.ThrowIfNotOnUIThread();
             var message = "OnBuildProjConfigDone";
             System.Diagnostics.Debug.WriteLine(message);
-            Project startupProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
-            VCConfiguration config = ProjectConfigurationManager.GetVCConfig(startupProject, ProjectConfig, Platform);
+            Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
+            VCConfiguration config = ProjectConfigurationManager.GetVCConfig(invokedProject, ProjectConfig, Platform);
             // FIXME: the problem with this is that the first time you build
             // the build is started before this step finishes
             // maybe we can inject the dependency to the project via a prebuild event? 
             // with a script?
-            _ = ProjectConfigurationManager.InjectConanDepsAsync(startupProject, config);
+            _ = ProjectConfigurationManager.InjectConanDepsAsync(invokedProject, config);
         }
 
         private void OnBuildDone(vsBuildScope Scope, vsBuildAction Action)

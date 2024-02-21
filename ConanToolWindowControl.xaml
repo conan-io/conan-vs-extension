@@ -14,7 +14,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -54,8 +53,17 @@
                 <Button x:Name="InstallButton" Content="Install" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button x:Name="RemoveButton" Content="Remove" Margin="5,0" Click="RemoveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
+            <TextBlock Margin="5,0,5,10">
+                <Hyperlink x:Name="MoreInfoHyperlink" RequestNavigate="Hyperlink_RequestNavigate">
+                    Check conan.io/center for more info
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="5,0,5,10">
+                <Hyperlink x:Name="GitHubRecipeLink" RequestNavigate="Hyperlink_RequestNavigate">
+                    You can also check the Conan recipe in GitHub
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
-        <WebBrowser x:Name="myWebBrowser" Grid.Row="3" Grid.ColumnSpan="2"/>
 
 
     </Grid>

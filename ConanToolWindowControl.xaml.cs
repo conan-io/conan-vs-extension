@@ -75,10 +75,8 @@ namespace conan_vs_extension
         {
             this.InitializeComponent();
             LibraryHeader.Visibility = Visibility.Collapsed;
-            myWebBrowser.Visibility = Visibility.Collapsed;
 
             ToggleUIEnableState(IsConanInitialized());
-
             _ = InitializeAsync();
         }
 
@@ -164,13 +162,20 @@ namespace conan_vs_extension
         {
             if (PackagesListView.SelectedItem is string selectedItem)
             {
-                var htmlContent = GenerateHtml(selectedItem);
-                myWebBrowser.NavigateToString(htmlContent);
+                UpdateLibraryInfo(selectedItem);
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.Uri.AbsoluteUri);
+            e.Handled = true;
         }
 
         public void UpdatePanel(string name, string description, string licenses, List<string> versions)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             LibraryNameLabel.Content = name;
             VersionsComboBox.ItemsSource = versions;
             VersionsComboBox.SelectedIndex = 0;
@@ -178,23 +183,24 @@ namespace conan_vs_extension
             DescriptionTextBlock.Text = description ?? "No description available.";
             LicenseText.Text = licenses ?? "No description available.";
 
-            ThreadHelper.ThrowIfNotOnUIThread();
+            MoreInfoHyperlink.NavigateUri = new Uri($"https://conan.io/center/recipes/{name}");
+            GitHubRecipeLink.NavigateUri = new Uri($"https://github.com/conan-io/conan-center-index/tree/master/recipes/{name}");
 
-            Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
-            Project activeProject = activeSolutionProjects.GetValue(0) as Project;
+            Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
 
-            string projectFilePath = activeProject.FullName;
-            string projectDirectory = Path.GetDirectoryName(projectFilePath);
+            if (startupProject != null && startupProject.Object is VCProject vcProject)
+            {
+                string projectFilePath = startupProject.FullName;
+                string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
-            var requirements = GetConandataRequirements(projectDirectory);
-            bool isInstalled = requirements.Any(e => e.StartsWith(name + "/"));
+                var requirements = GetConandataRequirements(projectDirectory);
+                bool isInstalled = requirements.Any(e => e.StartsWith(name + "/"));
 
-            InstallButton.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
-            RemoveButton.Visibility = isInstalled ? Visibility.Visible : Visibility.Collapsed;
+                InstallButton.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
+                RemoveButton.Visibility = isInstalled ? Visibility.Visible : Visibility.Collapsed;
 
-            LibraryHeader.Visibility = Visibility.Visible;
-            myWebBrowser.Visibility = Visibility.Visible;
-
+                LibraryHeader.Visibility = Visibility.Visible;
+            }
         }
 
         private void InstallButton_Click(object sender, RoutedEventArgs e)
@@ -245,60 +251,17 @@ namespace conan_vs_extension
         }
 
 
-        private string GenerateHtml(string name)
+        private void UpdateLibraryInfo(string name)
         {
-            if (_jsonData == null || !_jsonData.libraries.ContainsKey(name)) return "";
-
-            var library = _jsonData.libraries[name];
-            var versions = library.versions;
-            var description = library.description ?? "No description available.";
-            var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
-            var cmakeFileName = library.cmake_file_name ?? name;
-            var cmakeTargetName = library.cmake_target_name ?? $"{name}::{name}";
-            var warningSection = !library.v2 ? "<div class='warning'>Warning: This library is not compatible with Conan v2.</div>" : string.Empty;
-
-            UpdatePanel(name, description, licenses, versions);
-
-            var additionalInfo = $@"
-        <p>Please, be aware that this information is generated automatically and it may contain some mistakes. If you have any problem, you can check the <a href='https://github.com/conan-io/conan-center-index/tree/master/recipes/{name}' target='_blank'>upstream recipe</a> to confirm the information. Also, for more detailed information on how to consume Conan packages, please <a href='https://docs.conan.io/2/tutorial/consuming_packages.html' target='_blank'>check the Conan documentation</a>.</p>";
-
-            var componentsSection = string.Empty;
-            if (library.components != null && library.components.Count > 0)
+            if (_jsonData != null && _jsonData.libraries.ContainsKey(name))
             {
-                componentsSection += "<h2>Declared components for " + name + "</h2>";
-                componentsSection += "<p>This library declares components, so you can use the components targets in your project instead of the global target. There are the declared CMake target names for the library's components:<br><ul>";
-                foreach (var component in library.components)
-                {
-                    var componentCmakeTargetName = component.Value.cmake_target_name ?? $"{name}::{component.Key}";
-                    componentsSection += $"<li>{component.Key}: <code>{componentCmakeTargetName}</code></li>";
-                }
-                componentsSection += "</ul></p>";
+                var library = _jsonData.libraries[name];
+                var versions = library.versions;
+                var description = library.description ?? "No description available.";
+                var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
+
+                UpdatePanel(name, description, licenses, versions);
             }
-
-            var htmlTemplate = $@"
-<html>
-<head>
-    <style>
-        body {{ font-family: 'Roboto', sans-serif; }}
-        .code {{ background-color: lightgray; padding: 10px; border-radius: 5px; overflow: auto; white-space: pre; }}
-        .warning {{ background-color: yellow; padding: 10px; }}
-    </style>
-</head>
-<body>
-    {warningSection}
-    <h2>Using {name} with CMake</h2>
-<pre class='code'>
-# First, tell CMake to find the package.
-find_package({cmakeFileName})
-
-# Then, link your executable or library with the package target.
-target_link_libraries(your_target_name PRIVATE {cmakeTargetName})
-</pre>
-    {additionalInfo}
-    {componentsSection}
-</body>
-</html>";
-            return htmlTemplate;
         }
 
         /// <summary>
@@ -457,7 +420,6 @@ class ConanApplication(ConanFile):
 
             PackagesListView.IsEnabled = enabled;
             LibraryHeader.IsEnabled = enabled;
-            myWebBrowser.IsEnabled = enabled;
         }
 
 

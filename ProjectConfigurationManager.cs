@@ -145,15 +145,17 @@ namespace conan_vs_extension
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             SolutionBuild solutionBuild = dte.Solution.SolutionBuild;
-            string startupProjectName = (string)((Array)solutionBuild.StartupProjects).GetValue(0);
-            foreach (Project project in dte.Solution.Projects)
+            if (solutionBuild.StartupProjects != null)
             {
-                if (project.UniqueName == startupProjectName)
+                string startupProjectName = (string)((Array)solutionBuild.StartupProjects).GetValue(0);
+                foreach (Project project in dte.Solution.Projects)
                 {
-                    return project;
+                    if (project.UniqueName == startupProjectName)
+                    {
+                        return project;
+                    }
                 }
             }
-
             return null;
         }
 
