@@ -110,7 +110,7 @@ os=Windows
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"There was a problem generating the file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"There was a problem generating the file: {ex.Message}", "Error - Conan C/C++ Package Manager", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

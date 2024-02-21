@@ -208,7 +208,7 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            MessageBox.Show($"Installing {selectedLibrary} version {selectedVersion}");
+            MessageBox.Show($"Installing {selectedLibrary} version {selectedVersion}", "Conan C/C++ Package Manager");
 
             InstallButton.Visibility = Visibility.Collapsed;
             RemoveButton.Visibility = Visibility.Visible;
@@ -234,7 +234,7 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}");
+            MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}", "Conan C/C++ Package Manager");
 
             InstallButton.Visibility = Visibility.Visible;
             RemoveButton.Visibility = Visibility.Collapsed;
@@ -434,7 +434,12 @@ class ConanApplication(ConanFile):
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
+            string projectFilePath = startupProject.FullName;
+            string projectName = startupProject.Name;
+            string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
+            MessageBox.Show(string.Join("\n", GetConandataRequirements(projectDirectory)), $"Installed packages for '{projectName}' - Conan C/C++ Package Manager");
         }
 
         private async Task UpdateJsonDataAsync()
@@ -452,12 +457,12 @@ class ConanApplication(ConanFile):
 
                     File.WriteAllText(jsonFilePath, jsonContent);
 
-                    MessageBox.Show("Libraries data file updated.", "Libraries data file updated.", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("ConanCenter libraries data file updated.", "Conan C/C++ Package Manager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating: {ex.Message}", "Error updating", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error updating: {ex.Message}", "Error - Conan C/C++ Package Manager", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
