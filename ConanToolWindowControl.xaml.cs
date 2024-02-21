@@ -63,11 +63,10 @@ namespace conan_vs_extension
     /// </summary>
     public partial class ConanToolWindowControl : UserControl
     {
-        private ProjectConfigurationManager _manager;
         private DTE _dte;
         private RootObject _jsonData;
 
-        private string _modifyCommentGuard = "# This is a Conan Plugin Managed File blah balh blhaaah";
+        private string _modifyCommentGuard = "# This file is managed by the Conan Visual Studio Extension, contents will be overwritten.\n# To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConanToolWindowControl"/> class.
@@ -80,7 +79,6 @@ namespace conan_vs_extension
 
             ToggleUIEnableState(IsConanInitialized());
 
-            _manager = new ProjectConfigurationManager();
             _ = InitializeAsync();
         }
 
@@ -211,13 +209,18 @@ namespace conan_vs_extension
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
-            Project activeProject = activeSolutionProjects.GetValue(0) as Project;
+            Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
 
-            string projectFilePath = activeProject.FullName;
-            string projectDirectory = Path.GetDirectoryName(projectFilePath);
+            if (startupProject.Object is VCProject vcProject)
+            {
+                string projectFilePath = startupProject.FullName;
+                string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
-            WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+                WriteNecessaryConanGuardedFiles(projectDirectory);
+                WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+
+                ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(startupProject);
+            }
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -461,140 +464,15 @@ class ConanApplication(ConanFile):
         private void Configuration_Click(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
             ShowConfigurationDialog();
-
-            string conanPath = GlobalSettings.ConanExecutablePath;
-
-            foreach (Project project in _dte.Solution.Projects)
-            {
-                if (project.Object is VCProject vcProject)
-                {
-                    string projectFilePath = project.FullName;
-                    string projectDirectory = Path.GetDirectoryName(projectFilePath);
-                    string propsFilePath = Path.Combine(projectDirectory, "conandeps.props");
-                    string conanInstallCommand = $"\"{conanPath}\" install --requires=fmt/10.2.1 -g=MSBuildDeps -s=build_type=$(Configuration) --build=missing";
-
-                    WriteNecessaryConanGuardedFiles(projectDirectory);
-
-                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                    {
-                        _ = _manager.SaveConanPrebuildEventAsync(vcProject, vcConfig, conanInstallCommand);
-                    }
-                }
-            }
-
-            foreach (Project project in _dte.Solution.Projects)
-            {
-                if (project.Object is VCProject vcProject)
-                {
-                    string projectFilePath = project.FullName;
-                    string projectDirectory = Path.GetDirectoryName(projectFilePath);
-                    string propsFilePath = Path.Combine(projectDirectory, "conandeps.props");
-
-                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                    {
-                        _ = _manager.InjectConanDepsAsync(vcProject, vcConfig, propsFilePath);
-                    }
-                }
-            }
-
             ToggleUIEnableState(true);
 
-        }
-
-        private string getProfileName(string vcConfigName)
-        {
-            return vcConfigName.Replace("|", "_");
-        }
-
-        private string getConanArch(string platform)
-        {
-            var archMap = new Dictionary<string, string>();
-            archMap["x64"] = "x86_64";
-            archMap["Win32"] = "x86";
-            archMap["ARM64"] = "armv8";
-            return archMap[platform];
-        }
-
-        private string getConanCompilerVersion(string platformToolset)
-        {
-            var msvcVersionMap = new Dictionary<string, string>();
-            msvcVersionMap["v143"] = "193";
-            msvcVersionMap["v142"] = "192";
-            msvcVersionMap["v141"] = "191";
-            return msvcVersionMap[platformToolset];
-        }
-
-        private string getConanCppstd(string languageStandard)
-        {
-            // https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170
-
-            if (languageStandard.ToLower().Contains("default"))
-            {
-                return "14";
-            }
-
-            List<string> cppStdValues = new List<string>() { "14", "17", "20", "23" };
-
-            foreach (string cppStdValue in cppStdValues)
-            {
-                if (languageStandard.Contains(cppStdValue))
-                {
-                    return cppStdValue;
-                }
-            }
-            return "null";
         }
 
         private void ShowPackages_Click(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            try
-            {
-                if (_dte != null && _dte.Solution != null && _dte.Solution.Projects != null)
-                {
-                    foreach (Project project in _dte.Solution.Projects)
-                    {
-                        if (project.Object is VCProject vcProject)
-                        {
-                            string projectDirectory = System.IO.Path.GetDirectoryName(project.FullName);
-                            string conanProjectDirectory = System.IO.Path.Combine(projectDirectory, ".conan");
-                            MessageBox.Show(string.Join("\n", GetConandataRequirements(projectDirectory)));
-                            if (!Directory.Exists(conanProjectDirectory))
-                            {
-                                Directory.CreateDirectory(conanProjectDirectory);
-                            }
 
-                            foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                            {
-                                string profileName = getProfileName(vcConfig.Name);
-                                string profilePath = System.IO.Path.Combine(conanProjectDirectory, profileName);
-
-                                if (!File.Exists(profilePath))
-                                {
-                                    string toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
-                                    string compilerVersion = getConanCompilerVersion(toolset);
-                                    string arch = getConanArch(vcConfig.Evaluate("$(PlatformName)").ToString());
-                                    IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
-                                    string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
-                                    string cppStd = getConanCppstd(languageStandard);
-                                    string buildType = vcConfig.ConfigurationName;
-                                    string profileContent = $"[settings]\narch={arch}\nbuild_type={buildType}\ncompiler=msvc\ncompiler.cppstd={cppStd}\ncompiler.runtime=dynamic\n" +
-                                        $"compiler.runtime_type={buildType}\ncompiler.version={compilerVersion}\nos=Windows";
-                                    File.WriteAllText(profilePath, profileContent);
-                                }
-                            }
-                        }
-                    }
-
-                    MessageBox.Show($"Generated profiles for actual project.", "Conan profiles generated", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"There was a problem generating the file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
         private async Task UpdateJsonDataAsync()
@@ -626,4 +504,5 @@ class ConanApplication(ConanFile):
             _ = UpdateJsonDataAsync();
         }
     }
+
 }

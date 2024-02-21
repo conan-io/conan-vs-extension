@@ -51,6 +51,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BuildEventsHandler.cs" />
+    <Compile Include="ConanProfilesManager.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="ConanOptionsPage.cs">
       <SubType>Component</SubType>

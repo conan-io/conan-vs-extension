@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio;
+﻿using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -33,6 +34,7 @@ namespace conan_vs_extension
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(UIContextGuids80.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideToolWindow(typeof(ConanToolWindow))]
     [Guid(ConanToolWindowPackage.PackageGuidString)]
@@ -57,6 +59,7 @@ namespace conan_vs_extension
         }
 
         #region Package Members
+        private BuildEventsHandler _event_handler;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -74,6 +77,14 @@ namespace conan_vs_extension
 
             ConanOptionsPage optionsPage = (ConanOptionsPage)GetDialogPage(typeof(ConanOptionsPage));
             GlobalSettings.ConanExecutablePath = optionsPage.ConanExecutablePath;
+
+            DTE _dte = (DTE)ServiceProvider.GlobalProvider.GetService(typeof(DTE));
+            if (_dte == null)
+            {
+                throw new InvalidOperationException("Cannot access DTE service.");
+            }
+            _event_handler = new BuildEventsHandler(_dte);
+
         }
 
         #endregion
