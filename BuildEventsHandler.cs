@@ -1,10 +1,6 @@
 using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.VCProjectEngine;
-using System;
-using System.Collections;
-using System.IO;
 
 namespace conan_vs_extension
 {

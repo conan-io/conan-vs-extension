@@ -119,7 +119,6 @@ namespace conan_vs_extension
             }
         }
 
-
         public static void SaveConanPrebuildEventsAllConfig(Project project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
