@@ -17,26 +17,16 @@ using System.Windows.Navigation;
 
 namespace conan_vs_extension
 {
-    public class Component
-    {
-        public string cmake_target_name { get; set; }
-    }
-
     public class Library
     {
-        public string cmake_file_name { get; set; }
-        public string cmake_target_name { get; set; }
-        public string description { get; set; }
-        public List<string> license { get; set; }
-        public bool v2 { get; set; }
-        public List<string> versions { get; set; }
-        public Dictionary<string, Component> components { get; set; } = new Dictionary<string, Component>();
+        public string Description { get; set; }
+        public List<string> License { get; set; }
+        public List<string> Versions { get; set; }
     }
 
     public class RootObject
     {
-        public long date { get; set; }
-        public Dictionary<string, Library> libraries { get; set; }
+        public Dictionary<string, Library> Libraries { get; set; }
     }
 
     public class Requirements
@@ -127,7 +117,7 @@ namespace conan_vs_extension
             Dispatcher.Invoke(() =>
             {
                 PackagesListView.Items.Clear();
-                foreach (var library in _jsonData.libraries.Keys)
+                foreach (var library in _jsonData.Libraries.Keys)
                 {
                     PackagesListView.Items.Add(library);
                 }
@@ -136,11 +126,11 @@ namespace conan_vs_extension
 
         private void FilterListView(string searchText)
         {
-            if (_jsonData == null || _jsonData.libraries == null) return;
+            if (_jsonData == null || _jsonData.Libraries == null) return;
 
             PackagesListView.Items.Clear();
 
-            var filteredLibraries = _jsonData.libraries
+            var filteredLibraries = _jsonData.Libraries
                 .Where(kv => kv.Key.Contains(searchText))
                 .ToList();
 
@@ -209,7 +199,7 @@ namespace conan_vs_extension
 
             Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
 
-            if (startupProject.Object is VCProject vcProject)
+            if (startupProject.Object is VCProject)
             {
                 string projectFilePath = startupProject.FullName;
                 string projectDirectory = Path.GetDirectoryName(projectFilePath);
@@ -245,12 +235,12 @@ namespace conan_vs_extension
 
         private void UpdateLibraryInfo(string name)
         {
-            if (_jsonData != null && _jsonData.libraries.ContainsKey(name))
+            if (_jsonData != null && _jsonData.Libraries.ContainsKey(name))
             {
-                var library = _jsonData.libraries[name];
-                var versions = library.versions;
-                var description = library.description ?? "No description available.";
-                var licenses = library.license != null ? string.Join(", ", library.license) : "No license information.";
+                var library = _jsonData.Libraries[name];
+                var versions = library.Versions;
+                var description = library.Description ?? "No description available.";
+                var licenses = library.License != null ? string.Join(", ", library.License) : "No license information.";
 
                 UpdatePanel(name, description, licenses, versions);
             }
@@ -261,8 +251,6 @@ namespace conan_vs_extension
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
 
         private void ShowConfigurationDialog()
         {
