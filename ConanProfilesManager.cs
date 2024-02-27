@@ -1,5 +1,6 @@
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Collections;
@@ -68,27 +69,36 @@ namespace conan_vs_extension
                 if (project != null && project.Object is VCProject vcProject)
                 {
                     string projectDirectory = System.IO.Path.GetDirectoryName(project.FullName);
-                    string conanProjectDirectory = System.IO.Path.Combine(projectDirectory, ".conan");
-                    if (!Directory.Exists(conanProjectDirectory))
-                    {
-                        Directory.CreateDirectory(conanProjectDirectory);
-                    }
+                    string path = Path.Combine(projectDirectory, "conandata.yml");
 
-                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                    {
-                        string profileName = getProfileName(vcConfig);
-                        string profilePath = System.IO.Path.Combine(conanProjectDirectory, profileName);
+                    // only generate the profiles if we had a conandata that means
+                    // that at some point the user wanted to use conan
 
-                        if (!File.Exists(profilePath))
+                    bool fileExists = File.Exists(path);
+
+                    if (fileExists)
+                    {
+                        string conanProjectDirectory = System.IO.Path.Combine(projectDirectory, ".conan");
+                        if (!Directory.Exists(conanProjectDirectory))
                         {
-                            string toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
-                            string compilerVersion = getConanCompilerVersion(toolset);
-                            string arch = getConanArch(vcConfig.Evaluate("$(PlatformName)").ToString());
-                            IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
-                            string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
-                            string cppStd = getConanCppstd(languageStandard);
-                            string buildType = vcConfig.ConfigurationName;
-                            string profileContent = 
+                            Directory.CreateDirectory(conanProjectDirectory);
+                        }
+
+                        foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
+                        {
+                            string profileName = getProfileName(vcConfig);
+                            string profilePath = System.IO.Path.Combine(conanProjectDirectory, profileName);
+
+                            if (!File.Exists(profilePath))
+                            {
+                                string toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
+                                string compilerVersion = getConanCompilerVersion(toolset);
+                                string arch = getConanArch(vcConfig.Evaluate("$(PlatformName)").ToString());
+                                IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
+                                string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
+                                string cppStd = getConanCppstd(languageStandard);
+                                string buildType = vcConfig.ConfigurationName;
+                                string profileContent = 
 $@"
 [settings]
 arch={arch}
@@ -102,7 +112,8 @@ compiler.runtime_type={buildType}
 compiler.version={compilerVersion}
 os=Windows
 ";
-                            File.WriteAllText(profilePath, profileContent);
+                                File.WriteAllText(profilePath, profileContent);
+                            }
                         }
                     }
                 }
