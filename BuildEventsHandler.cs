@@ -29,6 +29,11 @@ namespace conan_vs_extension
             // the project marked as startup project
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
             _profiles_manager.GenerateProfilesForProject(invokedProject);
+
+            // We always overrwrite the script for the prebuild event
+            // the ps1 is always overwritten but the event is only added if no conan_install.ps1 is found
+            // in the prebuild events
+            ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(invokedProject);
         }
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
