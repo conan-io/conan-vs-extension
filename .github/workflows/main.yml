@@ -33,7 +33,7 @@ jobs:
         run: nuget restore
 
       - name: Build conan-vs-extension
-        run: msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal
+        run: msbuild /p:configuration=Release /p:Platform="Any CPU" /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal
 
       - name: Upload VSIX as artifact
         uses: actions/upload-artifact@v4
