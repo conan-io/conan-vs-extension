@@ -1,7 +1,9 @@
 using conan_vs_extension;
 using Microsoft.VisualStudio.Shell;
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 [Guid(GuidList.strConanOptionsPage)]
 public class ConanOptionsPage : DialogPage
@@ -11,17 +13,15 @@ public class ConanOptionsPage : DialogPage
 
     [DisplayName("Executable Path")]
     [Description("Path to the Conan executable.")]
+    [Editor(typeof(ExecutablePathEditor), typeof(System.Drawing.Design.UITypeEditor))]
     public string ConanExecutablePath
     {
-        get
-        {
-            return _conanExecutablePath;
-        }
+        get => _conanExecutablePath;
         set
         {
             _useSystemConan = false;
             _conanExecutablePath = value;
-            GlobalSettings.ConanExecutablePath = _conanExecutablePath;
+            GlobalSettings.ConanExecutablePath = value;
         }
     }
 
@@ -37,9 +37,32 @@ public class ConanOptionsPage : DialogPage
                 _useSystemConan = value;
                 if (_useSystemConan)
                 {
-                    _conanExecutablePath = "System";
+                    _conanExecutablePath = "";
                 }
             }
+        }
+    }
+
+    public class ExecutablePathEditor : System.Drawing.Design.UITypeEditor
+    {
+        public override System.Drawing.Design.UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return System.Drawing.Design.UITypeEditorEditStyle.Modal;
+        }
+
+        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Executable Files (*.exe)|*.exe|All Files (*.*)|*.*";
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return openFileDialog.FileName;
+                }
+            }
+            return value;
         }
     }
 }

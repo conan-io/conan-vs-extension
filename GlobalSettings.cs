@@ -18,7 +18,7 @@ namespace conan_vs_extension{
             set
             {
 
-                if (value == "System")
+                if (value == "")
                 {
                     _conanExecutablePath = "conan";
                 }

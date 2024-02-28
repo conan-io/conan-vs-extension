@@ -85,19 +85,28 @@ namespace conan_vs_extension
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            string conan_script_name = "conan_install.ps1";
+            string conan_script_name = "conan_install.bat";
             string projectDirectory = Path.GetDirectoryName(project.FullName);
             string conanScriptDirectory = Path.Combine(projectDirectory, ".conan");
             string scriptPath = Path.Combine(conanScriptDirectory, conan_script_name);
             string conanPath = GlobalSettings.ConanExecutablePath;
 
-            string conanCommandContents = $@"
-param(
-    [string]$conan_arguments = ''
-)
-Set-Location -Path '" + projectDirectory + @"'
-& '" + conanPath + @"' install . ${conan_arguments}
-";
+            string conanCommandContents = $@"@echo off
+setlocal enabledelayedexpansion
+
+set ""args=""
+
+:args_loop
+if ""%~1""=="""" goto after_args_loop
+set ""args=!args! %1""
+shift
+goto args_loop
+
+:after_args_loop
+echo Arguments for conan install: !args!
+
+""{conanPath}"" install !args!
+        ";
 
             Directory.CreateDirectory(conanScriptDirectory);
             File.WriteAllText(scriptPath, conanCommandContents);
@@ -113,8 +122,8 @@ Set-Location -Path '" + projectDirectory + @"'
 
             if (preBuildTool != null)
             {
-                string conan_script_name = "conan_install.ps1";
-                string commandLine = $"powershell -ExecutionPolicy Bypass -File \"$(ProjectDir).conan\\{conan_script_name}\"  \"-pr:h=.conan/$(Configuration)_$(Platform) -pr:b=default --build=missing\"";
+                string conan_script_name = "conan_install.bat";
+                string commandLine = $"\"$(ProjectDir).conan\\{conan_script_name}\" . -pr:h=.conan/$(Configuration)_$(Platform) -pr:b=default --build=missing";
                 if (!preBuildTool.CommandLine.Contains(conan_script_name))
                 {
                     preBuildTool.CommandLine += Environment.NewLine + commandLine;
