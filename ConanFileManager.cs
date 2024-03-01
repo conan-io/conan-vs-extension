@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using YamlDotNet.Serialization;
@@ -8,20 +9,28 @@ namespace conan_vs_extension
 {
     public static class ConanFileManager
     {
-        private static readonly string _modifyCommentGuard = "# This file is managed by the Conan Visual Studio Extension, contents will be overwritten.\n# To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements";
+        private static readonly string[] _modifyCommentGuard = new[]
+        {
+            "# This file is managed by the Conan Visual Studio Extension, contents will be overwritten.",
+            "# To keep your changes, remove these comment lines, but the plugin won't be able to modify your requirements"
+        };
 
         private static bool IsFileCommentGuarded(string path)
         {
-            if (File.Exists(path))
+            if (!File.Exists(path)) return false;
+
+            var guardCommentLines = new List<string>(_modifyCommentGuard.Length);
+
+            using (var reader = new StreamReader(path))
             {
-                string[] guardComment = _modifyCommentGuard.Split('\n');
-                string[] fileContents = File.ReadAllLines(path);
-                if (fileContents.Length > guardComment.Length && fileContents.AsSpan(0, guardComment.Length).SequenceEqual(guardComment))
+                for (int i = 0; i < _modifyCommentGuard.Length; i++)
                 {
-                    return true;
+                    if (reader.EndOfStream) return false;
+                    guardCommentLines.Add(reader.ReadLine());
                 }
             }
-            return false;
+
+            return guardCommentLines.SequenceEqual(_modifyCommentGuard);
         }
 
         public static string[] GetConandataRequirements(string projectDirectory)
@@ -35,7 +44,7 @@ namespace conan_vs_extension
                     .WithNamingConvention(UnderscoredNamingConvention.Instance)
                     .Build();
 
-                var result = deserializer.Deserialize<Requirements>(string.Join("\n", conandataContents));
+                var result = deserializer.Deserialize<Requirements>(string.Join(Environment.NewLine, conandataContents));
 
                 if (result.requirements != null)
                 {
@@ -47,45 +56,47 @@ namespace conan_vs_extension
 
         private static void WriteConanfileIfNecessary(string projectDirectory)
         {
-            string path = Path.Combine(projectDirectory, "conanfile.py");
-            if (!IsFileCommentGuarded(path))
+            string conanfilePath = Path.Combine(projectDirectory, "conanfile.py");
+            if (!IsFileCommentGuarded(conanfilePath))
             {
-                StreamWriter conanfileWriter = File.CreateText(path);
-                conanfileWriter.Write(_modifyCommentGuard +  "\n");
+                string conanfileContents = string.Join(Environment.NewLine,
+                    _modifyCommentGuard.Concat(new string[]
+                    {
+                        "",
+                        "from conan import ConanFile",
+                        "from conan.tools.microsoft import vs_layout, MSBuildDeps",
+                        "class ConanApplication(ConanFile):",
+                        "    package_type = \"application\"",
+                        "    settings = \"os\", \"compiler\", \"build_type\", \"arch\"",
+                        "",
+                        "    def layout(self):",
+                        "        vs_layout(self)",
+                        "",
+                        "    def generate(self):",
+                        "        deps = MSBuildDeps(self)",
+                        "        deps.generate()",
+                        "",
+                        "    def requirements(self):",
+                        "        requirements = self.conan_data.get('requirements', [])",
+                        "        for requirement in requirements:",
+                        "            self.requires(requirement)"
+                    })
+                );
 
-                conanfileWriter.Write(@"
-from conan import ConanFile
-from conan.tools.microsoft import vs_layout, MSBuildDeps
-class ConanApplication(ConanFile):
-    package_type = ""application""
-    settings = ""os"", ""compiler"", ""build_type"", ""arch""
-
-    def layout(self):
-        vs_layout(self)
-
-    def generate(self):
-        deps = MSBuildDeps(self)
-        deps.generate()
-
-    def requirements(self):
-        requirements = self.conan_data.get('requirements', [])
-        for requirement in requirements:
-            self.requires(requirement)");
-                conanfileWriter.Close();
+                File.WriteAllText(conanfilePath, conanfileContents);
             }
         }
 
         private static void WriteConandataIfNecessary(string projectDirectory)
         {
-            string path = Path.Combine(projectDirectory, "conandata.yml");
-            if (!IsFileCommentGuarded(path))
+            string conandataPath = Path.Combine(projectDirectory, "conandata.yml");
+            if (!IsFileCommentGuarded(conandataPath))
             {
-                StreamWriter conandataWriter = File.CreateText(path);
-                conandataWriter.Write(_modifyCommentGuard + "\n");
+                string conandataContents = string.Join(Environment.NewLine,
+                    _modifyCommentGuard.Concat(new string[] { "requirements:" })
+                );
 
-                conandataWriter.Write("requirements:\n");
-
-                conandataWriter.Close();
+                File.WriteAllText(conandataPath, conandataContents);
             }
         }
 
@@ -103,15 +114,17 @@ class ConanApplication(ConanFile):
                 string[] requirements = GetConandataRequirements(projectDirectory);
                 if (!requirements.Contains(newRequirement))
                 {
-                    var newRequirements = requirements.Append(newRequirement);
-                    var conandata = File.CreateText(path);
-                    conandata.Write(_modifyCommentGuard + "\n");
+                    var newRequirements = requirements.Append(newRequirement).ToArray();
                     var serializer = new SerializerBuilder()
                         .WithNamingConvention(UnderscoredNamingConvention.Instance)
                         .Build();
-                    var yaml = serializer.Serialize(new Requirements(newRequirements.ToArray()));
-                    conandata.Write(yaml);
-                    conandata.Close();
+                    var yaml = serializer.Serialize(new Requirements(newRequirements));
+
+                    // Combine guard comments and YAML contents.
+                    string fileContents = string.Join(Environment.NewLine, _modifyCommentGuard) + Environment.NewLine + yaml;
+                    
+                    // Write the combined contents to the file.
+                    File.WriteAllText(path, fileContents);
                 }
             }
         }
@@ -125,17 +138,18 @@ class ConanApplication(ConanFile):
                 if (requirements.Contains(oldRequirement))
                 {
                     var newRequirements = requirements.Where(req => req != oldRequirement).ToArray();
-                    var conandata = File.CreateText(path);
-                    conandata.Write(_modifyCommentGuard + "\n");
                     var serializer = new SerializerBuilder()
                         .WithNamingConvention(UnderscoredNamingConvention.Instance)
                         .Build();
                     var yaml = serializer.Serialize(new Requirements(newRequirements));
-                    conandata.Write(yaml);
-                    conandata.Close();
+
+                    // Combine guard comments and YAML contents.
+                    string fileContents = string.Join(Environment.NewLine, _modifyCommentGuard) + Environment.NewLine + yaml;
+                    
+                    // Write the combined contents to the file.
+                    File.WriteAllText(path, fileContents);
                 }
             }
         }
-
     }
 }

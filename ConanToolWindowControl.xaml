@@ -50,7 +50,7 @@
             </TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <ComboBox x:Name="VersionsComboBox" Width="150" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button x:Name="InstallButton" Content="Install" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="InstallButton" Content="Add requirement" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button x:Name="RemoveButton" Content="Remove" Margin="5,0" Click="RemoveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </StackPanel>
             <TextBlock Margin="5,0,5,10">

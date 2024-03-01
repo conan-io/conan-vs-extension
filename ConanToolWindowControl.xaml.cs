@@ -190,7 +190,7 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            MessageBox.Show($"Installing {selectedLibrary} version {selectedVersion}", "Conan C/C++ Package Manager");
+            MessageBox.Show($"Requirement {selectedLibrary}/{selectedVersion} added to conandata.yml", "Conan C/C++ Package Manager");
 
             InstallButton.Visibility = Visibility.Collapsed;
             RemoveButton.Visibility = Visibility.Visible;
