@@ -45,7 +45,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish release to marketplace
-        if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: mrluje/vs-marketplace-publisher@v2
         with:
           pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
