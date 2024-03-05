@@ -3,6 +3,8 @@ name: Build conan-vs-extension
 on:
   push:
     branches: [ develop2 ]
+    tags:
+      - '*'
   pull_request:
     branches: [ develop2 ]
 
@@ -41,3 +43,11 @@ jobs:
           name: conan-vs-extension.vsix
           path: bin\Release\conan-vs-extension.vsix
           if-no-files-found: error
+
+      - name: Publish release to marketplace
+        if: ${{ ! startsWith(github.ref, 'refs/tags/') }}
+        uses: mrluje/vs-marketplace-publisher@v2
+        with:
+          pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
+          manifestPath: vsixManifest.json
+          vsixPath: bin\Release\conan-vs-extension.vsix

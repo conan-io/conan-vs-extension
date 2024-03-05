@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json.schemastore.org/vsix-publish",
+    "categories": [ "conan", "c++", "c" ],
+    "identity": {
+        "internalName": "conan-vs-extension"
+    },
+    "overview": "README.md",
+    "priceCategory": "free",
+    "publisher": "Conan",
+    "private": false,
+    "qna": false,
+    "repo": "https://github.com/conan-io/conan-vs-extension"
+}
