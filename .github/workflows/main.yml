@@ -50,6 +50,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - name: Download extension artifact from latest workflow build
         uses: actions/download-artifact@v4
         with:
