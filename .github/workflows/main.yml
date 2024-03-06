@@ -44,7 +44,7 @@ jobs:
 
   releaseDraft:
     name: Release draft
-    if: github.event_name != 'pull_request' && github.ref_name == "develop2"
+    if: github.event_name != 'pull_request' && github.ref_name == 'develop2'
     needs: [ build ]
     runs-on: ubuntu-latest
     permissions:
