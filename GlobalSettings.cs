@@ -7,7 +7,20 @@ using System.Threading.Tasks;
 namespace conan_vs_extension{
     public static class GlobalSettings
     {
+        private static bool _conanExtensionEnabled;
         private static string _conanExecutablePath;
+
+        public static bool ConanExtensionEnabled
+        {
+            get
+            {
+                return _conanExtensionEnabled;
+            }
+            set
+            {
+                _conanExtensionEnabled = value;
+            }
+        }
 
         public static string ConanExecutablePath
         {
@@ -17,17 +30,8 @@ namespace conan_vs_extension{
             }
             set
             {
-
-                if (value == "")
-                {
-                    _conanExecutablePath = "conan";
-                }
-                else
-                {
-                    _conanExecutablePath = value;
-                }
+                _conanExecutablePath = value;
             }
-
         }
     }
 }

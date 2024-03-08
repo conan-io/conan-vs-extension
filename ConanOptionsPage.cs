@@ -8,20 +8,22 @@ using System.Windows.Forms;
 [Guid(GuidList.strConanOptionsPage)]
 public class ConanOptionsPage : DialogPage
 {
+    private bool _enableConanExtension;
     private string _conanExecutablePath;
     private bool _useSystemConan;
 
-    [DisplayName("Executable Path")]
-    [Description("Path to the Conan executable.")]
-    [Editor(typeof(ExecutablePathEditor), typeof(System.Drawing.Design.UITypeEditor))]
-    public string ConanExecutablePath
+    [DisplayName("Activate Conan extension")]
+    [Description("Enable or disable the Conan extension")]
+    public bool EnableConanExtension
     {
-        get => _conanExecutablePath;
+        get => _enableConanExtension;
         set
         {
-            _useSystemConan = false;
-            _conanExecutablePath = value;
-            GlobalSettings.ConanExecutablePath = value;
+            if (_enableConanExtension != value)
+            {
+                _enableConanExtension = value;
+                GlobalSettings.ConanExtensionEnabled = value;
+            }
         }
     }
 
@@ -37,9 +39,28 @@ public class ConanOptionsPage : DialogPage
                 _useSystemConan = value;
                 if (_useSystemConan)
                 {
+                    _conanExecutablePath = "conan";
+                    GlobalSettings.ConanExecutablePath = "conan";
+                }
+                else
+                {
                     _conanExecutablePath = "";
+                    GlobalSettings.ConanExecutablePath = "";
                 }
             }
+        }
+    }
+
+    [DisplayName("Executable Path")]
+    [Description("Path to the Conan executable.")]
+    [Editor(typeof(ExecutablePathEditor), typeof(System.Drawing.Design.UITypeEditor))]
+    public string ConanExecutablePath
+    {
+        get => _conanExecutablePath;
+        set
+        {
+            _conanExecutablePath = value;
+            GlobalSettings.ConanExecutablePath = value;
         }
     }
 

@@ -55,6 +55,14 @@ namespace conan_vs_extension
             }
         }
 
+        public static async Task ExtractConanDepsAsync(Project project, VCConfiguration vcConfig)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            string propsFilePath = GetPropsFilePath(project);
+            ExtractConanDepsFromConfig(vcConfig, propsFilePath);
+            project.Save();
+        }
+
         private static void InjectConanDepsToConfig(VCConfiguration vcConfig, string propsFilePath)
         {
             bool isAlreadyIncluded = false;
@@ -72,7 +80,21 @@ namespace conan_vs_extension
                 vcConfig.AddPropertySheet(propsFilePath);
             }
         }
-        
+
+        private static void ExtractConanDepsFromConfig(VCConfiguration vcConfig, string propsFilePath)
+        {
+            IVCCollection propertySheets = vcConfig.PropertySheets as IVCCollection;
+            foreach (VCPropertySheet propertySheet in propertySheets)
+            {
+                if (propertySheet.PropertySheetFile == propsFilePath)
+                {
+                    // Remove the property sheet
+                    vcConfig.RemovePropertySheet(propertySheet);
+                    break;
+                }
+            }
+        }
+
         private static string GetPropsFilePath(Project project)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -132,6 +154,26 @@ echo Arguments for conan install: !args!
             }
         }
 
+        private static async Task ClearConanPrebuildEventAsync(Project project, VCConfiguration vcConfig)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            VCProject vcProject = project.Object as VCProject;
+            IVCCollection tools = vcConfig.Tools as IVCCollection;
+            VCPreBuildEventTool preBuildTool = tools.Item("VCPreBuildEventTool") as VCPreBuildEventTool;
+
+            if (preBuildTool != null)
+            {
+                string conan_script_name = "conan_install.bat";
+                string commandLine = $"\"$(ProjectDir).conan\\{conan_script_name}\" . -pr:h=.conan/$(Configuration)_$(Platform) -pr:b=default --build=missing";
+                if (preBuildTool.CommandLine.Contains(conan_script_name))
+                {
+                    preBuildTool.CommandLine = preBuildTool.CommandLine.Replace(commandLine, "");
+                    vcProject.Save();
+                }
+            }
+        }
+
         public static async void SaveConanPrebuildEventsAllConfig(Project project)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -141,6 +183,17 @@ echo Arguments for conan install: !args!
             foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
             {
                 await SaveConanPrebuildEventAsync(project, vcConfig);
+            }
+        }
+
+        public static async void ClearConanPrebuildEventsAllConfig(Project project)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            VCProject vcProject = project.Object as VCProject;
+            foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
+            {
+                await ClearConanPrebuildEventAsync(project, vcConfig);
             }
         }
 

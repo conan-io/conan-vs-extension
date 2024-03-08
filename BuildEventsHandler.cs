@@ -33,7 +33,12 @@ namespace conan_vs_extension
             // We always overrwrite the script for the prebuild event
             // the ps1 is always overwritten but the event is only added if no conan_install.ps1 is found
             // in the prebuild events
-            ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(invokedProject);
+            if (GlobalSettings.ConanExtensionEnabled) {
+                ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(invokedProject);
+            }
+            else {
+                ProjectConfigurationManager.ClearConanPrebuildEventsAllConfig(invokedProject);
+            }
         }
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
@@ -43,11 +48,18 @@ namespace conan_vs_extension
             System.Diagnostics.Debug.WriteLine(message);
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
             VCConfiguration config = ProjectConfigurationManager.GetVCConfig(invokedProject, ProjectConfig, Platform);
-            // FIXME: the problem with this is that the first time you build
-            // the build is started before this step finishes
-            // maybe we can inject the dependency to the project via a prebuild event? 
-            // with a script?
-            _ = ProjectConfigurationManager.InjectConanDepsAsync(invokedProject, config);
+            if (GlobalSettings.ConanExtensionEnabled)
+            {
+                // FIXME: the problem with this is that the first time you build
+                // the build is started before this step finishes
+                // maybe we can inject the dependency to the project via a prebuild event? 
+                // with a script?
+                _ = ProjectConfigurationManager.InjectConanDepsAsync(invokedProject, config);
+            }
+            else
+            {
+                _ = ProjectConfigurationManager.ExtractConanDepsAsync(invokedProject, config);
+            }
         }
 
         private void OnBuildDone(vsBuildScope Scope, vsBuildAction Action)

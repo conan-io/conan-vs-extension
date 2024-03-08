@@ -260,7 +260,7 @@ namespace conan_vs_extension
 
         private bool IsConanInitialized()
         {
-            bool initialized = GlobalSettings.ConanExecutablePath != null && GlobalSettings.ConanExecutablePath.Length > 0;
+            bool initialized = GlobalSettings.ConanExecutablePath.Length > 0 && GlobalSettings.ConanExtensionEnabled;
             return initialized;
         }
 
@@ -273,6 +273,14 @@ namespace conan_vs_extension
 
             PackagesListView.IsEnabled = enabled;
             LibraryHeader.IsEnabled = enabled;
+
+            if (!enabled)
+            {
+                LibrarySearchTextBox.Text = "Click 'configure' to enable or set Conan path -->";
+            } else
+            {
+                LibrarySearchTextBox.Text = "";
+            }
         }
 
 
@@ -280,7 +288,7 @@ namespace conan_vs_extension
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             ShowConfigurationDialog();
-            ToggleUIEnableState(true);
+            ToggleUIEnableState(IsConanInitialized());
 
         }
 
