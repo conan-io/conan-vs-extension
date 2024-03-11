@@ -200,7 +200,7 @@ namespace conan_vs_extension
 
                 InstallButton.Visibility = isInstalled ? Visibility.Collapsed : Visibility.Visible;
                 RemoveButton.Visibility = isInstalled ? Visibility.Visible : Visibility.Collapsed;
-
+                VersionsComboBox.IsEnabled = !isInstalled;
                 LibraryHeader.Visibility = Visibility.Visible;
             }
         }
@@ -228,7 +228,7 @@ namespace conan_vs_extension
                 ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
 
                 ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(startupProject);
-
+                VersionsComboBox.IsEnabled = false;
                 FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
             }
         }
@@ -252,7 +252,7 @@ namespace conan_vs_extension
             string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
             ConanFileManager.RemoveRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
-
+            VersionsComboBox.IsEnabled = true;
             FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 
