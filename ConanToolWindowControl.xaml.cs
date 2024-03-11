@@ -103,7 +103,7 @@ namespace conan_vs_extension
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            FilterListView(LibrarySearchTextBox.Text);
+            FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 
         private async Task LoadLibrariesFromJsonAsync()
@@ -124,7 +124,7 @@ namespace conan_vs_extension
             });
         }
 
-        private void FilterListView(string searchText)
+        private void FilterListView(string searchText, bool onlyInstalled)
         {
             if (_jsonData == null || _jsonData.Libraries == null) return;
 
@@ -133,11 +133,31 @@ namespace conan_vs_extension
             var filteredLibraries = _jsonData.Libraries
                 .Where(kv => kv.Key.Contains(searchText))
                 .ToList();
+            Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
 
-            foreach (var library in filteredLibraries)
+            if (onlyInstalled && startupProject != null && startupProject.Object is VCProject vcProject)
             {
-                PackagesListView.Items.Add(library.Key);
+                string projectFilePath = startupProject.FullName;
+                string projectDirectory = Path.GetDirectoryName(projectFilePath);
+
+                var requirements = ConanFileManager.GetConandataRequirements(projectDirectory);
+                foreach (var requirement in requirements)
+                {
+                    string key = requirement.Split('/')[0];
+                    if (filteredLibraries.Any(library => library.Key == key))
+                    {
+                        PackagesListView.Items.Add(key);
+                    }
+                }
             }
+            else
+            {
+                foreach (var library in filteredLibraries)
+                {
+                    PackagesListView.Items.Add(library.Key);
+                }
+            }
+
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -208,6 +228,8 @@ namespace conan_vs_extension
                 ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
 
                 ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(startupProject);
+
+                FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
             }
         }
 
@@ -230,6 +252,8 @@ namespace conan_vs_extension
             string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
             ConanFileManager.RemoveRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+
+            FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 
 
@@ -268,7 +292,7 @@ namespace conan_vs_extension
         {
             LibrarySearchTextBox.IsEnabled = enabled;
 
-            ShowPackagesButton.IsEnabled = enabled;
+            ShowPackagesCheckbox.IsEnabled = enabled;
             UpdateButton.IsEnabled = enabled;
 
             PackagesListView.IsEnabled = enabled;
@@ -284,15 +308,9 @@ namespace conan_vs_extension
 
         }
 
-        private void ShowPackages_Click(object sender, RoutedEventArgs e)
+        private void ShowPackagesCheckbox_Click(object sender, RoutedEventArgs e)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
-            string projectFilePath = startupProject.FullName;
-            string projectName = startupProject.Name;
-            string projectDirectory = Path.GetDirectoryName(projectFilePath);
-
-            MessageBox.Show(string.Join("\n", ConanFileManager.GetConandataRequirements(projectDirectory)), $"Installed packages for '{projectName}' - Conan C/C++ Package Manager");
+            FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 
         private async Task UpdateJsonDataAsync()
@@ -324,5 +342,4 @@ namespace conan_vs_extension
             _ = UpdateJsonDataAsync();
         }
     }
-
 }
