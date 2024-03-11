@@ -53,7 +53,7 @@ namespace conan_vs_extension
 
             if (!conandataFileExists(project))
             {
-                System.Diagnostics.Debug.WriteLine("conandata.yaml not found. Skipping Conan Deps.");
+                System.Diagnostics.Debug.WriteLine("conandata.yml not found. Skipping Conan Deps.");
                 return;
             }
 
