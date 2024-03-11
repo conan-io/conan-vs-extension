@@ -19,9 +19,13 @@ public class ConanOptionsPage : DialogPage
         get => _conanExecutablePath;
         set
         {
-            _useSystemConan = false;
             _conanExecutablePath = value;
             GlobalSettings.ConanExecutablePath = value;
+
+            if (value != "conan")
+            {
+                _useSystemConan = false;
+            }
         }
     }
 
@@ -32,13 +36,17 @@ public class ConanOptionsPage : DialogPage
         get => _useSystemConan;
         set
         {
-            if (_useSystemConan != value)
+            _useSystemConan = value;
+            if (_useSystemConan)
             {
-                _useSystemConan = value;
-                if (_useSystemConan)
-                {
-                    _conanExecutablePath = "";
-                }
+                _conanExecutablePath = "conan";
+                GlobalSettings.ConanExecutablePath = "conan";
+            }
+
+            if (!_useSystemConan && _conanExecutablePath == "conan")
+            {
+                _conanExecutablePath = "";
+                GlobalSettings.ConanExecutablePath = "";
             }
         }
     }
