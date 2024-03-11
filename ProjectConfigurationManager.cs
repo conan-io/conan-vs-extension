@@ -153,7 +153,7 @@ echo Arguments for conan install: !args!
 
             if (!conandataFileExists(project))
             {
-                System.Diagnostics.Debug.WriteLine("conandata.yaml not found. Skipping Conan PreBuildEvent.");
+                System.Diagnostics.Debug.WriteLine("conandata.yml not found. Skipping Conan PreBuildEvent.");
                 return;
             }
 
