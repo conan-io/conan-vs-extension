@@ -27,12 +27,10 @@
             <Button x:Name="ConfigureConanButton" ToolTip="Configure Conan" Click="Configuration_Click" BorderThickness="0" Background="{x:Null}">
                 <Image Source="./Resources/gear.png" Stretch="None"/>
             </Button>
-            <Button x:Name="ShowPackagesButton" ToolTip="Show installed packages" Click="ShowPackages_Click" BorderThickness="0" Background="{x:Null}">
-                <Image Source="./Resources/eye.png" Stretch="None"/>
-            </Button>
             <Button x:Name="UpdateButton" ToolTip="Refresh ConanCenter data" Click="Update_Click" BorderThickness="0" Background="{x:Null}">
                 <Image Source="./Resources/refresh.png" Stretch="None"/>
             </Button>
+            <CheckBox x:Name="ShowPackagesCheckbox" Click="ShowPackagesCheckbox_Click" Content="List only installed libraries" Height="15" />
         </StackPanel>
 
         <ListView x:Name="PackagesListView" SelectionChanged="ListView_SelectionChanged" Grid.Row="1" Grid.ColumnSpan="2" Margin="5">
