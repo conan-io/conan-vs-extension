@@ -20,6 +20,13 @@ namespace conan_vs_extension
         {
         }
 
+        static private bool conandataFileExists(Project project)
+        {
+            string projectDirectory = System.IO.Path.GetDirectoryName(project.FullName);
+            string path = Path.Combine(projectDirectory, "conandata.yml");
+            return File.Exists(path);
+        }
+
         public static async Task InjectConanDepsToAllConfigsAsync(Project project)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -43,6 +50,13 @@ namespace conan_vs_extension
         public static async Task InjectConanDepsAsync(Project project, VCConfiguration vcConfig)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            if (!conandataFileExists(project))
+            {
+                System.Diagnostics.Debug.WriteLine("conandata.yaml not found. Skipping Conan Deps.");
+                return;
+            }
+
             string propsFilePath = GetPropsFilePath(project);
             if (File.Exists(propsFilePath))
             {
@@ -136,6 +150,12 @@ echo Arguments for conan install: !args!
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             await GenerateConanInstallScriptAsync(project); // all the config share the same script
+
+            if (!conandataFileExists(project))
+            {
+                System.Diagnostics.Debug.WriteLine("conandata.yaml not found. Skipping Conan PreBuildEvent.");
+                return;
+            }
 
             VCProject vcProject = project.Object as VCProject;
             foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
