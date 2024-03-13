@@ -109,30 +109,27 @@ namespace conan_vs_extension
 setlocal enabledelayedexpansion
 
 REM Initialize flags
-set ""conandataChanged=0""
-set ""conanfileChanged=0""
 
 REM Check if the control files exist
 
-if not exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" set ""conandataChanged=1""
-if not exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" set ""conanfileChanged=1""
+set performInstall=0
 
+if not exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" set ""performInstall=1""
+if not exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" set ""performInstall=1""
 
 REM Check for changes in conandata.yml and conanfile.py
 
 if exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" (
-    fc conandata.yml .conan\CONANDATA_%CONAN_BUILD_CONFIG% > nul
-    set conandataChanged=%errorlevel%
+    echo Checking changes in conandata.yml
+    fc ""conandata.yml"" "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" > nul
+    if %errorlevel% equ 1 set performInstall=1
 )
 
 if exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" (
-    fc conanfile.py .conan\CONANFILE_%CONAN_BUILD_CONFIG% > nul
-    set conanfileChanged=%errorlevel%
+    echo Checking changes in conanfile.py
+    fc ""conanfile.py"" "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" > nul
+    if %errorlevel% equ 1 set performInstall=1
 )
-
-set performInstall=0
-if %conandataChanged% equ 1 set performInstall=1
-if %conanfileChanged% equ 1 set performInstall=1
 
 if %performInstall% equ 1 (
     REM Echo changes detected
