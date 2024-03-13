@@ -108,19 +108,60 @@ namespace conan_vs_extension
             string conanCommandContents = $@"@echo off
 setlocal enabledelayedexpansion
 
-set ""args=""
+REM Initialize flags
+set ""conandataChanged=0""
+set ""conanfileChanged=0""
 
-:args_loop
-if ""%~1""=="""" goto after_args_loop
-set ""args=!args! %1""
-shift
-goto args_loop
+REM Check if the control files exist
 
-:after_args_loop
-echo Arguments for conan install: !args!
+if not exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" set ""conandataChanged=1""
+if not exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" set ""conanfileChanged=1""
 
-""{conanPath}"" install !args!
-        ";
+
+REM Check for changes in conandata.yml and conanfile.py
+
+if exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" (
+    fc conandata.yml .conan\CONANDATA_%CONAN_BUILD_CONFIG% > nul
+    set conandataChanged=%errorlevel%
+)
+
+if exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" (
+    fc conanfile.py .conan\CONANFILE_%CONAN_BUILD_CONFIG% > nul
+    set conanfileChanged=%errorlevel%
+)
+
+set performInstall=0
+if %conandataChanged% equ 1 set performInstall=1
+if %conanfileChanged% equ 1 set performInstall=1
+
+if %performInstall% equ 1 (
+    REM Echo changes detected
+    echo Changes detected, executing conan install...
+    
+    set ""args=""
+
+    :args_loop
+    if ""%~1""=="""" goto after_args_loop
+    set ""args=!args! %1""
+    shift
+    goto args_loop
+
+    :after_args_loop
+    echo Arguments for conan install: !args!
+
+    ""{conanPath}"" install !args!
+
+    REM Update control files to reflect current state
+    copy /Y conandata.yml .conan\CONANDATA_%CONAN_BUILD_CONFIG%
+    copy /Y conanfile.py .conan\CONANFILE_%CONAN_BUILD_CONFIG%
+    goto finish
+)
+
+REM Echo no changes detected
+echo No changes detected, skipping conan install...
+
+:finish
+";
 
             Directory.CreateDirectory(conanScriptDirectory);
             File.WriteAllText(scriptPath, conanCommandContents);
@@ -137,7 +178,7 @@ echo Arguments for conan install: !args!
             if (preBuildTool != null)
             {
                 string conan_script_name = "conan_install.bat";
-                string commandLine = $"\"$(ProjectDir).conan\\{conan_script_name}\" . -pr:h=.conan/$(Configuration)_$(Platform) -pr:b=default --build=missing";
+                string commandLine = $"set CONAN_BUILD_CONFIG=\"$(Configuration)_$(Platform)\" && \"$(ProjectDir).conan\\{conan_script_name}\" . -pr:h=.conan/$(Configuration)_$(Platform) -pr:b=default --build=missing";
                 if (!preBuildTool.CommandLine.Contains(conan_script_name))
                 {
                     preBuildTool.CommandLine += Environment.NewLine + commandLine;
