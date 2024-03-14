@@ -151,13 +151,20 @@ if %performInstall% equ 1 (
     REM Update control files to reflect current state
     copy /Y conandata.yml .conan\CONANDATA_%CONAN_BUILD_CONFIG%
     copy /Y conanfile.py .conan\CONANFILE_%CONAN_BUILD_CONFIG%
-    goto finish
+
+    REM Display the message indicating Conan install finished
+    echo ****************************************************************
+    echo *                                                              *
+    echo *   Conan installation completed successfully.                 *
+    echo *   Please relaunch the build to apply the new changes.        *
+    echo *                                                              *
+    echo ****************************************************************
+    echo ERROR: Conan installation completed successfully. Please relaunch the build to apply the new changes.
+    exit /b 1
 )
 
 REM Echo no changes detected
 echo No changes detected, skipping conan install...
-
-:finish
 ";
 
             Directory.CreateDirectory(conanScriptDirectory);
