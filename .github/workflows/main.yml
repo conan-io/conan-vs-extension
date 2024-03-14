@@ -41,3 +41,57 @@ jobs:
           name: conan-vs-extension.vsix
           path: bin\Release\conan-vs-extension.vsix
           if-no-files-found: error
+
+  releaseDraft:
+    name: Release draft
+    if: github.event_name != 'pull_request' && github.ref_name == 'develop2'
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download extension artifact from latest workflow build
+        uses: actions/download-artifact@v4
+        with:
+          name: conan-vs-extension.vsix
+          token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ needs.build.run_id }}
+
+      - name: Remove old release drafts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/{owner}/{repo}/releases \
+            --jq '.[] | select(.draft == true) | .id' \
+            | xargs -I '{}' gh api -X DELETE repos/{owner}/{repo}/releases/{}
+
+      - name: Get release version
+        id: version
+        run:  |
+          VERSION=$(grep -oP '(?<=<Identity Id="[^"]+" Version=")[^"]+' source.extension.vsixmanifest | sed -n 1p)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create new release draft
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          draft: true
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
+
+      - name: Upload extension artifact to new release draft
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: conan-vs-extension.vsix
+          asset_name: conan-vs-extension.vsix
