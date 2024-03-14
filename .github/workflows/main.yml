@@ -84,7 +84,7 @@ jobs:
         with:
           draft: true
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
+          release_name: v${{ steps.version.outputs.version }}
           tag_name: v${{ steps.version.outputs.version }}
 
       - name: Upload extension artifact to new release draft
