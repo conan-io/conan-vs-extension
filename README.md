@@ -5,12 +5,14 @@
 Conan, the C and C++ package manager, is now directly integrated into your IDE. List
 available libraries, install, and use them without leaving Visual Studio.
 
-## Using the Extension
+- 🔧 **Compatibility:** Designed exclusively for Conan 2.0 and above.
+- 🆕 **Completely revamped:** This is a fresh start with no ties to previous versions.
+- ❌ **End of support for older versions:** Previous extensions are no longer supported.
+- 💻 **Platforms supported:** It is developed for Visual Studio 2022 and beyond.
+- ⏫ **Looking Ahead:** We're committed to supporting Conan 2.0 and future versions.
+- 📢 **Early stage release:** Your feedback is crucial as we continue to improve 🚀 
 
-> **Note**
-> 
-> For a detailed explanation of how to use the extension, please visit [our documentation
-> page](https://docs.conan.io/2/integrations/visual_studio.html).
+## Using the Extension
 
 After installing the Conan extension, you can access it from the “Conan” tool window in
 Visual Studio. To do so, go to **View > Other Windows > Conan C/C++ Package Manager**.
@@ -43,8 +45,7 @@ Conan packages. It will also add a prebuild event to the project to install thos
 libraries on the next compilation of the project.
 
 At any point, you can also use the refresh button (🔄) to update the list of available
-packages in [Conan Center](https://conan.io/center) and the view (👁️) button to check the
-requirements that have been added to the project.
+packages in [Conan Center](https://conan.io/center).
 
 Now, if you initiate the build process for your project, the pre-build event will trigger
 Conan to install the packages and inject the necessary properties into the project,
