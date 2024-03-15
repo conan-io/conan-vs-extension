@@ -38,7 +38,12 @@
         <ListView x:Name="PackagesListView" SelectionChanged="ListView_SelectionChanged" Grid.Row="2" Grid.ColumnSpan="2" Margin="5" ></ListView>
 
         <StackPanel x:Name="LibraryHeader" Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
-            <Label x:Name="LibraryNameLabel" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Content="Library Name"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <Label x:Name="LibraryNameLabel" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Content="Library Name"/>
+                <ComboBox x:Name="VersionsComboBox" Width="Auto" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <Button x:Name="InstallButton" Content="Add requirement" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="RemoveButton" Content="Remove" Margin="5,0" Click="RemoveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
             <TextBlock x:Name="DescriptionTextBlock" FontSize="14" Margin="5" TextWrapping="Wrap" Text="This is a library that makes one two three..."/>
             <TextBlock x:Name="LicenseTextBlock" Margin="5,0,5,5" FontSize="12">
                 <TextBlock.Inlines>
@@ -46,11 +51,6 @@
                     <Run x:Name="LicenseText" Text="With license GPL"/>
                 </TextBlock.Inlines>
             </TextBlock>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <ComboBox x:Name="VersionsComboBox" Width="150" Margin="5,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <Button x:Name="InstallButton" Content="Add requirement" Margin="5,0" Click="InstallButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button x:Name="RemoveButton" Content="Remove" Margin="5,0" Click="RemoveButton_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            </StackPanel>
             <TextBlock Margin="5,0,5,10">
                 <Hyperlink x:Name="MoreInfoHyperlink" RequestNavigate="Hyperlink_RequestNavigate">
                     Check conan.io/center for more info
