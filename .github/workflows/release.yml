@@ -7,8 +7,8 @@ on:
 
 jobs:
   release:
+    runs-on: windows-latest
     name: Publish the extension to Visual Studio Marketplace
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4
