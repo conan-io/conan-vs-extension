@@ -1,4 +1,4 @@
-# Conan Visual Studio Extension
+# Conan Visual Studio Extension for Conan 2
 
 ![Build](https://github.com/conan-io/conan-vs-extension/actions/workflows/main.yml/badge.svg?branch=develop2)
 
