@@ -284,7 +284,7 @@ namespace conan_vs_extension
 
         private bool IsConanInitialized()
         {
-            return GlobalSettings.ConanExecutablePath.Length > 0;
+            return !string.IsNullOrEmpty(GlobalSettings.ConanExecutablePath);
         }
 
         private void ToggleUIEnableState(bool enabled)
