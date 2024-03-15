@@ -14,7 +14,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
       - name: Donwload extension from latest release assets
         uses: robinraju/release-downloader@v1.9
         with: 
@@ -23,10 +22,9 @@ jobs:
           out-file-path: conan-vs-extension.vsix
           extract: false
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish release to marketplace
-        uses: mrluje/vs-marketplace-publisher@v2
+      - name: Visual Studio Marketplace Publisher
+        uses: CalvinAllen/action-vs-marketplace-publish@v1
         with:
-          pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
-          manifestPath: vsixManifest.json
-          vsixPath: conan-vs-extension.vsix
+          marketplace-pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
+          publish-manifest-path: vsixManifest.json
+          vsix-path: conan-vs-extension.vsix
