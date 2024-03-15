@@ -1,6 +1,6 @@
 {
     "$schema": "http://json.schemastore.org/vsix-publish",
-    "categories": [ "conan", "c++", "c" ],
+    "categories": [ "build", "coding", "visual studio extensions" ],
     "identity": {
         "internalName": "conan-vs-extension"
     },
