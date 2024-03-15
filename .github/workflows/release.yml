@@ -19,7 +19,7 @@ jobs:
         with: 
           latest: true
           fileName: conan-vs-extension.vsix
-          out-file-path: conan-vs-extension.vsix
+          out-file-path: output
           extract: false
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Visual Studio Marketplace Publisher
@@ -27,4 +27,4 @@ jobs:
         with:
           marketplace-pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
           publish-manifest-path: vsixManifest.json
-          vsix-path: conan-vs-extension.vsix
+          vsix-path: output/conan-vs-extension.vsix
