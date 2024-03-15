@@ -6,7 +6,7 @@
     },
     "overview": "README.md",
     "priceCategory": "free",
-    "publisher": "Conan",
+    "publisher": "conan-io",
     "private": false,
     "qna": false,
     "repo": "https://github.com/conan-io/conan-vs-extension"
