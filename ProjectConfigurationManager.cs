@@ -148,6 +148,11 @@ if %performInstall% equ 1 (
 
     ""{conanPath}"" install !args!
 
+    if !errorlevel! neq 0 (
+        echo ERROR: Conan installation failed. Please check the console output to troubleshoot issues.
+        exit /b 1
+    )
+
     REM Update control files to reflect current state
     copy /Y conandata.yml .conan\CONANDATA_%CONAN_BUILD_CONFIG%
     copy /Y conanfile.py .conan\CONANFILE_%CONAN_BUILD_CONFIG%
