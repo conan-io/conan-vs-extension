@@ -22,6 +22,7 @@ namespace conan_vs_extension
 
         static private bool conandataFileExists(Project project)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             string projectDirectory = System.IO.Path.GetDirectoryName(project.FullName);
             string path = Path.Combine(projectDirectory, "conandata.yml");
             return File.Exists(path);

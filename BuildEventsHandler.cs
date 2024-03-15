@@ -25,6 +25,7 @@ namespace conan_vs_extension
 
         private void OnBuildProjConfigBegin(string Project, string ProjectConfig, string Platform, string SolutionConfig)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             // here we generate profiles for all projects but we probably should only generate profiles for 
             // the project marked as startup project
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
@@ -38,7 +39,7 @@ namespace conan_vs_extension
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            //ThreadHelper.ThrowIfNotOnUIThread();
+            ThreadHelper.ThrowIfNotOnUIThread();
             var message = "OnBuildProjConfigDone";
             System.Diagnostics.Debug.WriteLine(message);
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
