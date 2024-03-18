@@ -197,7 +197,7 @@ echo No changes detected, skipping conan install...
             }
         }
 
-        public static async void SaveConanPrebuildEventsAllConfig(Project project)
+        public static async Task SaveConanPrebuildEventsAllConfigAsync(Project project)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             await GenerateConanInstallScriptAsync(project); // all the config share the same script

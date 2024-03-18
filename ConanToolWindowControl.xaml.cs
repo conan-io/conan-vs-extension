@@ -232,7 +232,7 @@ namespace conan_vs_extension
                 ConanFileManager.WriteNecessaryConanGuardedFiles(projectDirectory);
                 ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
 
-                ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(startupProject);
+                _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(startupProject);
                 VersionsComboBox.IsEnabled = false;
                 FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
             }

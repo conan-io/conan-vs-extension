@@ -34,7 +34,7 @@ namespace conan_vs_extension
             // We always overrwrite the script for the prebuild event
             // the ps1 is always overwritten but the event is only added if no conan_install.ps1 is found
             // in the prebuild events
-            ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(invokedProject);
+            _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(invokedProject);
         }
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
