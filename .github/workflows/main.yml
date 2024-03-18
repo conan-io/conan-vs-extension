@@ -73,7 +73,7 @@ jobs:
       - name: Get release version
         id: version
         run: |
-          VERSION=$(sed -n 's/.*Version="\([^"]*\)".*/\1/p' source.extension.vsixmanifest | head -n 1)
+          VERSION=$(sed -n 's/.*<Identity Id="[^"]*" Version="\([^"]*\)".*/\1/p' source.extension.vsixmanifest | head -n 1)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Create new release draft
