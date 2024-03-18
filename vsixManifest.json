@@ -5,6 +5,24 @@
         "internalName": "conan-vs-extension"
     },
     "overview": "README.md",
+    "assetFiles": [
+        {
+            "pathOnDisk": ".github/readme/build-project.png",
+            "targetPath": ".github/readme/build-project.png"
+        },
+        {
+            "pathOnDisk": ".github/readme/search-packages.png",
+            "targetPath": ".github/readme/search-packages.png"
+        },
+        {
+            "pathOnDisk": ".github/readme/select-conan-executable.png",
+            "targetPath": ".github/readme/select-conan-executable.png"
+        },
+        {
+            "pathOnDisk": ".github/readme/tool-window-extension.png",
+            "targetPath": ".github/readme/tool-window-extension.png"
+        }
+    ],
     "priceCategory": "free",
     "publisher": "conan-io",
     "private": false,
