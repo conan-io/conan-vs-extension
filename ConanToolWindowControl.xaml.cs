@@ -103,6 +103,7 @@ namespace conan_vs_extension
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 
@@ -114,8 +115,9 @@ namespace conan_vs_extension
             string json = await Task.Run(() => File.ReadAllText(jsonFilePath));
             _jsonData = JsonConvert.DeserializeObject<RootObject>(json);
 
-            Dispatcher.Invoke(() =>
-            {
+            await ThreadHelper.JoinableTaskFactory.RunAsync(async delegate {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
                 PackagesListView.Items.Clear();
                 foreach (var library in _jsonData.Libraries.Keys)
                 {
@@ -126,6 +128,8 @@ namespace conan_vs_extension
 
         private void FilterListView(string searchText, bool onlyInstalled)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             if (_jsonData == null || _jsonData.Libraries == null) return;
 
             PackagesListView.Items.Clear();
@@ -162,6 +166,7 @@ namespace conan_vs_extension
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (PackagesListView.SelectedItem is string selectedItem)
             {
                 UpdateLibraryInfo(selectedItem);
@@ -227,7 +232,7 @@ namespace conan_vs_extension
                 ConanFileManager.WriteNecessaryConanGuardedFiles(projectDirectory);
                 ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
 
-                ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(startupProject);
+                _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(startupProject);
                 VersionsComboBox.IsEnabled = false;
                 FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
             }
@@ -317,6 +322,7 @@ namespace conan_vs_extension
 
         private void ShowPackagesCheckbox_Click(object sender, RoutedEventArgs e)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 

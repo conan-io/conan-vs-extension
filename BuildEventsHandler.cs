@@ -25,6 +25,7 @@ namespace conan_vs_extension
 
         private void OnBuildProjConfigBegin(string Project, string ProjectConfig, string Platform, string SolutionConfig)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             // here we generate profiles for all projects but we probably should only generate profiles for 
             // the project marked as startup project
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
@@ -33,12 +34,12 @@ namespace conan_vs_extension
             // We always overrwrite the script for the prebuild event
             // the ps1 is always overwritten but the event is only added if no conan_install.ps1 is found
             // in the prebuild events
-            ProjectConfigurationManager.SaveConanPrebuildEventsAllConfig(invokedProject);
+            _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(invokedProject);
         }
 
         private void OnBuildProjConfigDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            //ThreadHelper.ThrowIfNotOnUIThread();
+            ThreadHelper.ThrowIfNotOnUIThread();
             var message = "OnBuildProjConfigDone";
             System.Diagnostics.Debug.WriteLine(message);
             Project invokedProject = ProjectConfigurationManager.GetProjectByName(_dte, Project);
