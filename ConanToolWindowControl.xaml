@@ -36,7 +36,13 @@
         <CheckBox x:Name="ShowPackagesCheckbox" Click="ShowPackagesCheckbox_Click" Content="List only installed libraries" Grid.Row="1" Grid.ColumnSpan="2" Margin="5" />
 
         <ListView x:Name="PackagesListView" SelectionChanged="ListView_SelectionChanged" Grid.Row="2" Grid.ColumnSpan="2" Margin="5" ></ListView>
-        <TextBlock x:Name="UnsupportedProjectTypeText" Visibility="Visible" Grid.Row="3" Grid.ColumnSpan="2" FontSize="18" >Unsupported Project Type</TextBlock>
+        <StackPanel x:Name="UnsupportedProjectType" Visibility="Collapsed" Grid.Row="3" Grid.ColumnSpan="2">
+            <TextBlock Visibility="Visible" FontSize="18" FontWeight="Bold">Unsupported Project Type</TextBlock>
+            <TextBlock>
+                You're using an unsupported project type, or no project has yet been loaded.
+                The Conan VS Extension only considers msbuild projects.
+            </TextBlock>
+        </StackPanel>
         <StackPanel x:Name="LibraryHeader" Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <Label x:Name="LibraryNameLabel" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Content="Library Name"/>
