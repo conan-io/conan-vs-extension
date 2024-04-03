@@ -207,6 +207,12 @@ namespace conan_vs_extension
                 RemoveButton.Visibility = isInstalled ? Visibility.Visible : Visibility.Collapsed;
                 VersionsComboBox.IsEnabled = !isInstalled;
                 LibraryHeader.Visibility = Visibility.Visible;
+                UnsupportedProjectTypeText.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                LibraryHeader.Visibility = Visibility.Collapsed;
+                UnsupportedProjectTypeText.Visibility = Visibility.Visible;
             }
         }
 
