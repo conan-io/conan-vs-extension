@@ -40,7 +40,7 @@
             <TextBlock Margin="5,0,5,5" Visibility="Visible" FontSize="18" FontWeight="Bold">Unsupported Project Type</TextBlock>
             <TextBlock Margin="5,0,5,5" TextWrapping="Wrap">
                 You're using an unsupported project type, or no project has yet been loaded.
-                The Conan VS Extension only considers msbuild projects.
+                The Conan VS Extension only supports projects based on msbuild.
             </TextBlock>
         </StackPanel>
         <StackPanel x:Name="LibraryHeader" Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Margin="5">
