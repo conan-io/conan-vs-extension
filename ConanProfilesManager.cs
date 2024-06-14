@@ -97,6 +97,7 @@ namespace conan_vs_extension
                                 IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
                                 string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
                                 string cppStd = getConanCppstd(languageStandard);
+                                string runtime = vcConfig.Evaluate("$(RuntimeLibrary)").ToString().Contains("DLL") ? "dynamic" : "static";
                                 string buildType = vcConfig.ConfigurationName;
                                 string profileContent = 
 $@"
@@ -105,7 +106,7 @@ arch={arch}
 build_type={buildType}
 compiler=msvc
 compiler.cppstd={cppStd}
-compiler.runtime=dynamic
+compiler.runtime={runtime}
 " +
 $@"
 compiler.runtime_type={buildType}
