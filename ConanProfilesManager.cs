@@ -40,6 +40,22 @@ namespace conan_vs_extension
             return msvcVersionMap[platformToolset];
         }
 
+        private string GetRuntimeLibraryType(runtimeLibraryOption runtimeLibraryValue)
+        {
+            switch (runtimeLibraryValue)
+            {
+                case runtimeLibraryOption.rtMultiThreaded:
+                case runtimeLibraryOption.rtMultiThreadedDebug:
+                    return "static";
+                case runtimeLibraryOption.rtMultiThreadedDLL:
+                case runtimeLibraryOption.rtMultiThreadedDebugDLL:
+                    return "dynamic";
+                default:
+                    return "dynamic";
+            }
+        }
+
+
         private string getConanCppstd(string languageStandard)
         {
             // https://learn.microsoft.com/en-us/cpp/build/reference/std-specify-language-standard-version?view=msvc-170
@@ -97,7 +113,12 @@ namespace conan_vs_extension
                                 IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
                                 string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
                                 string cppStd = getConanCppstd(languageStandard);
-                                string runtime = vcConfig.Evaluate("$(RuntimeLibrary)").ToString().Contains("DLL") ? "dynamic" : "static";
+
+                                var tools = (IVCCollection) vcConfig.Tools;
+                                var vcCTool = (VCCLCompilerTool) tools.Item("VCCLCompilerTool");
+
+                                string runtime = GetRuntimeLibraryType(vcCTool.RuntimeLibrary);
+
                                 string buildType = vcConfig.ConfigurationName;
                                 string profileContent = 
 $@"
