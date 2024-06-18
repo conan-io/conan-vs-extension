@@ -9,6 +9,15 @@
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="800"
              Name="ConanToolWindow">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/conan-vs-extension;component/Resources/icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,10 +35,10 @@
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5">
             <Button x:Name="ConfigureConanButton" ToolTip="Configure Conan" Click="Configuration_Click" BorderThickness="0" Background="{x:Null}">
-                <Image Source="./Resources/gear.png" Stretch="None"/>
+                <Image Source="{StaticResource ic_fluent_settings_24_regularDrawingImage}" Stretch="None"/>
             </Button>
             <Button x:Name="UpdateButton" ToolTip="Refresh ConanCenter data" Click="Update_Click" BorderThickness="0" Background="{x:Null}">
-                <Image Source="./Resources/refresh.png" Stretch="None"/>
+                <Image Source="{StaticResource ic_fluent_arrow_sync_24_regularDrawingImage}" Stretch="None"/>
             </Button>
         </StackPanel>
 
@@ -68,7 +77,5 @@
                 </Hyperlink>
             </TextBlock>
         </StackPanel>
-
-
     </Grid>
 </UserControl>
