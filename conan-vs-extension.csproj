@@ -105,7 +105,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="Resources\eye.png" />
     <Resource Include="Resources\gear.png" />
     <Resource Include="Resources\refresh.png" />
   </ItemGroup>
