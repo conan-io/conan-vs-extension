@@ -1,13 +1,18 @@
 ﻿using EnvDTE;
-using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Win32;
 using System;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
-using System.Windows.Media;
 
 namespace conan_vs_extension
 {
@@ -80,29 +85,6 @@ namespace conan_vs_extension
             }
             _event_handler = new BuildEventsHandler(_dte);
 
-            // Subscribe to theme change events
-            VSColorTheme.ThemeChanged += OnThemeChanged;
-
-            // Update the theme initially
-            UpdateTheme();
-        }
-
-        private void OnThemeChanged(ThemeChangedEventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void UpdateTheme()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            var currentThemeColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextColorKey);
-            var currentColor = Color.FromRgb(currentThemeColor.R, currentThemeColor.G, currentThemeColor.B);
-
-            // Get the tool window and update its foreground color
-            var window = FindToolWindow(typeof(ConanToolWindow), 0, true) as ConanToolWindow;
-            var control = window?.Content as ConanToolWindowControl;
-            control?.UpdateForeground(currentColor);
         }
 
         #endregion

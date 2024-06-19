@@ -105,9 +105,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Page Include="Resources\icons.xaml">
-        <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Resource Include="Resources\eye.png" />
+    <Resource Include="Resources\gear.png" />
+    <Resource Include="Resources\refresh.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">

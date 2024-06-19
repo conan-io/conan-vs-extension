@@ -132,14 +132,6 @@ if exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" (
     if %errorlevel% equ 1 set performInstall=1
 )
 
-REM Check for the .runconan file that indicates changes in profiles
-
-if exist "".conan\.runconan"" (
-    echo Changes in profiles detected
-    set performInstall=1
-    del "".conan\.runconan""
-)
-
 if %performInstall% equ 1 (
     REM Echo changes detected
     echo Changes detected, executing conan install...

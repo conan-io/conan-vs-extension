@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,6 @@ using System.Reflection;
 using EnvDTE;
 using Microsoft.VisualStudio.Threading;
 using System.Windows.Navigation;
-using System.Windows.Media;
 
 namespace conan_vs_extension
 {
@@ -60,14 +60,6 @@ namespace conan_vs_extension
 
             ToggleUIEnableState(IsConanInitialized());
             _ = InitializeAsync();
-        }
-
-        public void UpdateForeground(Color color)
-        {
-            var brush = new SolidColorBrush(color);
-            this.Foreground = brush;
-            ShowPackagesCheckbox.Foreground = brush;
-            LibraryNameLabel.Foreground = brush;
         }
 
         private async Task InitializeAsync()
