@@ -79,30 +79,6 @@ namespace conan_vs_extension
                 throw new InvalidOperationException("Cannot access DTE service.");
             }
             _event_handler = new BuildEventsHandler(_dte);
-
-            // Subscribe to theme change events
-            VSColorTheme.ThemeChanged += OnThemeChanged;
-
-            // Update the theme initially
-            UpdateTheme();
-        }
-
-        private void OnThemeChanged(ThemeChangedEventArgs e)
-        {
-            UpdateTheme();
-        }
-
-        private void UpdateTheme()
-        {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            var currentThemeColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextColorKey);
-            var currentColor = Color.FromRgb(currentThemeColor.R, currentThemeColor.G, currentThemeColor.B);
-
-            // Get the tool window and update its foreground color
-            var window = FindToolWindow(typeof(ConanToolWindow), 0, true) as ConanToolWindow;
-            var control = window?.Content as ConanToolWindowControl;
-            control?.UpdateForeground(currentColor);
         }
 
         #endregion
