@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Windows.Media;
-using System.Windows;
 
 namespace conan_vs_extension
 {
@@ -85,17 +84,18 @@ namespace conan_vs_extension
             VSColorTheme.ThemeChanged += OnThemeChanged;
 
             // Update the theme initially
-            await Task.Run(() => UpdateThemeAsync());
+            UpdateTheme();
         }
 
         private void OnThemeChanged(ThemeChangedEventArgs e)
         {
-            _ = ThreadHelper.JoinableTaskFactory.RunAsync(UpdateThemeAsync);
+            UpdateTheme();
         }
 
-        private async Task UpdateThemeAsync()
+        private void UpdateTheme()
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             var currentThemeColor = VSColorTheme.GetThemedColor(EnvironmentColors.ToolWindowTextColorKey);
             var currentColor = Color.FromRgb(currentThemeColor.R, currentThemeColor.G, currentThemeColor.B);
 
