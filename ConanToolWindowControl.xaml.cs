@@ -380,7 +380,7 @@ namespace conan_vs_extension
 
                     File.WriteAllText(jsonFilePath, jsonContent);
 
-                    MessageBox.Show("ConanCenter libraries data file updated.", "Conan C/C++ Package Manager", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("ConanCenter libraries data file updated. Please restart Visual Studio for the changes to take effect.", "Conan C/C++ Package Manager", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
