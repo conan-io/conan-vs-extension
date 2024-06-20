@@ -1,5 +1,5 @@
 {
-    "date": 1707869735,
+    "date": 1718842623,
     "libraries": {
         "7bitconf": {
             "cmake_file_name": "7bitConf",
@@ -10,6 +10,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.0",
                 "1.1.0",
                 "1.0.0"
             ]
@@ -17,12 +18,16 @@
         "7bitdi": {
             "cmake_file_name": "7bitDI",
             "cmake_target_name": "7bitDI::7bitDI",
-            "description": "7bitDI is a simple C++ dependency injection library.",
+            "description": "a simple C++ dependency injection library.",
             "license": [
                 "MIT"
             ],
             "v2": true,
             "versions": [
+                "3.3.0",
+                "3.2.0",
+                "3.1.0",
+                "3.0.0",
                 "2.1.0",
                 "2.0.0",
                 "1.0.0"
@@ -71,13 +76,11 @@
             ],
             "v2": true,
             "versions": [
+                "20240116.2",
+                "20240116.1",
                 "20230802.1",
                 "20230125.3",
-                "20230125.2",
-                "20230125.1",
-                "20230125.0",
                 "20220623.1",
-                "20220623.0",
                 "20211102.0"
             ]
         },
@@ -152,6 +155,9 @@
             ],
             "v2": true,
             "versions": [
+                "2.8.0",
+                "2.7.8",
+                "2.7.7",
                 "2.7.5",
                 "2.7.4",
                 "2.7.3",
@@ -309,6 +315,8 @@
             ],
             "v2": true,
             "versions": [
+                "r26d",
+                "r26c",
                 "r26b",
                 "r26",
                 "r25c",
@@ -339,6 +347,28 @@
                 "2.36.0",
                 "2.35.1",
                 "2.35.0"
+            ]
+        },
+        "annoy": {
+            "cmake_file_name": "Annoy",
+            "cmake_target_name": "Annoy::Annoy",
+            "description": "Approximate Nearest Neighbors optimized for memory usage and loading/saving to disk",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.17.3"
+            ]
+        },
+        "antlr4": {
+            "description": "powerful parser generator for reading, processing, executing, or translating structured text or binary files.",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "4.13.1"
             ]
         },
         "antlr4-cppruntime": {
@@ -396,6 +426,7 @@
             ],
             "v2": true,
             "versions": [
+                "10.13.0",
                 "10.12.2",
                 "10.12.1",
                 "10.12.0",
@@ -559,6 +590,7 @@
             ],
             "v2": true,
             "versions": [
+                "6.3.4",
                 "6.3.3",
                 "6.3.2",
                 "6.3.1",
@@ -596,6 +628,8 @@
             ]
         },
         "armadillo": {
+            "cmake_file_name": "Armadillo",
+            "cmake_target_name": "Armadillo::Armadillo",
             "description": "Armadillo is a high quality C++ library for linear algebra and scientific computing, aiming towards a good balance between speed and ease of use.",
             "license": [
                 "Apache-2.0"
@@ -620,6 +654,8 @@
             ],
             "v2": true,
             "versions": [
+                "16.1.0",
+                "16.0.0",
                 "15.0.0",
                 "14.0.2",
                 "14.0.1",
@@ -632,9 +668,7 @@
                 "10.0.0",
                 "8.0.1",
                 "8.0.0",
-                "7.0.0",
-                "2.0.0",
-                "1.0.0"
+                "7.0.0"
             ]
         },
         "arsenalgear": {
@@ -680,6 +714,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.30.2",
+                "1.30.1",
                 "1.29.0",
                 "1.28.2",
                 "1.28.1",
@@ -737,6 +773,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240531",
                 "cci.20230325",
                 "cci.20221111",
                 "cci.20220210",
@@ -762,11 +799,10 @@
             ],
             "v2": true,
             "versions": [
-                "5.2.2",
-                "5.1.6",
-                "5.1.0",
-                "5.0.1",
-                "5.0.0"
+                "5.4.1",
+                "5.3.1",
+                "5.2.5",
+                "5.1.6"
             ]
         },
         "astc-codec": {
@@ -786,18 +822,20 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.6",
                 "1.3.4"
             ]
         },
         "async_simple": {
             "cmake_file_name": "async_simple",
-            "cmake_target_name": "async_simple::async_simple",
             "description": "Simple, light-weight and easy-to-use asynchronous components",
             "license": [
                 "Apache-2.0"
             ],
             "v2": true,
             "versions": [
+                "1.3",
+                "1.2",
                 "1.0.0"
             ]
         },
@@ -823,6 +861,16 @@
             "v2": true,
             "versions": [
                 "1.1"
+            ]
+        },
+        "asyncpp": {
+            "description": "A C++20 coroutine library for asynchronous and parallel programming.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.2.4"
             ]
         },
         "at-spi2-atk": {
@@ -944,8 +992,9 @@
             ],
             "v2": true,
             "versions": [
-                "2.1.0",
-                "cci.20220301"
+                "2.3.2",
+                "2.3.0",
+                "2.1.0"
             ]
         },
         "avir": {
@@ -1056,6 +1105,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.8.1",
                 "0.7.14",
                 "0.6.22",
                 "0.6.13",
@@ -1107,6 +1157,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.4.5",
+                "0.3.24",
                 "0.1.49",
                 "0.1.37",
                 "0.1.29",
@@ -1164,7 +1216,7 @@
             ],
             "v2": true,
             "versions": [
-                "0.18.8",
+                "0.24.1",
                 "0.17.23",
                 "0.17.12",
                 "0.14.3"
@@ -1183,6 +1235,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.0",
                 "1.0.1",
                 "cci.20210812"
             ]
@@ -1251,7 +1304,10 @@
                 "4.9.6",
                 "4.10.0",
                 "4.10.1",
-                "5.0.0"
+                "5.0.0",
+                "5.1.0",
+                "5.2.0",
+                "5.2.1"
             ]
         },
         "b64": {
@@ -1338,6 +1394,16 @@
                 "0.4.0"
             ]
         },
+        "basu": {
+            "description": "The sd-bus library, extracted from systemd",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "v2": true,
+            "versions": [
+                "0.2.1"
+            ]
+        },
         "bazel": {
             "description": "Bazel is a fast, scalable, multi-language and extensible build system.",
             "license": [
@@ -1396,15 +1462,25 @@
             ]
         },
         "behaviortree.cpp": {
+            "cmake_file_name": "BehaviorTree",
+            "cmake_target_name": "BT::behaviortree_cpp",
+            "components": {
+                "behaviortree_cpp": {
+                    "cmake_target_name": "BT::behaviortree_cpp"
+                }
+            },
             "description": "This C++ library provides a framework to create BehaviorTrees",
             "license": [
                 "MIT"
             ],
             "v2": true,
             "versions": [
+                "4.6.1",
+                "4.6.0",
+                "4.5.2",
                 "4.0.1",
-                "3.7.0",
-                "3.5.6"
+                "3.8.6",
+                "3.7.0"
             ]
         },
         "benchmark": {
@@ -1421,6 +1497,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.4",
                 "1.8.3",
                 "1.8.2",
                 "1.8.1",
@@ -1500,10 +1577,8 @@
             ],
             "v2": true,
             "versions": [
-                "2.41",
-                "2.40",
-                "2.38",
-                "2.37"
+                "2.42",
+                "2.41"
             ]
         },
         "bison": {
@@ -1573,12 +1648,13 @@
                     "cmake_target_name": "BitSerializer::core"
                 }
             },
-            "description": "C++ 17 library for serialization to multiple output formats (JSON, XML, YAML, CSV)",
+            "description": "C++ 17 library for serialization to multiple output formats (JSON, XML, YAML, CSV, MsgPack)",
             "license": [
                 "MIT"
             ],
             "v2": true,
             "versions": [
+                "0.70",
                 "0.65",
                 "0.50",
                 "0.44",
@@ -1600,10 +1676,7 @@
             "v2": true,
             "versions": [
                 "5.2.3",
-                "5.2.2",
-                "5.2.1",
-                "5.2.0",
-                "5.1.0"
+                "5.2.2"
             ]
         },
         "blaze": {
@@ -1629,14 +1702,13 @@
             ],
             "v2": true,
             "versions": [
+                "0.11.1",
                 "0.10.6",
                 "0.10.5",
                 "0.10.4",
                 "0.10",
                 "0.9",
-                "0.8",
-                "0.0.18",
-                "0.0.17"
+                "0.8"
             ]
         },
         "bliss": {
@@ -1648,6 +1720,18 @@
             "v2": true,
             "versions": [
                 "0.77"
+            ]
+        },
+        "bmx": {
+            "cmake_file_name": "bmx",
+            "description": "Library for handling broadcast/production oriented media file formats. Allows reading, modifying and writing media metadata and file essences.",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "1.2",
+                "cci.20240517"
             ]
         },
         "boolean-lite": {
@@ -1685,6 +1769,9 @@
             "components": {
                 "atomic": {
                     "cmake_target_name": "Boost::atomic"
+                },
+                "charconv": {
+                    "cmake_target_name": "Boost::charconv"
                 },
                 "chrono": {
                     "cmake_target_name": "Boost::chrono"
@@ -1797,6 +1884,9 @@
                 "stacktrace_basic": {
                     "cmake_target_name": "Boost::stacktrace_basic"
                 },
+                "stacktrace_from_exception": {
+                    "cmake_target_name": "Boost::stacktrace_from_exception"
+                },
                 "stacktrace_noop": {
                     "cmake_target_name": "Boost::stacktrace_noop"
                 },
@@ -1837,6 +1927,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.85.0",
                 "1.84.0",
                 "1.83.0",
                 "1.82.0",
@@ -1892,27 +1983,24 @@
             ]
         },
         "botan": {
-            "description": "Botan is a cryptography library written in C++11.",
+            "description": "Botan is a cryptography library written in modern C++.",
             "license": [
                 "BSD-2-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "2.12.1",
-                "2.13.0",
-                "2.14.0",
-                "2.15.0",
-                "2.16.0",
-                "2.17.0",
-                "2.17.1",
-                "2.17.2",
                 "2.17.3",
-                "2.18.0",
-                "2.18.1",
                 "2.18.2",
                 "2.19.1",
                 "2.19.2",
-                "2.19.3"
+                "2.19.3",
+                "2.19.4",
+                "3.0.0",
+                "3.1.0",
+                "3.1.1",
+                "3.2.0",
+                "3.3.0",
+                "3.4.0"
             ]
         },
         "box2d": {
@@ -1939,6 +2027,16 @@
             "v2": true,
             "versions": [
                 "cci.20210521"
+            ]
+        },
+        "bredis": {
+            "description": "Boost::ASIO low-level redis client (connector)",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.12"
             ]
         },
         "brigand": {
@@ -1999,6 +2097,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.1.0",
                 "4.0.1",
                 "3.5.0",
                 "3.4.0",
@@ -2056,6 +2155,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.0",
                 "1.0.0"
             ]
         },
@@ -2133,6 +2233,9 @@
             ],
             "v2": true,
             "versions": [
+                "1.30.0",
+                "1.28.1",
+                "1.27.0",
                 "1.26.0",
                 "1.25.0",
                 "1.22.1",
@@ -2170,13 +2273,12 @@
             ],
             "v2": true,
             "versions": [
+                "2.14.4",
                 "2.13.1",
                 "2.13.0",
                 "2.12.0",
                 "2.11.3",
-                "2.10.5",
-                "2.8.0",
-                "2.6.1"
+                "2.10.5"
             ]
         },
         "c-client": {
@@ -2208,6 +2310,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.2.1",
+                "0.2.0",
                 "0.1.11",
                 "0.1.10",
                 "0.1.9",
@@ -2254,9 +2358,7 @@
                 "1.18.0",
                 "1.17.8",
                 "1.17.6",
-                "1.17.4",
-                "1.17.2",
-                "1.16.0"
+                "1.17.4"
             ]
         },
         "cairomm": {
@@ -2329,6 +2431,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.2",
                 "1.0.1",
                 "1.0.0",
                 "0.10.4",
@@ -2392,6 +2495,9 @@
             ],
             "v2": true,
             "versions": [
+                "3.6.0",
+                "3.5.4",
+                "3.5.3",
                 "3.5.2",
                 "3.5.1",
                 "3.5.0",
@@ -2429,6 +2535,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.9.1",
                 "4.9",
                 "4.8.3",
                 "4.8.2",
@@ -2468,6 +2575,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.3",
                 "1.0.1"
             ]
         },
@@ -2480,6 +2588,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.4",
                 "2.3"
             ]
         },
@@ -2504,6 +2613,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.9.0",
                 "2.8.2",
                 "2.6.0"
             ]
@@ -2585,18 +2695,18 @@
             "cmake_target_name": "cfitsio::cfitsio",
             "description": "C library for reading and writing data files in FITS (Flexible Image Transport System) data format",
             "license": [
-                "CFITSIO"
+                "CFITSIO",
+                "NASA-1.3"
             ],
             "v2": true,
             "versions": [
+                "4.4.0",
                 "4.3.1",
                 "4.3.0",
                 "4.2.0",
                 "4.1.0",
                 "4.0.0",
-                "3.490",
-                "3.480",
-                "3.470"
+                "3.490"
             ]
         },
         "cgal": {
@@ -2613,7 +2723,8 @@
                 "5.5.1",
                 "5.5.2",
                 "5.5.3",
-                "5.6"
+                "5.6",
+                "5.6.1"
             ]
         },
         "cgif": {
@@ -2726,6 +2837,17 @@
                 "cci.20230918"
             ]
         },
+        "chunkio": {
+            "description": "Simple library to manage chunks of data in memory and file system",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.5.2",
+                "1.1.6"
+            ]
+        },
         "cimg": {
             "description": "The CImg Library is a small and open-source C++ toolkit for image processing",
             "license": [
@@ -2761,6 +2883,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.15",
                 "0.14",
                 "0.11",
                 "0.10",
@@ -2808,6 +2931,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.7.18",
                 "1.7.17",
                 "1.7.16",
                 "1.7.15",
@@ -2875,6 +2999,16 @@
                 "2.4.1.3"
             ]
         },
+        "cli": {
+            "description": "A library for interactive command line interfaces in modern C++",
+            "license": [
+                "BSL-1.0"
+            ],
+            "v2": true,
+            "versions": [
+                "2.1.0"
+            ]
+        },
         "cli11": {
             "cmake_file_name": "CLI11",
             "cmake_target_name": "CLI11::CLI11",
@@ -2884,6 +3018,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.4.2",
                 "2.4.1",
                 "2.4.0",
                 "2.3.2",
@@ -2962,6 +3097,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.4.4",
                 "2.4.1",
                 "2.4.0",
                 "2.3.0",
@@ -2976,6 +3112,14 @@
             ],
             "v2": true,
             "versions": [
+                "3.29.6",
+                "3.29.5",
+                "3.29.4",
+                "3.29.3",
+                "3.29.2",
+                "3.29.0",
+                "3.28.6",
+                "3.28.5",
                 "3.28.1",
                 "3.27.9",
                 "3.27.7",
@@ -3043,6 +3187,18 @@
             "v2": true,
             "versions": [
                 "1.0.0"
+            ]
+        },
+        "cnats": {
+            "cmake_file_name": "cnats",
+            "cmake_target_name": "cnats::nats_static",
+            "description": "A C client for NATS",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "3.8.0"
             ]
         },
         "cnpy": {
@@ -3166,6 +3322,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.2.9",
                 "0.2.8",
                 "0.2.7",
                 "0.2.6-bug1",
@@ -3310,6 +3467,27 @@
                 "cci.20210322"
             ]
         },
+        "cpp-channel": {
+            "description": "Thread-safe container for sharing data between threads",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.8.2"
+            ]
+        },
+        "cpp-dump": {
+            "description": "An all-round dump function library for C++ that can print any type, even user-defined types.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.6.0",
+                "0.5.0"
+            ]
+        },
         "cpp-httplib": {
             "cmake_file_name": "httplib",
             "cmake_target_name": "httplib::httplib",
@@ -3319,6 +3497,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.16.0",
                 "0.15.3",
                 "0.15.2",
                 "0.15.1",
@@ -3389,6 +3568,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.8",
+                "1.8.7",
                 "1.8.6",
                 "1.8.5",
                 "1.8.4",
@@ -3443,6 +3624,18 @@
                 "2.0.3"
             ]
         },
+        "cpp-yyjson": {
+            "cmake_file_name": "cpp_yyjson",
+            "cmake_target_name": "cpp_yyjson::cpp_yyjson",
+            "description": "Ultra-fast and intuitive C++ JSON reader/writer with yyjson backend",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.5.0"
+            ]
+        },
         "cpp_project_framework": {
             "description": "C++ Project Framework is a framework for creating C++ projects.",
             "license": [
@@ -3473,10 +3666,11 @@
             ],
             "v2": true,
             "versions": [
+                "2.14",
+                "2.14.1",
+                "2.13.4",
                 "2.13.3",
-                "2.13",
                 "2.12.1",
-                "2.12",
                 "2.11.1",
                 "2.10.3",
                 "2.9.3",
@@ -3627,6 +3821,15 @@
             ],
             "v2": true,
             "versions": [
+                "0.6.1",
+                "0.6.0",
+                "0.5.4",
+                "0.5.3",
+                "0.5.2",
+                "0.5.1",
+                "0.5.0",
+                "0.4.1",
+                "0.4.0",
                 "0.3.1",
                 "0.3.0",
                 "0.2.1"
@@ -3742,17 +3945,18 @@
             ]
         },
         "cpython": {
+            "cmake_file_name": "Python3",
             "description": "Python is a programming language that lets you work quickly and integrate systems more effectively.",
             "license": [
-                ""
+                "Python-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "3.10.0",
-                "3.9.7",
-                "3.8.12",
-                "3.7.12",
-                "2.7.18"
+                "3.12.2",
+                "3.11.9",
+                "3.10.14",
+                "3.9.19",
+                "3.8.19"
             ]
         },
         "cqrlib": {
@@ -3765,14 +3969,23 @@
                 "1.1.4"
             ]
         },
+        "cr": {
+            "description": "cr.h: A Simple C Hot Reload Header-only Library",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20221105"
+            ]
+        },
         "crashpad": {
             "description": "Crashpad is a crash-reporting system.",
             "license": [
                 "Apache-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "cci.20210507",
                 "cci.20220219"
             ]
         },
@@ -3800,6 +4013,16 @@
                 "1.1.0",
                 "1.0.1",
                 "1.0.0"
+            ]
+        },
+        "crcpp": {
+            "description": "Easy to use and fast C++ CRC library.",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "1.2.0.0"
             ]
         },
         "create-dmg": {
@@ -3853,6 +4076,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.0",
                 "1.1.0",
                 "1.0+5",
                 "1.0+3",
@@ -3994,6 +4218,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.9.0",
                 "3.8.1",
                 "3.8",
                 "3.7.2",
@@ -4041,7 +4266,9 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.0-b2",
                 "0.7-b1",
+                "0.6.8",
                 "0.6.3"
             ]
         },
@@ -4117,6 +4344,16 @@
                 "1.0.0"
             ]
         },
+        "cxxgraph": {
+            "description": "Header-Only C++ Library for Graph Representation and Algorithms",
+            "license": [
+                "AGPL-3.0-later"
+            ],
+            "v2": true,
+            "versions": [
+                "3.1.0"
+            ]
+        },
         "cxxopts": {
             "cmake_file_name": "cxxopts",
             "cmake_target_name": "cxxopts::cxxopts",
@@ -4126,6 +4363,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.2.0",
                 "3.1.1",
                 "3.0.0",
                 "2.2.1",
@@ -4204,6 +4442,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.9",
+                "1.8",
                 "1.7",
                 "1.6",
                 "1.5"
@@ -4238,6 +4478,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.1.0",
                 "3.0.0",
                 "2.3.0",
                 "2.2.0",
@@ -4271,12 +4512,9 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.1",
                 "1.3.0",
-                "1.2.1",
-                "1.1.0",
-                "1.0.0",
-                "0.9.1",
-                "0.8.1"
+                "1.2.1"
             ]
         },
         "daw_header_libraries": {
@@ -4293,6 +4531,8 @@
             ],
             "v2": true,
             "versions": [
+                "2.106.0",
+                "2.101.0",
                 "2.98.5",
                 "2.97.0",
                 "2.96.1",
@@ -4321,6 +4561,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.23.2",
                 "3.23.0",
                 "3.20.1",
                 "3.19.0",
@@ -4348,6 +4589,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.4",
                 "2.2.3",
                 "2.2.2",
                 "2.2.0"
@@ -4380,8 +4622,7 @@
             "cmake_target_name": "dbus-1",
             "description": "D-Bus is a simple system for interprocess communication and coordination.",
             "license": [
-                "AFL-2.1",
-                "GPL-2.0-or-later"
+                "(AFL-2.1 OR GPL-2.0-or-later) AND DocumentRef-COPYING"
             ],
             "v2": true,
             "versions": [
@@ -4399,6 +4640,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.6.8",
                 "3.6.7"
             ]
         },
@@ -4407,8 +4649,9 @@
             "license": [
                 "Apache-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "1.3.7",
                 "1.3.0"
             ]
         },
@@ -4493,6 +4736,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.3",
                 "1.0.2"
             ]
         },
@@ -4515,6 +4759,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.5.0",
+                "1.3.0",
                 "1.2.0",
                 "1.1.0",
                 "1.0.0",
@@ -4651,6 +4897,18 @@
                 "2.2.7"
             ]
         },
+        "dispenso": {
+            "cmake_file_name": "Dispenso",
+            "cmake_target_name": "Dispenso::dispenso",
+            "description": "Dispenso is a library for working with sets of tasks in parallel",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.3.0"
+            ]
+        },
         "djinni-generator": {
             "description": "Djinni is a tool for generating cross-language type declarations and interface bindings.",
             "license": [
@@ -4683,6 +4941,16 @@
                 "1.1.0",
                 "1.2.0",
                 "1.2.1"
+            ]
+        },
+        "djvulibre": {
+            "description": "Library and utilities to create, manipulate and view DjVu documents",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "v2": true,
+            "versions": [
+                "3.5.28"
             ]
         },
         "dlib": {
@@ -4720,6 +4988,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.18.0",
                 "1.17.0"
             ]
         },
@@ -4881,6 +5150,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.9.5",
+                "1.9.4",
                 "1.9.3",
                 "1.9.2",
                 "1.9.1",
@@ -4934,6 +5205,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.10.2",
+                "0.10.1",
                 "0.9.2",
                 "0.9.0",
                 "0.8.1",
@@ -4942,6 +5215,16 @@
                 "0.6.1",
                 "0.6.0",
                 "0.5.1"
+            ]
+        },
+        "duckx": {
+            "description": " C++ library for creating and updating Microsoft Word (.docx) files.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.2.2"
             ]
         },
         "duktape": {
@@ -5204,6 +5487,10 @@
             ]
         },
         "elfutils": {
+            "components": {
+                "libdw": {},
+                "libelf": {}
+            },
             "description": "A dwarf, dwfl and dwelf functions to read DWARF, find separate debuginfo, symbols and inspect process state.",
             "license": [
                 "GPL-1.0-or-later",
@@ -5253,6 +5540,16 @@
                 "3.12.0"
             ]
         },
+        "emhash": {
+            "description": "Fast and memory efficient c++ flat hash map/set",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240601"
+            ]
+        },
         "emio": {
             "description": "A character input/output library for embedded systems.",
             "license": [
@@ -5260,6 +5557,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.0",
                 "0.6.1",
                 "0.6.0",
                 "0.5.0",
@@ -5320,10 +5618,9 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.18",
                 "1.3.17",
-                "1.3.16",
-                "1.3.15",
-                "1.3.14"
+                "1.3.16"
             ]
         },
         "enhex-generic_serialization": {
@@ -5380,6 +5677,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.21.0",
                 "2.19.1"
             ]
         },
@@ -5420,6 +5718,16 @@
                 "0.1a"
             ]
         },
+        "enumbitmask": {
+            "description": "A C++ library to enable bitmask operators for an enum class type",
+            "license": [
+                "CC0-1.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.0"
+            ]
+        },
         "erikzenker-hsm": {
             "cmake_file_name": "hsm",
             "cmake_target_name": "hsm::hsm",
@@ -5443,6 +5751,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.1.1",
                 "2.0.0",
                 "1.0.0"
             ]
@@ -5501,6 +5810,11 @@
             ],
             "v2": true,
             "versions": [
+                "20.38.16",
+                "20.38.15",
+                "20.38.14",
+                "20.38.13",
+                "20.38.11",
                 "20.38.10",
                 "20.38.7",
                 "20.38.6",
@@ -5508,15 +5822,17 @@
                 "20.38.3",
                 "20.38.0",
                 "20.37.3",
-                "20.37.2",
-                "20.37.1",
-                "20.37.0",
-                "20.36.0",
-                "20.35.14",
-                "20.35.11",
-                "20.35.8",
-                "20.35.7",
-                "20.34.0"
+                "20.36.0"
+            ]
+        },
+        "eudev": {
+            "description": "eudev is a standalone dynamic and persistent device naming support (aka userspace devfs) daemon that runs independently from the init system.",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "v2": true,
+            "versions": [
+                "3.2.14"
             ]
         },
         "eventpp": {
@@ -5553,8 +5869,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.28.2",
                 "0.28.1",
-                "0.28.0",
                 "0.27.5"
             ]
         },
@@ -5567,17 +5883,11 @@
             ],
             "v2": true,
             "versions": [
+                "2.6.2",
                 "2.6.0",
                 "2.5.0",
                 "2.4.9",
                 "2.4.8",
-                "2.4.7",
-                "2.4.6",
-                "2.4.5",
-                "2.4.4",
-                "2.4.3",
-                "2.4.2",
-                "2.4.1",
                 "2.3.0",
                 "2.2.10"
             ]
@@ -5596,6 +5906,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.8.0",
+                "0.7.0",
                 "0.6.3",
                 "0.6.2",
                 "0.6.1",
@@ -5625,6 +5937,7 @@
             ],
             "v2": true,
             "versions": [
+                "6.2.0",
                 "5.113.0",
                 "5.111.0",
                 "5.108.0",
@@ -5697,15 +6010,11 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.0",
                 "2.1.0",
                 "2.0.0",
                 "1.1.0",
-                "1.0.27",
-                "1.0.26",
-                "1.0.24",
-                "1.0.23",
-                "1.0.22",
-                "1.0.21"
+                "1.0.27"
             ]
         },
         "fast-cpp-csv-parser": {
@@ -5715,6 +6024,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240102",
                 "cci.20211104",
                 "cci.20200830",
                 "20191004"
@@ -5736,12 +6046,11 @@
             ],
             "v2": true,
             "versions": [
+                "2.14.0",
+                "2.13.3",
                 "2.11.2",
-                "2.11.1",
                 "2.10.1",
-                "2.3.4",
-                "2.3.3",
-                "2.3.2"
+                "2.3.4"
             ]
         },
         "fast_double_parser": {
@@ -5752,6 +6061,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.8.0",
                 "0.7.0",
                 "0.6.0",
                 "0.5.0"
@@ -5773,6 +6083,7 @@
             ],
             "v2": true,
             "versions": [
+                "6.1.1",
                 "6.1.0",
                 "6.0.0",
                 "5.3.0",
@@ -5795,6 +6106,16 @@
                 "0.9.0"
             ]
         },
+        "fast_io": {
+            "description": "fast_io is a C++ io exception-safe RAII library based on C++ 20 Concepts. It is at least 10 times faster than cstdio than iostream.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240219"
+            ]
+        },
         "fastgltf": {
             "description": "A modern C++17 glTF 2.0 library focused on speed, correctness, and usability",
             "license": [
@@ -5802,6 +6123,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.0",
                 "0.6.1",
                 "0.5.0",
                 "0.4.0"
@@ -5944,6 +6266,18 @@
                 "0.2"
             ]
         },
+        "fixed-containers": {
+            "cmake_file_name": "fixed_containers",
+            "cmake_target_name": "fixed_containers::fixed_containers",
+            "description": "C++ Fixed Containers",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240225"
+            ]
+        },
         "flac": {
             "cmake_file_name": "flac",
             "components": {
@@ -5994,6 +6328,8 @@
             ],
             "v2": true,
             "versions": [
+                "24.3.25",
+                "24.3.7",
                 "23.5.26",
                 "23.3.3",
                 "23.1.21",
@@ -6016,6 +6352,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.1",
                 "1.2.0",
                 "1.1.0"
             ]
@@ -6051,6 +6388,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.2.11",
                 "3.2.8",
                 "3.2.4",
                 "3.1.4",
@@ -6217,9 +6555,7 @@
             "versions": [
                 "2.15.0",
                 "2.14.2",
-                "2.13.93",
-                "2.13.92",
-                "2.13.91"
+                "2.13.93"
             ]
         },
         "foonathan-lexy": {
@@ -6338,6 +6674,16 @@
                 "1.3.0"
             ]
         },
+        "freealut": {
+            "description": "freealut is a free implementation of OpenAL's ALUT standard.",
+            "license": [
+                "LGPL-2.0-or-later"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.0"
+            ]
+        },
         "freeglut": {
             "cmake_file_name": "FreeGLUT",
             "cmake_target_name": "FreeGLUT::freeglut_static",
@@ -6435,15 +6781,10 @@
             ],
             "v2": true,
             "versions": [
+                "0.16.0",
+                "0.15.31",
                 "0.15.30",
-                "0.15.29",
-                "0.15.25-p0",
-                "0.15.24-p0",
-                "0.15.19-p0",
-                "0.15.18-p0",
-                "0.15.16-p0",
-                "0.15.13-p0",
-                "0.15.1-p0"
+                "0.15.29"
             ]
         },
         "fruit": {
@@ -6526,14 +6867,9 @@
             ],
             "v2": true,
             "versions": [
-                "0.2.22",
-                "0.2.20-p0",
-                "0.2.18-p0",
-                "0.2.17-p0",
-                "0.2.16",
-                "0.2.15",
-                "0.2.14-p0",
-                "0.2.13-p0"
+                "0.2.24",
+                "0.2.23",
+                "0.2.22"
             ]
         },
         "functions-framework-cpp": {
@@ -6661,14 +6997,13 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "3.7.0",
-                "3.5.2",
-                "3.5.1",
+                "3.8.3",
+                "3.7.3",
+                "3.5.3",
                 "3.4.3",
-                "3.4.1",
-                "3.3.3"
+                "3.4.1"
             ]
         },
         "gdbm": {
@@ -6691,6 +7026,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.0.24",
                 "3.0.23",
                 "3.0.22",
                 "3.0.21",
@@ -6835,6 +7171,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.22.5",
                 "0.21",
                 "0.20.1"
             ]
@@ -6901,6 +7238,7 @@
             ],
             "v2": true,
             "versions": [
+                "5.2.2",
                 "5.2.1",
                 "5.1.4"
             ]
@@ -6966,18 +7304,12 @@
             ],
             "v2": true,
             "versions": [
-                "2.1.0",
-                "2.0.9",
-                "2.0.7",
-                "2.0.6",
-                "2.0.5",
-                "2.0.3",
-                "2.0.2",
-                "2.0.1",
-                "2.0.0",
-                "1.9.9",
-                "1.9.5",
-                "1.8.5"
+                "2.9.0",
+                "2.8.4",
+                "2.7.0",
+                "2.6.9",
+                "2.6.2",
+                "2.1.6"
             ]
         },
         "glbinding": {
@@ -7036,6 +7368,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.4",
                 "3.3.8",
                 "3.3.7",
                 "3.3.6",
@@ -7106,13 +7439,8 @@
             ],
             "v2": true,
             "versions": [
-                "cci.20230113",
-                "cci.20220420",
-                "0.9.9.8",
-                "0.9.9.7",
-                "0.9.9.6",
-                "0.9.9.5",
-                "0.9.5.4"
+                "1.0.1",
+                "0.9.9.8"
             ]
         },
         "glog": {
@@ -7124,6 +7452,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.1",
+                "0.7.0",
                 "0.6.0",
                 "0.5.0",
                 "0.4.0"
@@ -7151,7 +7481,7 @@
         },
         "glslang": {
             "cmake_file_name": "glslang",
-            "cmake_target_name": "glslang::glslang-do-not-use",
+            "cmake_target_name": "glslang::_glslang-do-not-use",
             "components": {
                 "glslang-core": {
                     "cmake_target_name": "glslang::glslang"
@@ -7162,22 +7492,16 @@
             },
             "description": "Khronos-reference front end for GLSL/ESSL, partial front end for HLSL, and a SPIR-V generator.",
             "license": [
-                "BSD-3-Clause",
-                "NVIDIA"
+                "DocumentRef-LICENSE.txt:LicenseRef-glslang"
             ],
             "v2": true,
             "versions": [
+                "1.3.268.0",
+                "1.3.261.1",
+                "1.3.243.0",
                 "1.3.239.0",
                 "1.3.236.0",
-                "1.3.231.1",
-                "1.3.224.0",
-                "1.3.216.0",
-                "1.3.211.0",
-                "1.3.204.0",
-                "11.7.0",
-                "11.6.0",
-                "11.5.0",
-                "8.13.3559"
+                "1.2.198.0"
             ]
         },
         "glu": {
@@ -7227,7 +7551,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "cci.20210429"
             ]
@@ -7730,7 +8054,8 @@
                 "1.10.0",
                 "1.11.0",
                 "1.11.0.1",
-                "1.11.1"
+                "1.11.1",
+                "1.11.2"
             ]
         },
         "half": {
@@ -7842,6 +8167,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.14.4.3",
                 "1.14.3",
                 "1.14.2",
                 "1.14.1",
@@ -7933,6 +8259,9 @@
             ],
             "v2": true,
             "versions": [
+                "0.0.12",
+                "0.0.10",
+                "0.0.9",
                 "0.0.8",
                 "0.0.3",
                 "0.0.2",
@@ -7983,6 +8312,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.7.0",
                 "1.6.0",
                 "1.5.3"
             ]
@@ -7997,6 +8327,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.0",
+                "1.1.0",
                 "1.0.7",
                 "1.0.6",
                 "1.0.5",
@@ -8054,8 +8386,7 @@
                 "1.2.0",
                 "1.1.0",
                 "1.0.2",
-                "1.0.0",
-                "0.14.1"
+                "1.0.0"
             ]
         },
         "hlslpp": {
@@ -8127,6 +8458,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.382",
                 "0.378",
                 "0.376",
                 "0.374"
@@ -8139,12 +8471,8 @@
             ],
             "v2": true,
             "versions": [
-                "2.9.3",
-                "2.9.2",
-                "2.9.1",
-                "2.9.0",
-                "2.8.0",
-                "2.7.2"
+                "2.10.0",
+                "2.9.3"
             ]
         },
         "hyperscan": {
@@ -8190,6 +8518,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.0.6",
                 "2.0.5",
                 "2.0.3",
                 "1.0.3"
@@ -8202,6 +8531,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240128",
                 "cci.20231102",
                 "cci.20231026"
             ]
@@ -8254,6 +8584,19 @@
                 "2.1"
             ]
         },
+        "idna": {
+            "cmake_file_name": "ada-idna",
+            "cmake_target_name": "ada-idna",
+            "description": "C++ library implementing the to_ascii and to_unicode functions from the Unicode Technical Standard.",
+            "license": [
+                "Apache-2.0",
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240228"
+            ]
+        },
         "ignition-cmake": {
             "cmake_file_name": "ignition-cmake2",
             "components": {
@@ -8304,6 +8647,18 @@
             "v2": false,
             "versions": [
                 "1.3.0"
+            ]
+        },
+        "iguana": {
+            "description": "universal serialization engine",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.0.5",
+                "1.0.4",
+                "1.0.3"
             ]
         },
         "iir1": {
@@ -8380,12 +8735,10 @@
             ],
             "v2": true,
             "versions": [
+                "3.1.11",
+                "3.1.10",
                 "3.1.9",
-                "3.1.8",
-                "3.1.7",
-                "3.1.6",
-                "3.1.5",
-                "3.1.4"
+                "3.1.8"
             ]
         },
         "imgui": {
@@ -8395,6 +8748,18 @@
             ],
             "v2": true,
             "versions": [
+                "1.90.8",
+                "1.90.8-docking",
+                "1.90.7",
+                "1.90.7-docking",
+                "1.90.6",
+                "1.90.6-docking",
+                "1.90.5",
+                "1.90.5-docking",
+                "1.90.4",
+                "1.90.4-docking",
+                "1.90.3",
+                "1.90.3-docking",
                 "1.90.2",
                 "1.90.2-docking",
                 "1.90.1",
@@ -8428,6 +8793,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20231114",
                 "1.83"
             ]
         },
@@ -8514,6 +8880,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240102",
                 "cci.20201227"
             ]
         },
@@ -8640,8 +9007,20 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.18",
                 "1.4.17",
                 "1.4.16"
+            ]
+        },
+        "ipaddress": {
+            "description": "A library for working and manipulating IPv4/IPv6 addresses and networks",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.0",
+                "1.0.1"
             ]
         },
         "iqa": {
@@ -8679,11 +9058,11 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "0.24",
-                "0.23",
-                "0.22"
+                "0.26",
+                "0.25",
+                "0.24"
             ]
         },
         "iso8601lib": {
@@ -8748,6 +9127,7 @@
             ],
             "v2": true,
             "versions": [
+                "11.4.5",
                 "11.4.3",
                 "11.2.4",
                 "11.0.9",
@@ -8782,12 +9162,10 @@
             ],
             "v2": true,
             "versions": [
+                "4.2.4",
+                "4.2.0",
                 "4.1.2",
-                "4.1.1",
-                "4.1.0",
-                "4.0.0",
-                "3.0.6",
-                "2.0.33"
+                "4.0.0"
             ]
         },
         "jbig": {
@@ -8868,6 +9246,16 @@
                 "1.1.0"
             ]
         },
+        "jnk0le_ringbuffer": {
+            "description": "simple C++11 ring buffer implementation, allocated and evaluated at compile time",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240422"
+            ]
+        },
         "joltphysics": {
             "description": "A multi core friendly rigid body physics and collision detection library, written in C++, suitable for games and VR applications.",
             "license": [
@@ -8886,6 +9274,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.4",
                 "1.1.3"
             ]
         },
@@ -8987,6 +9376,9 @@
             ],
             "v2": true,
             "versions": [
+                "0.176.0",
+                "0.175.0",
+                "0.174.0",
                 "0.173.4",
                 "0.173.3",
                 "0.173.2",
@@ -9021,6 +9413,16 @@
             "v2": false,
             "versions": [
                 "3.7.0"
+            ]
+        },
+        "jsonifier": {
+            "description": "A few classes for parsing and serializing objects from/into JSON - very rapidly.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.9.95"
             ]
         },
         "jsonnet": {
@@ -9140,12 +9542,13 @@
             ]
         },
         "kcov": {
-            "description": "Code coverage tool for compiled programs, Python and Bashwhich uses debugging information to collect and report data withoutspecial compilation options",
+            "description": "Code coverage tool for compiled programs, Python and Bash which uses debugging information to collect and report data without special compilation options",
             "license": [
                 "GPL-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "42",
                 "40",
                 "38"
             ]
@@ -9170,6 +9573,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.5",
                 "1.0.3"
             ]
         },
@@ -9178,10 +9582,11 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "1.4.14",
-                "1.4.13"
+                "1.5.2",
+                "1.4.15",
+                "1.4.14"
             ]
         },
         "keychain": {
@@ -9260,6 +9665,7 @@
             ],
             "v2": true,
             "versions": [
+                "31",
                 "30",
                 "29"
             ]
@@ -9272,6 +9678,16 @@
             "v2": true,
             "versions": [
                 "0.1.15"
+            ]
+        },
+        "krb5": {
+            "description": "Kerberos is a network authentication protocol. It is designed to provide strong authentication for client/server applications by using secret-key cryptography.",
+            "license": [
+                "LicenseRef-NOTICE"
+            ],
+            "v2": true,
+            "versions": [
+                "1.21.2"
             ]
         },
         "ktx": {
@@ -9300,6 +9716,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.3.2",
                 "0.3.1",
                 "0.3.0",
                 "0.2.6",
@@ -9309,6 +9726,16 @@
                 "0.2.2",
                 "0.2.0",
                 "0.1.31"
+            ]
+        },
+        "kuliya": {
+            "description": "Algeria's college hierarchy dataset as a C library.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.0.0"
             ]
         },
         "lager": {
@@ -9338,6 +9765,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.4.4",
                 "3.4.3"
             ]
         },
@@ -9392,6 +9820,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.3.4",
                 "2.3.3",
                 "2.3.2"
             ]
@@ -9404,6 +9833,19 @@
             "v2": true,
             "versions": [
                 "3.32.3"
+            ]
+        },
+        "leopard": {
+            "cmake_file_name": "ThreadPool",
+            "cmake_target_name": "ThreadPool::ThreadPool",
+            "description": "C++ light-weight Thread Pool library",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "2.1.0",
+                "2.0.0"
             ]
         },
         "leptonica": {
@@ -9444,6 +9886,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.35.2",
                 "1.35.1"
             ]
         },
@@ -9551,26 +9994,25 @@
             ],
             "v2": true,
             "versions": [
+                "3.7.4",
+                "3.7.3",
                 "3.7.2",
-                "3.7.1",
-                "3.6.2",
-                "3.6.1",
-                "3.6.0",
-                "3.5.2",
-                "3.5.1",
-                "3.4.3",
-                "3.4.0"
+                "3.7.1"
             ]
         },
         "libassert": {
-            "cmake_file_name": "assert",
-            "cmake_target_name": "assert::assert",
-            "description": "The most over-engineered and overpowered C++ assertion library.",
+            "cmake_file_name": "libassert",
+            "cmake_target_name": "libassert::assert",
+            "description": "The most over-engineered C++ assertion library",
             "license": [
                 "MIT"
             ],
             "v2": true,
             "versions": [
+                "2.1.0",
+                "2.0.2",
+                "2.0.1",
+                "2.0.0",
                 "1.2.2",
                 "1.2.1",
                 "1.1",
@@ -9616,6 +10058,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.4",
                 "1.0.3",
                 "1.0.2",
                 "1.0.1",
@@ -9678,6 +10121,18 @@
             "v2": true,
             "versions": [
                 "0.4.7"
+            ]
+        },
+        "libboxes": {
+            "cmake_file_name": "libboxes",
+            "cmake_target_name": "libboxes::libboxes",
+            "description": "Boxes is a set of frequently used containers built on top of STL",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "0.1.1"
             ]
         },
         "libbpf": {
@@ -9852,6 +10307,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.11.1",
                 "0.10",
                 "0.9",
                 "0.8",
@@ -9908,24 +10364,26 @@
             ],
             "v2": true,
             "versions": [
+                "8.8.0",
                 "8.6.0",
                 "8.5.0",
                 "8.4.0",
                 "8.2.1",
-                "8.2.0",
                 "8.1.2",
-                "8.1.1",
                 "8.0.1",
-                "7.88.1",
-                "7.87.0",
-                "7.86.0",
-                "7.85.0",
-                "7.84.0",
-                "7.83.1",
-                "7.82.0",
-                "7.80.0",
-                "7.79.1",
-                "7.78.0"
+                "7.88.1"
+            ]
+        },
+        "libcvd": {
+            "cmake_file_name": "CVD",
+            "cmake_target_name": "cvd",
+            "description": "libCVD - efficient and easy-to-use C++ computer vision library",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "2.5.1"
             ]
         },
         "libdaemon": {
@@ -9984,6 +10442,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.20",
                 "1.19",
                 "1.18",
                 "1.17",
@@ -10088,14 +10547,16 @@
             "description": "A library and a set of command-line tools for reading and writing DWARF2",
             "license": [
                 "LGPL-2.1-only",
-                "BSD-2-Clause-Views"
+                "BSD-2-Clause-Views",
+                "GPL-2.0-only"
             ],
             "v2": true,
             "versions": [
+                "0.9.1",
+                "0.9.0",
                 "0.8.0",
                 "0.7.0",
-                "0.5.0",
-                "20191104"
+                "0.5.0"
             ]
         },
         "libdxfrw": {
@@ -10153,6 +10614,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.1",
                 "1.4.0",
                 "1.3.0"
             ]
@@ -10270,10 +10732,20 @@
             ],
             "v2": true,
             "versions": [
+                "3.4.6",
                 "3.4.4",
-                "3.4.3",
-                "3.4.2",
                 "3.3"
+            ]
+        },
+        "libfork": {
+            "description": "A bleeding-edge, lock-free, wait-free, continuation-stealing tasking library.",
+            "license": [
+                "MPL-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "3.8.0",
+                "3.7.2"
             ]
         },
         "libfreenect": {
@@ -10310,6 +10782,20 @@
             "versions": [
                 "0.20",
                 "1.5"
+            ]
+        },
+        "libftp": {
+            "cmake_file_name": "ftp",
+            "cmake_target_name": "ftp::ftp",
+            "description": "A cross-platform FTP/FTPS client library based on Boost.Asio",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.5.1",
+                "0.5.0",
+                "0.4.1"
             ]
         },
         "libfuse": {
@@ -10384,16 +10870,16 @@
             "license": [
                 "GPL-2.0-linking-exception"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "1.8.1",
+                "1.7.2",
                 "1.5.0",
                 "1.4.3",
                 "1.3.0",
                 "1.2.0",
                 "1.1.1",
-                "1.0.1",
-                "0.28.5",
-                "0.27.10"
+                "1.0.1"
             ]
         },
         "libglvnd": {
@@ -10468,6 +10954,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.0",
                 "2.0.2",
                 "2.0.1"
             ]
@@ -10559,7 +11046,7 @@
             "license": [
                 "GPL-3.0-or-later"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.36"
             ]
@@ -10569,19 +11056,40 @@
             "license": [
                 "GPL-3.0-or-later"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "2.3.0"
             ]
         },
         "libigl": {
+            "cmake_file_name": "libigl",
+            "cmake_target_name": "igl::igl",
+            "components": {
+                "common": {
+                    "cmake_target_name": "igl::common"
+                },
+                "core": {
+                    "cmake_target_name": "igl::core"
+                }
+            },
             "description": "Simple C++ geometry processing library",
             "license": [
                 "MPL-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "2.5.0",
                 "2.3.0"
+            ]
+        },
+        "libinput": {
+            "description": "libinput is a library that handles input devices for display servers and other applications that need to directly deal with input devices.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.25.0"
             ]
         },
         "libinterpolate": {
@@ -10618,9 +11126,9 @@
             ],
             "v2": true,
             "versions": [
+                "9f",
                 "9e",
-                "9d",
-                "9c"
+                "9d"
             ]
         },
         "libjpeg-turbo": {
@@ -10636,6 +11144,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.0.3",
                 "3.0.2",
                 "3.0.1",
                 "3.0.0",
@@ -10672,6 +11181,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.5.0",
                 "0.4.1"
             ]
         },
@@ -10740,6 +11250,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.10.0",
                 "1.9.1",
                 "1.8.0",
                 "1.7.1",
@@ -10755,6 +11266,16 @@
             "versions": [
                 "20200424",
                 "20200515"
+            ]
+        },
+        "libmd": {
+            "description": "Message Digest functions from BSD systems",
+            "license": [
+                "BSD-2-Clause AND BSD-3-Clause AND ISC AND Beerware AND DocumentRef-COPYING:LicenseRef-libmd-Public-Domain"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.0"
             ]
         },
         "libmediainfo": {
@@ -10869,6 +11390,10 @@
             ]
         },
         "libmount": {
+            "components": {
+                "libblkid": {},
+                "libmount": {}
+            },
             "description": "The libmount library is used to parse /etc/fstab, /etc/mtab and /proc/self/mountinfo files, manage the mtab file, evaluate mount options, etc",
             "license": [
                 "LGPL-2.1-or-later"
@@ -11003,6 +11528,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.61.0",
+                "1.60.0",
                 "1.59.0",
                 "1.58.0",
                 "1.57.0",
@@ -11146,6 +11673,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.6.43",
                 "1.6.42",
                 "1.6.41",
                 "1.6.40",
@@ -11176,6 +11704,7 @@
             ],
             "v2": true,
             "versions": [
+                "15.5",
                 "15.4",
                 "15.3",
                 "14.9",
@@ -11200,6 +11729,8 @@
             ],
             "v2": true,
             "versions": [
+                "7.9.1",
+                "7.9.0",
                 "7.8.1",
                 "7.8.0",
                 "7.7.5",
@@ -11221,13 +11752,21 @@
             ]
         },
         "libprotobuf-mutator": {
+            "components": {
+                "fuzzer": {
+                    "cmake_target_name": "libprotobuf-mutator::protobuf-mutator-libfuzzer"
+                },
+                "mutator": {
+                    "cmake_target_name": "libprotobuf-mutator::protobuf-mutator"
+                }
+            },
             "description": "A library to randomly mutate protobuffers.",
             "license": [
                 "Apache-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "cci.20210831"
+                "1.3"
             ]
         },
         "libpsl": {
@@ -11238,6 +11777,17 @@
             "v2": true,
             "versions": [
                 "0.21.1"
+            ]
+        },
+        "libqasm": {
+            "description": "Library to parse cQASM files",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "0.6.6",
+                "0.6.5"
             ]
         },
         "libqrencode": {
@@ -11304,6 +11854,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.4.0",
                 "2.3.0",
                 "2.2.0",
                 "2.0.2",
@@ -11348,6 +11899,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.9.1",
                 "3.5.3",
                 "3.5.2",
                 "3.4.3",
@@ -11358,12 +11910,15 @@
             ]
         },
         "librhash": {
+            "cmake_file_name": "LibRHash",
+            "cmake_target_name": "LibRHash::LibRHash",
             "description": "Great utility for computing hash sums",
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "1.4.4",
                 "1.4.2",
                 "1.3.9"
             ]
@@ -11447,6 +12002,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.21.4",
                 "0.20.5",
                 "0.20.4"
             ]
@@ -11614,6 +12170,7 @@
             ],
             "v2": true,
             "versions": [
+                "5.1.0",
                 "5.0.1"
             ]
         },
@@ -11646,10 +12203,23 @@
             ],
             "v2": true,
             "versions": [
+                "2.6.0",
                 "2.5.0",
                 "2.4.2",
                 "2.4.0",
                 "2.3.0"
+            ]
+        },
+        "libssh": {
+            "cmake_file_name": "libssh",
+            "cmake_target_name": "ssh::ssh",
+            "description": "multiplatform C library implementing the SSHv2 protocol on client and server side",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "v2": true,
+            "versions": [
+                "0.10.6"
             ]
         },
         "libssh2": {
@@ -11699,6 +12269,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.1.0",
                 "1.7.0",
                 "1.6.0",
                 "1.4.1",
@@ -11713,17 +12284,12 @@
             ],
             "v2": true,
             "versions": [
+                "255.7",
                 "255.2",
                 "255",
                 "253.14",
                 "253.10",
-                "253.6",
-                "252.12",
-                "251.18",
-                "249.16",
-                "248.12",
-                "247.13",
-                "246.16"
+                "253.6"
             ]
         },
         "libtar": {
@@ -11751,7 +12317,7 @@
             "cmake_target_name": "TIFF::TIFF",
             "description": "Library for Tag Image File Format (TIFF)",
             "license": [
-                "MIT"
+                "libtiff"
             ],
             "v2": true,
             "versions": [
@@ -11813,6 +12379,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.0.10",
                 "2.0.9",
                 "2.0.8",
                 "2.0.1",
@@ -11826,6 +12393,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.9.0",
                 "0.8.2",
                 "0.8.1"
             ]
@@ -11861,11 +12429,12 @@
             },
             "description": "A prototype implementation of the C++ sender/receiver async programming model",
             "license": [
-                ""
+                "Apache-2.0",
+                "LLVM-exception"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "cci.20220430"
+                "0.4.0"
             ]
         },
         "libunistring": {
@@ -11890,6 +12459,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.1",
                 "1.8.0",
                 "1.7.2",
                 "1.7.0",
@@ -11905,6 +12475,8 @@
             ],
             "v2": true,
             "versions": [
+                "2.6",
+                "2.5",
                 "2.4",
                 "2.3",
                 "2.2",
@@ -11991,6 +12563,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.21.0",
                 "2.20.0"
             ]
         },
@@ -12003,9 +12576,7 @@
             ],
             "v2": true,
             "versions": [
-                "0.52.0",
-                "0.51.0",
-                "0.48.0"
+                "0.59.0"
             ]
         },
         "libvdpau": {
@@ -12053,6 +12624,7 @@
             ],
             "v2": true,
             "versions": [
+                "8.15.2",
                 "8.15.1",
                 "8.14.2"
             ]
@@ -12064,6 +12636,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.14.0",
                 "1.13.1",
                 "1.11.0",
                 "1.10.0",
@@ -12105,6 +12678,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.0",
                 "1.3.2",
                 "1.3.1",
                 "1.2.4",
@@ -12124,10 +12698,7 @@
                 "4.3.2",
                 "4.3.0",
                 "4.2.1",
-                "4.2.0",
-                "4.1.6",
-                "4.1.4",
-                "4.0.15"
+                "4.2.0"
             ]
         },
         "libx264": {
@@ -12204,6 +12775,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.7",
                 "1.1.5",
                 "1.1.4",
                 "1.1.3",
@@ -12219,16 +12791,18 @@
             ],
             "v2": true,
             "versions": [
+                "2.12.7",
+                "2.12.6",
+                "2.12.5",
                 "2.12.4",
                 "2.12.3",
-                "2.12.2",
-                "2.12.1",
+                "2.11.8",
+                "2.11.7",
                 "2.11.6",
                 "2.11.4",
                 "2.10.4",
                 "2.10.3",
                 "2.9.14",
-                "2.9.13",
                 "2.9.12",
                 "2.9.10"
             ]
@@ -12298,6 +12872,17 @@
             "versions": [
                 "0.2.5",
                 "0.2.2"
+            ]
+        },
+        "libyang": {
+            "cmake_file_name": "LibYANG",
+            "description": "YANG data modeling language library",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "2.1.148"
             ]
         },
         "libyuv": {
@@ -12384,6 +12969,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.3.0",
                 "4.2.0",
                 "4.1.0",
                 "3.3.5",
@@ -12400,6 +12986,17 @@
             "v2": true,
             "versions": [
                 "cci.20211005"
+            ]
+        },
+        "limereport": {
+            "description": "Report generator for Qt Framework",
+            "license": [
+                "LGPL-3.0",
+                "GPL-3.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.7.4"
             ]
         },
         "linmath.h": {
@@ -12483,6 +13080,7 @@
             ],
             "v2": true,
             "versions": [
+                "b3040",
                 "b2038"
             ]
         },
@@ -12542,6 +13140,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.9.32",
                 "0.9.31",
                 "0.9.29"
             ]
@@ -12592,19 +13191,30 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.0",
                 "1.1.0",
-                "0.12.1",
-                "0.12.0"
+                "0.13.0",
+                "0.12.1"
+            ]
+        },
+        "logfault": {
+            "description": "Simple to use, header only C++ library for application-logging on all major platforms.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.5.2"
             ]
         },
         "logr": {
-            "cmake_file_name": "logr",
             "description": "Logger frontend substitution for spdlog, glog, etc for server/desktop applications",
             "license": [
                 "BSD-3-Clause"
             ],
             "v2": true,
             "versions": [
+                "0.7.0",
                 "0.6.0",
                 "0.5.1",
                 "0.4.0",
@@ -12690,6 +13300,10 @@
             ],
             "v2": true,
             "versions": [
+                "0.630",
+                "0.625",
+                "0.620",
+                "0.615",
                 "0.610",
                 "0.607",
                 "0.603",
@@ -12831,6 +13445,16 @@
             "versions": [
                 "1.4.19",
                 "1.4.18"
+            ]
+        },
+        "macdylibbundler": {
+            "description": "mac dylib bundler is a tool for use when bundling mac applications",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.0.5"
             ]
         },
         "maddy": {
@@ -13015,6 +13639,16 @@
                 "1.0.1"
             ]
         },
+        "materialx": {
+            "description": "MaterialX is an open standard for the exchange of rich material and look-development content across applications and renderers.",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.38.10"
+            ]
+        },
         "mathfu": {
             "description": "C++ math library developed primarily for games focused on simplicity and efficiency.",
             "license": [
@@ -13032,6 +13666,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.1",
+                "1.1.0",
                 "1.0.1",
                 "1.0.0"
             ]
@@ -13043,11 +13679,10 @@
             ],
             "v2": true,
             "versions": [
-                "1.5.18",
-                "1.5.19",
-                "1.5.21",
-                "1.5.23",
-                "1.5.24"
+                "1.5.27",
+                "1.5.26",
+                "1.5.24",
+                "1.5.23"
             ]
         },
         "mattiasgustavsson-libs": {
@@ -13103,6 +13738,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.6.0",
                 "3.5.2",
                 "3.5.1",
                 "3.5.0",
@@ -13110,6 +13746,7 @@
                 "3.2.1",
                 "3.1.0",
                 "3.0.0",
+                "2.28.8",
                 "2.28.4",
                 "2.25.0",
                 "2.24.0",
@@ -13212,6 +13849,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.4",
                 "1.0.3"
             ]
         },
@@ -13222,6 +13860,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.0",
                 "1.3.0",
                 "1.2.1",
                 "1.2.0",
@@ -13264,6 +13903,11 @@
             ],
             "v2": true,
             "versions": [
+                "2.8.2",
+                "2.8.1",
+                "2.8.0",
+                "2.7.4",
+                "2.7.3",
                 "2.7.2",
                 "2.7.1",
                 "2.7.0",
@@ -13387,6 +14031,9 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.1",
+                "1.4.0",
+                "1.3.2",
                 "1.3.1",
                 "1.3.0",
                 "1.2.3",
@@ -13425,6 +14072,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.28",
                 "0.27",
                 "0.26",
                 "0.25",
@@ -13576,19 +14224,13 @@
             ],
             "v2": true,
             "versions": [
+                "2.1.7",
                 "2.1.2",
                 "2.0.9",
-                "2.0.7",
-                "2.0.6",
-                "2.0.5",
-                "2.0.3",
-                "2.0.2",
+                "1.8.7",
                 "1.8.2",
                 "1.7.9",
-                "1.7.7",
-                "1.7.6",
-                "1.7.5",
-                "1.6.7"
+                "1.7.6"
             ]
         },
         "mingw-builds": {
@@ -13600,6 +14242,7 @@
             ],
             "v2": true,
             "versions": [
+                "13.2.0",
                 "12.2.0",
                 "12.1.0",
                 "11.2.0",
@@ -13616,6 +14259,16 @@
             "v2": true,
             "versions": [
                 "8.0.2"
+            ]
+        },
+        "mini": {
+            "description": "INI file reader and writer",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.9.15"
             ]
         },
         "miniaudio": {
@@ -13638,6 +14291,17 @@
                 "0.11.2",
                 "0.10.40",
                 "0.10.39"
+            ]
+        },
+        "minicoro": {
+            "description": "Single header stackful cross-platform coroutine library in pure C",
+            "license": [
+                "Unlicense",
+                "MIT-0"
+            ],
+            "v2": true,
+            "versions": [
+                "0.1.3"
             ]
         },
         "minimp3": {
@@ -13718,6 +14382,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.1",
                 "1.2.13",
                 "1.2.12",
                 "1.2.11"
@@ -13737,6 +14402,8 @@
             ],
             "v2": true,
             "versions": [
+                "4.0.6",
+                "4.0.5",
                 "4.0.4",
                 "4.0.3",
                 "4.0.2",
@@ -13766,6 +14433,18 @@
                 "cci.20201220"
             ]
         },
+        "mlpack": {
+            "cmake_file_name": "mlpack",
+            "cmake_target_name": "mlpack::mlpack",
+            "description": "mlpack: a fast, header-only C++ machine learning library",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "4.3.0"
+            ]
+        },
         "mm_file": {
             "description": "A self-contained, header-only, implementation of memory-mapped files in C++ for fast integration into larger projects.",
             "license": [
@@ -13774,6 +14453,16 @@
             "v2": true,
             "versions": [
                 "1.0.0"
+            ]
+        },
+        "mocknetworkaccessmanager": {
+            "description": "Mocking network communication for Qt applications",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.12.0"
             ]
         },
         "modern-cpp-kafka": {
@@ -13799,13 +14488,15 @@
             ],
             "v2": true,
             "versions": [
+                "2.32.0",
+                "2.31.0",
                 "2.4.0",
                 "2.0.0",
+                "1.11.0",
                 "1.4.2",
                 "1.5.1",
                 "1.7.1",
-                "1.8.0",
-                "1.11.0"
+                "1.8.0"
             ]
         },
         "moltenvk": {
@@ -13846,14 +14537,11 @@
             ],
             "v2": true,
             "versions": [
+                "1.27.2",
+                "1.27.1",
+                "1.26.2",
                 "1.24.3",
-                "1.24.1",
-                "1.23.5",
-                "1.23.4",
-                "1.23.2",
-                "1.22.2",
-                "1.22.0",
-                "1.17.6"
+                "1.23.5"
             ]
         },
         "mongo-cxx-driver": {
@@ -13961,6 +14649,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.1.1",
                 "2.1.0",
                 "2.0.0",
                 "0.8.0"
@@ -14041,11 +14730,11 @@
             ]
         },
         "mpir": {
-            "description": "MPIR is a highly optimised library for bignum arithmeticforked from the GMP bignum library.",
+            "description": "MPIR is a highly optimised library for bignum arithmetic forked from the GMP bignum library.",
             "license": [
                 "LGPL-3.0-or-later"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "3.0.0"
             ]
@@ -14117,6 +14806,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.12",
+                "1.11",
                 "1.10",
                 "1.9.1",
                 "1.9"
@@ -14155,6 +14846,7 @@
             ],
             "v2": true,
             "versions": [
+                "6.1.1",
                 "6.1.0",
                 "6.0.0",
                 "5.0.0",
@@ -14170,7 +14862,7 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.7"
             ]
@@ -14426,9 +15118,9 @@
             ],
             "v2": true,
             "versions": [
+                "6.5",
                 "6.4",
-                "6.3",
-                "6.2"
+                "6.3"
             ]
         },
         "neargye-semver": {
@@ -14440,6 +15132,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.3.1",
                 "0.3.0"
             ]
         },
@@ -14529,9 +15222,34 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.0",
+                "1.2.0",
                 "1.1.0",
                 "1.0.0",
                 "0.15.0"
+            ]
+        },
+        "nifti_clib": {
+            "cmake_file_name": "nifti",
+            "cmake_target_name": "NIFTI::NIFTI",
+            "components": {
+                "nifticdf": {
+                    "cmake_target_name": "NIFTI::nifticdf"
+                },
+                "niftiio": {
+                    "cmake_target_name": "NIFTI::niftiio"
+                },
+                "znz": {
+                    "cmake_target_name": "NIFTI::znz"
+                }
+            },
+            "description": "C libraries for NIFTI support",
+            "license": [
+                "LicenseRef-LICENSE"
+            ],
+            "v2": true,
+            "versions": [
+                "3.0.0"
             ]
         },
         "ninja": {
@@ -14541,6 +15259,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.12.1",
+                "1.12.0",
                 "1.11.1",
                 "1.11.0",
                 "1.10.2"
@@ -14613,6 +15333,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240223",
                 "cci.20221203",
                 "cci.20220620",
                 "cci.20220428",
@@ -14639,6 +15360,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.0",
+                "1.7.3",
                 "1.7.2",
                 "1.7.1",
                 "1.7.0",
@@ -14649,7 +15372,7 @@
             ]
         },
         "nodejs": {
-            "description": "nodejs binaries for use in recipes",
+            "description": "Node.js is an open-source, cross-platform JavaScript runtime environment.",
             "license": [
                 "MIT"
             ],
@@ -14749,6 +15472,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.28.0",
+                "1.27.0",
                 "1.26.0",
                 "1.25.0",
                 "1.24.0",
@@ -14847,11 +15572,13 @@
             ]
         },
         "nvcloth": {
+            "cmake_file_name": "nvcloth",
+            "cmake_target_name": "nvcloth::nvcloth",
             "description": "NvCloth is a library that provides low level access to a cloth solver designed for realtime interactive applications.",
             "license": [
                 "Nvidia Source Code License (1-Way Commercial)"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.1.6"
             ]
@@ -14933,7 +15660,7 @@
         "oatpp-sqlite": {
             "cmake_file_name": "oatpp-sqlite",
             "cmake_target_name": "oatpp::oatpp-sqlite",
-            "description": "oat++ SQLite library",
+            "description": "SQLite adapter for oatpp ORM.",
             "license": [
                 "Apache-2.0"
             ],
@@ -14971,20 +15698,6 @@
                 "1.2.5",
                 "1.2.0",
                 "1.0.0"
-            ]
-        },
-        "objectbox": {
-            "description": "ObjectBox C and C++: super-fast database for objects and structs",
-            "license": [
-                "Apache-2.0"
-            ],
-            "v2": true,
-            "versions": [
-                "0.20.0",
-                "0.19.0",
-                "0.18.1",
-                "0.18.0",
-                "0.17.0"
             ]
         },
         "objectbox-generator": {
@@ -15058,6 +15771,10 @@
             ],
             "v2": true,
             "versions": [
+                "1.12.0",
+                "1.11.0",
+                "1.9.0",
+                "1.6.1",
                 "1.5.0",
                 "1.4.0",
                 "1.2.0",
@@ -15084,6 +15801,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.10.0",
                 "1.9.8",
                 "1.9.7",
                 "1.9.6",
@@ -15129,8 +15847,9 @@
             "license": [
                 "LGPL-3.0-or-later"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "5.1.0",
                 "4.1.2"
             ]
         },
@@ -15199,7 +15918,18 @@
             ],
             "v2": true,
             "versions": [
+                "1.36.5344",
                 "1.36.5182"
+            ]
+        },
+        "ohpipeline": {
+            "description": "OpenHome audio pipeline",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.139.1000"
             ]
         },
         "ois": {
@@ -15236,6 +15966,7 @@
             ],
             "v2": true,
             "versions": [
+                "2021.12.0",
                 "2021.10.0",
                 "2021.9.0",
                 "2021.8.0",
@@ -15277,11 +16008,12 @@
             ],
             "v2": true,
             "versions": [
+                "1.16.1",
+                "1.16.0",
                 "1.15.0",
                 "1.14.1",
                 "1.14.0",
-                "1.13.1",
-                "1.12.0"
+                "1.13.1"
             ]
         },
         "onnxruntime": {
@@ -15374,11 +16106,8 @@
             ],
             "v2": true,
             "versions": [
-                "1.22.2",
-                "1.21.1",
-                "1.21.0",
-                "1.20.1",
-                "1.19.1"
+                "1.23.1",
+                "1.22.2"
             ]
         },
         "openapi-generator": {
@@ -15388,12 +16117,10 @@
             ],
             "v2": true,
             "versions": [
+                "7.5.0",
+                "7.4.0",
                 "7.3.0",
-                "7.2.0",
-                "7.0.0",
-                "6.6.0",
-                "6.5.0",
-                "6.4.0"
+                "6.6.0"
             ]
         },
         "openassetio": {
@@ -15425,6 +16152,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.3.27",
                 "0.3.26",
                 "0.3.25",
                 "0.3.24",
@@ -15521,6 +16249,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.3.2",
                 "2.3.1",
                 "2.3.0",
                 "2.2.1",
@@ -15596,6 +16325,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.9.0",
                 "4.8.1",
                 "4.5.5",
                 "4.5.3",
@@ -15652,16 +16382,14 @@
             ],
             "v2": true,
             "versions": [
+                "3.2.4",
+                "3.2.3",
+                "3.2.2",
                 "3.2.1",
                 "3.1.9",
                 "3.1.7",
-                "3.1.5",
                 "2.5.9",
                 "2.5.7",
-                "2.5.5",
-                "2.5.4",
-                "2.5.3",
-                "2.5.2",
                 "2.4.0"
             ]
         },
@@ -15749,6 +16477,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.4.1",
                 "2.3.1",
                 "2.1.1",
                 "1.7.0"
@@ -15756,25 +16485,20 @@
         },
         "openimageio": {
             "cmake_file_name": "OpenImageIO",
-            "cmake_target_name": "OpenImageIO::OpenImageIO",
-            "components": {
-                "main": {
-                    "cmake_target_name": "OpenImageIO::OpenImageIO"
-                },
-                "openimageio_util": {
-                    "cmake_target_name": "OpenImageIO::OpenImageIO_Util"
-                }
-            },
             "description": "OpenImageIO is a library for reading and writing images, and a bunch of related classes, utilities, and applications. There is a particular emphasis on formats and functionality used in professional, large-scale animation and visual effects work for film.",
             "license": [
+                "Apache-2.0",
                 "BSD-3-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "2.2.7.0",
-                "2.2.18.0",
-                "2.3.7.2",
-                "2.4.7.1"
+                "2.4.7.1",
+                "2.4.17.0",
+                "2.5.6.0",
+                "2.5.9.0",
+                "2.5.10.1",
+                "2.5.11.0",
+                "2.5.12.0"
             ]
         },
         "openjdk": {
@@ -15785,6 +16509,7 @@
             ],
             "v2": true,
             "versions": [
+                "21.0.2",
                 "21.0.1",
                 "19.0.2",
                 "16.0.1"
@@ -15799,18 +16524,25 @@
             ],
             "v2": true,
             "versions": [
+                "2.5.2",
+                "2.5.1",
                 "2.5.0",
                 "2.4.0",
                 "2.3.1"
             ]
         },
         "openldap": {
-            "description": "OpenLDAP C++ library",
+            "components": {
+                "lber": {},
+                "ldap": {}
+            },
+            "description": "OpenLDAP C library",
             "license": [
                 "OLDAP-2.8"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "2.6.7",
                 "2.6.1"
             ]
         },
@@ -15867,13 +16599,52 @@
             ]
         },
         "openscenegraph": {
+            "cmake_file_name": "OpenSceneGraph",
+            "cmake_target_name": null,
+            "components": {
+                "OpenThreads": {
+                    "cmake_target_name": "OpenThreads::OpenThreads"
+                },
+                "openscenegraph": {
+                    "cmake_target_name": "OpenSceneGraph::OpenSceneGraph"
+                },
+                "osg": {},
+                "osgAnimation": {},
+                "osgDB": {},
+                "osgFX": {},
+                "osgGA": {},
+                "osgManipulator": {},
+                "osgParticle": {},
+                "osgPresentation": {},
+                "osgShadow": {},
+                "osgSim": {},
+                "osgTerrain": {},
+                "osgText": {},
+                "osgUI": {},
+                "osgUtil": {},
+                "osgViewer": {},
+                "osgVolume": {},
+                "osgWidget": {}
+            },
             "description": "OpenSceneGraph is an open source high performance 3D graphics toolkit",
             "license": [
-                ""
+                "LGPL-2.1-only",
+                "WxWindows-exception-3.1"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "3.6.5"
+            ]
+        },
+        "openssh": {
+            "description": "The OpenSSH (portable) suite of secure connectivity tools",
+            "license": [
+                "SSH-OpenSSH"
+            ],
+            "v2": true,
+            "versions": [
+                "9.6p1",
+                "9.1p1"
             ]
         },
         "openssl": {
@@ -15892,13 +16663,12 @@
             ],
             "v2": true,
             "versions": [
+                "3.2.2",
                 "3.2.1",
-                "3.2.0",
+                "3.1.6",
                 "3.1.5",
-                "3.1.4",
-                "3.1.3",
+                "3.0.14",
                 "3.0.13",
-                "3.0.12",
                 "1.1.1w"
             ]
         },
@@ -15944,10 +16714,10 @@
             ],
             "v2": true,
             "versions": [
+                "1.14.2",
                 "1.12.0",
                 "1.9.1",
-                "1.8.3",
-                "1.7.0"
+                "1.8.3"
             ]
         },
         "opentelemetry-proto": {
@@ -15957,6 +16727,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.0",
+                "1.2.0",
                 "1.1.0",
                 "1.0.0",
                 "0.20.0",
@@ -15982,18 +16754,15 @@
         "openvdb": {
             "cmake_file_name": "OpenVDB",
             "cmake_target_name": "OpenVDB::openvdb",
-            "components": {
-                "openvdb-core": {
-                    "cmake_target_name": "OpenVDB::openvdb"
-                }
-            },
             "description": "OpenVDB is an open source C++ library comprising a novel hierarchical datastructure and a large suite of tools for the efficient storage and manipulation of sparse volumetric data discretized on three-dimensional grids.",
             "license": [
                 "MPL-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "8.0.1"
+                "11.0.0",
+                "10.1.0",
+                "9.1.0"
             ]
         },
         "openvino": {
@@ -16004,9 +16773,10 @@
             ],
             "v2": true,
             "versions": [
+                "2024.1.0",
+                "2024.0.0",
                 "2023.3.0",
-                "2023.2.0",
-                "2023.1.0"
+                "2023.2.0"
             ]
         },
         "openvr": {
@@ -16014,7 +16784,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.12.5",
                 "1.14.15",
@@ -16086,6 +16856,21 @@
                 "0.11"
             ]
         },
+        "orc": {
+            "description": "ORC is a self-describing type-aware columnar file format designed for Hadoop workloads",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "2.0.0",
+                "1.9.3",
+                "1.9.2",
+                "1.8.7",
+                "1.8.6",
+                "1.7.10"
+            ]
+        },
         "orcania": {
             "cmake_file_name": "Orcania",
             "cmake_target_name": "Orcania::Orcania-static",
@@ -16136,6 +16921,24 @@
                 "0.6.2"
             ]
         },
+        "ouster_sdk": {
+            "cmake_file_name": "OusterSDK",
+            "cmake_target_name": "OusterSDK::OusterSDK",
+            "components": {
+                "ouster_client": {
+                    "cmake_target_name": "OusterSDK::ouster_client"
+                }
+            },
+            "description": "Ouster SDK - tools for working with Ouster Lidars",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "0.11.0",
+                "0.10.0"
+            ]
+        },
         "out_ptr": {
             "description": "a C++11 implementation of std::out_ptr (p1132), as a standalone library",
             "license": [
@@ -16153,6 +16956,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.9",
                 "2.2.8",
                 "2.2.7",
                 "2.2.4",
@@ -16263,9 +17067,8 @@
             ],
             "v2": true,
             "versions": [
-                "1.2.0",
-                "1.1",
-                "1.0.1"
+                "1.3.2",
+                "1.2.0"
             ]
         },
         "pango": {
@@ -16317,6 +17120,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.12",
                 "1.3.11",
                 "1.3.8",
                 "1.37",
@@ -16363,12 +17167,24 @@
                 "0.12"
             ]
         },
+        "pathie-cpp": {
+            "cmake_file_name": "Pathie",
+            "cmake_target_name": "Pathie::Pathie",
+            "description": "Small C++ library for crossplatform Unicode path management",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "0.1.1"
+            ]
+        },
         "pbc": {
             "description": "The PBC (Pairing-Based Crypto) library is a C library providing low-level routines for pairing-based cryptosystems.",
             "license": [
                 "LGPL-3.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "0.5.14"
             ]
@@ -16416,8 +17232,10 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "3.12.0",
+                "3.10.0",
                 "3.7.0"
             ]
         },
@@ -16453,6 +17271,8 @@
             ],
             "v2": true,
             "versions": [
+                "10.44",
+                "10.43",
                 "10.42",
                 "10.40",
                 "10.39",
@@ -16499,6 +17319,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.6.4",
                 "4.6.3",
                 "4.6.2",
                 "4.6.1",
@@ -16552,6 +17373,10 @@
             ],
             "v2": true,
             "versions": [
+                "45.0",
+                "44.0",
+                "43.1",
+                "42.0",
                 "41.0",
                 "40.0",
                 "39.0",
@@ -16638,6 +17463,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.2.0",
                 "3.0.2"
             ]
         },
@@ -16740,15 +17566,13 @@
         "pixman": {
             "description": "Pixman is a low-level software library for pixel manipulation",
             "license": [
-                "LGPL-2.1-only",
-                "MPL-1.1"
+                "MIT"
             ],
             "v2": true,
             "versions": [
+                "0.43.4",
                 "0.43.0",
-                "0.42.2",
-                "0.40.0",
-                "0.38.4"
+                "0.42.2"
             ]
         },
         "pkgconf": {
@@ -16758,6 +17582,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.0",
                 "2.1.0",
                 "2.0.3",
                 "2.0.2",
@@ -16837,6 +17662,18 @@
             "versions": [
                 "0.3.41",
                 "0.1.2"
+            ]
+        },
+        "platformfolders": {
+            "cmake_file_name": "platform_folders",
+            "cmake_target_name": "sago::platform_folders",
+            "description": "A C++ library to look for special directories like My Documents and APPDATA so that you do not need to write Linux, Windows or Mac OS X specific code",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "4.2.0"
             ]
         },
         "playrho": {
@@ -16982,6 +17819,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.13.3",
+                "1.13.2",
                 "1.13.1",
                 "1.13.0",
                 "1.12.5p2",
@@ -17041,6 +17880,16 @@
             "cmake_file_name": "polymorphic_value",
             "cmake_target_name": "polymorphic_value::polymorphic_value",
             "description": "Production-quality reference implementation of P0201r2: A polymorphic value-type for C++",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.3.0"
+            ]
+        },
+        "popl": {
+            "description": "Header-only C++ command line arguments parser that supports the same set of options as GNU's getopt.",
             "license": [
                 "MIT"
             ],
@@ -17149,6 +17998,19 @@
                 "1.0.0"
             ]
         },
+        "primesieve": {
+            "cmake_file_name": "primesieve",
+            "cmake_target_name": "primesieve::primesieve",
+            "description": "Fast prime number generator",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "12.1",
+                "11.2"
+            ]
+        },
         "pro-mdnsd": {
             "cmake_file_name": "mdnsd",
             "cmake_target_name": "libmdnsd",
@@ -17156,7 +18018,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "0.8.4"
             ]
@@ -17192,13 +18054,10 @@
             ],
             "v2": true,
             "versions": [
+                "9.4.1",
                 "9.3.1",
                 "9.3.0",
                 "9.2.1",
-                "9.1.1",
-                "9.1.0",
-                "9.0.1",
-                "9.0.0",
                 "8.2.1",
                 "7.2.1",
                 "6.3.1"
@@ -17235,22 +18094,8 @@
             "v2": true,
             "versions": [
                 "7.6.2",
-                "7.6.1",
-                "7.6.0",
                 "7.5.1",
-                "7.5.0",
-                "7.4.2",
-                "7.4.1",
-                "7.4.0",
-                "7.3.1",
-                "7.3.0",
-                "7.2.1",
-                "7.1.1",
-                "7.1.0",
-                "7.0.7",
-                "7.0.5",
-                "7.0.4",
-                "7.0.2"
+                "7.4.2"
             ]
         },
         "protobuf": {
@@ -17266,13 +18111,10 @@
             ],
             "v2": true,
             "versions": [
+                "5.27.0",
+                "4.25.3",
                 "3.21.12",
-                "3.21.9",
-                "3.20.3",
-                "3.20.0",
-                "3.19.6",
-                "3.18.3",
-                "3.17.1"
+                "3.20.3"
             ]
         },
         "protobuf-c": {
@@ -17305,6 +18147,22 @@
             "v2": true,
             "versions": [
                 "1.7.1"
+            ]
+        },
+        "proxy": {
+            "cmake_file_name": "proxy",
+            "cmake_target_name": "msft_proxy",
+            "description": "Proxy: Next Generation Polymorphism in C++",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "2.4.0",
+                "2.3.2",
+                "2.3.1",
+                "2.3.0",
+                "2.2.1"
             ]
         },
         "psimd": {
@@ -17349,6 +18207,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20231129",
                 "cci.20210218"
             ]
         },
@@ -17389,6 +18248,7 @@
             ],
             "v2": true,
             "versions": [
+                "17.0",
                 "14.2",
                 "14.0",
                 "13.0"
@@ -17427,7 +18287,8 @@
                 "2.10.0",
                 "2.10.1",
                 "2.10.4",
-                "2.11.1"
+                "2.11.1",
+                "2.12.0"
             ]
         },
         "pybind11_json": {
@@ -17478,6 +18339,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.3",
                 "1.2",
                 "1.1",
                 "1.0"
@@ -17597,17 +18459,16 @@
             ],
             "v2": true,
             "versions": [
+                "6.7.1",
+                "6.7.0",
+                "6.6.3",
+                "6.6.2",
                 "6.6.1",
                 "6.6.0",
                 "6.5.3",
                 "6.4.2",
                 "6.3.2",
-                "5.15.12",
-                "5.15.11",
-                "5.15.10",
-                "5.15.9",
-                "5.15.8",
-                "5.15.7"
+                "5.15.14"
             ]
         },
         "qt-advanced-docking-system": {
@@ -17679,6 +18540,18 @@
                 "1.1"
             ]
         },
+        "quickcpplib": {
+            "cmake_file_name": "quickcpplib",
+            "cmake_target_name": "quickcpplib::hl",
+            "description": "Eliminate all the tedious hassle when making state-of-the-art C++ 17 - 23 libraries!",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20231208"
+            ]
+        },
         "quickfast": {
             "description": "QuickFAST is an Open Source native C++ implementation of the FAST Protocol",
             "license": [
@@ -17719,22 +18592,16 @@
             ],
             "v2": true,
             "versions": [
+                "4.4.1",
+                "4.4.0",
+                "4.3.0",
+                "3.9.0",
+                "3.8.0",
+                "3.7.0",
                 "3.6.0",
                 "3.5.1",
-                "3.5.0",
                 "3.4.1",
-                "3.4.0",
-                "3.3.1",
-                "3.2.0",
-                "3.1.0",
-                "3.0.2",
-                "2.9.2",
-                "2.9.1",
-                "2.9.0",
-                "2.8.0",
-                "2.7.0",
-                "2.6.0",
-                "1.7.3"
+                "3.3.1"
             ]
         },
         "quirc": {
@@ -17818,6 +18685,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.14.0",
                 "0.13.0",
                 "0.11.0",
                 "0.10.0",
@@ -17910,6 +18778,7 @@
             ],
             "v2": true,
             "versions": [
+                "8.82",
                 "8.80",
                 "8.77",
                 "8.75",
@@ -17926,13 +18795,14 @@
             ],
             "v2": true,
             "versions": [
+                "3.0.4",
+                "3.0.2",
                 "3.0.0",
                 "2.2.3",
                 "2.2.0",
                 "2.1.1",
                 "2.0.0",
-                "1.10.4",
-                "cci.20210513"
+                "1.10.4"
             ]
         },
         "rapidjson": {
@@ -17971,6 +18841,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.0",
                 "0.5.0",
                 "0.4.1",
                 "0.4.0",
@@ -17991,6 +18862,19 @@
                 "3.5.0"
             ]
         },
+        "rdma-core": {
+            "description": "RDMA core userspace libraries and daemons. Provides userspace components for the Linux Kernel's drivers/infiniband subsystem.",
+            "license": [
+                "GPL-2.0",
+                "Linux-OpenIB",
+                "BSD-2-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "51.0",
+                "49.0"
+            ]
+        },
         "re2": {
             "cmake_file_name": "re2",
             "cmake_target_name": "re2::re2",
@@ -18000,6 +18884,7 @@
             ],
             "v2": true,
             "versions": [
+                "20240301",
                 "20231101",
                 "20230901",
                 "20230801",
@@ -18038,6 +18923,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.1.1",
                 "2.0.0",
                 "0.2.3",
                 "0.2.1",
@@ -18201,11 +19087,13 @@
             ]
         },
         "redradist-icc": {
+            "cmake_file_name": "icc",
+            "cmake_target_name": "icc::icc",
             "description": "I.C.C. - Inter Component Communication, This is a library created to simplify communication between components inside of single application. It is thread safe and could be used for creating components that works in different threads. ",
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.0.0"
             ]
@@ -18228,6 +19116,9 @@
             ],
             "v2": true,
             "versions": [
+                "0.11.1",
+                "0.11.0",
+                "0.10.0",
                 "0.6.0"
             ]
         },
@@ -18245,11 +19136,11 @@
             ]
         },
         "resiprocate": {
-            "description": "The project is dedicated to maintaining a complete, correct, and commercially usable implementation of SIP and a few related protocols. ",
+            "description": "The project is dedicated to maintaining a complete, correct, and commercially usable implementation of SIP and a few related protocols.",
             "license": [
                 "VSL-1.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
                 "1.12.0"
             ]
@@ -18328,6 +19219,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.7.0",
                 "0.6.0",
                 "0.5.0",
                 "0.4.0"
@@ -18355,6 +19247,7 @@
             ],
             "v2": true,
             "versions": [
+                "24.04.00",
                 "23.10.00",
                 "23.06.00"
             ]
@@ -18369,6 +19262,8 @@
             ],
             "v2": true,
             "versions": [
+                "4.0.0",
+                "3.0.0",
                 "2.1.2",
                 "2.1.1",
                 "2.1.0",
@@ -18402,6 +19297,16 @@
                 "3.7.0"
             ]
         },
+        "rocket": {
+            "description": "Fast single header signal/slots library for C++",
+            "license": [
+                "DocumentRef-README.md:LicenseRef-Rocket-public-domain"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20200603"
+            ]
+        },
         "rocksdb": {
             "cmake_file_name": "RocksDB",
             "cmake_target_name": "RocksDB::rocksdb",
@@ -18417,10 +19322,13 @@
             ],
             "v2": true,
             "versions": [
+                "9.2.1",
+                "9.1.0",
+                "9.0.0",
+                "8.8.1",
                 "6.29.5",
                 "6.27.3",
-                "6.20.3",
-                "8.8.1"
+                "6.20.3"
             ]
         },
         "rotor": {
@@ -18430,10 +19338,13 @@
             ],
             "v2": true,
             "versions": [
-                "0.21",
-                "0.23",
+                "0.30",
+                "0.29",
+                "0.28",
+                "0.25",
                 "0.24",
-                "0.25"
+                "0.23",
+                "0.21"
             ]
         },
         "rpclib": {
@@ -18486,6 +19397,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.3.0",
                 "2.2.1",
                 "2.2.0",
                 "2.1.5",
@@ -18556,6 +19468,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20231129",
                 "cci.20220628"
             ]
         },
@@ -18581,12 +19494,15 @@
             ]
         },
         "s2geometry": {
+            "cmake_file_name": "s2",
+            "cmake_target_name": "s2::s2",
             "description": "Computational geometry and spatial indexing on the sphere",
             "license": [
                 "Apache-2.0"
             ],
             "v2": true,
             "versions": [
+                "0.11.1",
                 "0.10.0"
             ]
         },
@@ -18595,8 +19511,9 @@
             "license": [
                 "GPL-3.0-or-later"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "2.2.6",
                 "2.2.3"
             ]
         },
@@ -18609,6 +19526,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.4.13",
                 "1.4.1",
                 "1.4.0",
                 "1.3.56",
@@ -18623,6 +19541,16 @@
                 "1.1.1",
                 "1.1.0",
                 "1.0.11"
+            ]
+        },
+        "safe": {
+            "description": "Header only read and write locks for mutexes",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.1"
             ]
         },
         "safeint": {
@@ -18663,6 +19591,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.9.5",
+                "0.9.4",
                 "0.9.1",
                 "0.9.0"
             ]
@@ -18685,6 +19615,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.13.0",
                 "0.9.0",
                 "0.8.0",
                 "0.7.0",
@@ -18710,6 +19641,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.0",
                 "1.2.0",
                 "1.1.0",
                 "1.0.1"
@@ -18755,6 +19687,7 @@
             ],
             "v2": true,
             "versions": [
+                "9.0.1",
                 "8.1.0",
                 "8.0.4",
                 "8.0.3"
@@ -18767,6 +19700,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.0",
                 "1.1.0",
                 "1.0.2"
             ]
@@ -18778,6 +19712,10 @@
             ],
             "v2": true,
             "versions": [
+                "3.0.1",
+                "2.0.3",
+                "2.0.2",
+                "2.0.1",
                 "2.0.0",
                 "1.1.3",
                 "1.1.2",
@@ -18844,6 +19782,9 @@
             ],
             "v2": true,
             "versions": [
+                "2.0.0",
+                "1.5.0",
+                "1.4.0",
                 "1.3.0",
                 "1.2.0",
                 "1.1.0",
@@ -18878,6 +19819,10 @@
             ],
             "v2": true,
             "versions": [
+                "2.30.4",
+                "2.30.3",
+                "2.30.2",
+                "2.30.1",
                 "2.28.5",
                 "2.28.3",
                 "2.28.2",
@@ -18909,8 +19854,9 @@
             "license": [
                 "Zlib"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "2.8.0",
                 "2.0.4"
             ]
         },
@@ -18923,6 +19869,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.2.0",
                 "2.0.1"
             ]
         },
@@ -18934,6 +19881,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.22.0",
                 "2.20.2",
                 "2.20.1",
                 "2.0.18",
@@ -19067,12 +20015,11 @@
             ],
             "v2": true,
             "versions": [
-                "0.7.0",
-                "0.6.5",
-                "0.6.4",
-                "0.6.3",
-                "0.5.4",
-                "0.4.18"
+                "0.7.6",
+                "0.7.5",
+                "0.7.4",
+                "0.6.6",
+                "0.5.4"
             ]
         },
         "seqan": {
@@ -19146,6 +20093,12 @@
             ],
             "v2": true,
             "versions": [
+                "1.6.0",
+                "1.5.0",
+                "1.4.0",
+                "1.3.1",
+                "1.3.0",
+                "1.2.4",
                 "1.2.3"
             ]
         },
@@ -19167,10 +20120,10 @@
             "license": [
                 "Apache-2.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "2021.1",
-                "2019.0"
+                "2023.6",
+                "2021.1"
             ]
         },
         "shapelib": {
@@ -19194,6 +20147,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.6",
                 "0.5",
                 "0.4",
                 "0.3",
@@ -19242,6 +20196,18 @@
                 "1.2.0"
             ]
         },
+        "simd": {
+            "cmake_file_name": "Simd",
+            "cmake_target_name": "Simd::Simd",
+            "description": "C++ image processing and machine learning library with SIMD",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "6.1.138"
+            ]
+        },
         "simde": {
             "description": "Implementations of SIMD instruction sets for systems which don't natively support them.",
             "license": [
@@ -19249,6 +20215,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.8.2",
+                "0.8.0",
                 "0.7.6"
             ]
         },
@@ -19261,18 +20229,15 @@
             ],
             "v2": true,
             "versions": [
+                "3.9.3",
+                "3.9.2",
+                "3.9.1",
+                "3.8.0",
+                "3.7.0",
                 "3.6.4",
-                "3.6.1",
-                "3.6.0",
                 "3.5.0",
                 "3.3.0",
-                "3.2.3",
-                "3.2.2",
-                "3.2.1",
-                "3.2.0",
-                "3.1.8",
-                "3.0.1",
-                "2.2.3"
+                "3.2.0"
             ]
         },
         "simdutf": {
@@ -19283,18 +20248,29 @@
             ],
             "v2": true,
             "versions": [
+                "5.2.8",
+                "5.2.6",
+                "5.2.3",
+                "5.2.2",
+                "5.0.0",
                 "4.0.9",
                 "4.0.5",
                 "4.0.4",
                 "4.0.3",
-                "3.2.17",
-                "3.2.15",
-                "3.2.14",
-                "3.2.2",
-                "3.2.0",
-                "3.1.0",
-                "3.0.0",
-                "2.2.0"
+                "3.2.17"
+            ]
+        },
+        "simfil": {
+            "description": "simfil is a C++ 17 library and a language for querying structured map feature data. The library provides an efficient in-memory storage pool for map data, optimized for the simfil query language, along with a query interpreter to query the actual data.",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "0.2.1",
+                "0.1.3",
+                "0.1.2",
+                "0.1.1"
             ]
         },
         "simple-websocket-server": {
@@ -19317,6 +20293,22 @@
             "v2": true,
             "versions": [
                 "0.2.2"
+            ]
+        },
+        "sioclient": {
+            "cmake_file_name": "sioclient",
+            "components": {
+                "sioclient_": {
+                    "cmake_target_name": "sioclient::sioclient"
+                }
+            },
+            "description": "C++11 implementation of Socket.IO client",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240405"
             ]
         },
         "sjson-cpp": {
@@ -19351,8 +20343,9 @@
             "license": [
                 "BSL-1.0"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "3.6",
                 "3.5.1"
             ]
         },
@@ -19365,6 +20358,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.1.11",
                 "1.1.9",
                 "1.1.8",
                 "1.1.6",
@@ -19386,6 +20380,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.2.1",
+                "1.2.0",
                 "1.1.10",
                 "1.1.9",
                 "1.1.8",
@@ -19529,6 +20525,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.0.1",
                 "1.0.0"
             ]
         },
@@ -19554,6 +20551,8 @@
             ],
             "v2": true,
             "versions": [
+                "7.0.1",
+                "7.0.0",
                 "6.0.4",
                 "6.0.3"
             ]
@@ -19631,6 +20630,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.14.1",
+                "1.14.0",
                 "1.13.0",
                 "1.12.0",
                 "1.11.0",
@@ -19653,6 +20654,18 @@
                 "1.0.0",
                 "0.9.0",
                 "0.8.1"
+            ]
+        },
+        "speedb": {
+            "cmake_file_name": "Speedb",
+            "cmake_target_name": "Speedb::speedb",
+            "description": "A RocksDB compliant high performance scalable embedded key-value store",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "2.8.0"
             ]
         },
         "spirv-cross": {
@@ -19759,6 +20772,9 @@
             ],
             "v2": true,
             "versions": [
+                "4.6.0",
+                "4.5.7",
+                "4.5.6",
                 "4.5.1",
                 "4.5.0",
                 "4.4.3",
@@ -19781,6 +20797,9 @@
             ],
             "v2": true,
             "versions": [
+                "3.46.0",
+                "3.45.3",
+                "3.45.2",
                 "3.45.1",
                 "3.45.0",
                 "3.44.2",
@@ -19802,6 +20821,18 @@
                 "3.38.5",
                 "3.37.2",
                 "3.36.0"
+            ]
+        },
+        "sqlite3mc": {
+            "description": "The project SQLite3 Multiple Ciphers implements an encryption extension for SQLite with support for multiple ciphers.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.8.6",
+                "1.8.4",
+                "1.8.0"
             ]
         },
         "sqlite_orm": {
@@ -19909,6 +20940,9 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.0",
+                "1.7.2",
+                "1.6.2",
                 "1.6.1"
             ]
         },
@@ -19973,6 +21007,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240213",
                 "cci.20230920",
                 "cci.20220909",
                 "cci.20210910",
@@ -20017,6 +21052,18 @@
                 "1.0"
             ]
         },
+        "stella-cv-fbow": {
+            "cmake_file_name": "fbow",
+            "cmake_target_name": "fbow::fbow",
+            "description": "FBoW (Fast Bag of Words) is an extremely optimized version of the DBoW2/DBoW3 libraries.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20240508"
+            ]
+        },
         "stlab": {
             "description": "The Software Technology Lab libraries.",
             "license": [
@@ -20038,6 +21085,16 @@
                 "5.32.1.1",
                 "5.30.0.1",
                 "5.28.1.1"
+            ]
+        },
+        "streaming-percentiles": {
+            "description": "Cross-platform, multi-language implementation of multiple streaming percentile algorithms",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "3.1.0"
             ]
         },
         "streamvbyte": {
@@ -20064,6 +21121,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.8.0",
                 "1.7.0",
                 "1.6.0",
                 "1.5.1",
@@ -20088,6 +21146,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.8.4",
                 "2.0.4",
                 "2.0.3",
                 "2.0.1",
@@ -20109,6 +21168,7 @@
             ],
             "v2": true,
             "versions": [
+                "v14",
                 "v13",
                 "v12",
                 "v11",
@@ -20235,7 +21295,8 @@
                 "0.9.0",
                 "0.10.1",
                 "0.11.1",
-                "0.11.2"
+                "0.11.2",
+                "0.12.0"
             ]
         },
         "systemc": {
@@ -20402,6 +21463,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.35",
                 "1.32.90"
             ]
         },
@@ -20414,6 +21476,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.7.0",
                 "3.6.0",
                 "3.5.0",
                 "3.4.0",
@@ -20615,6 +21678,8 @@
             ],
             "v2": true,
             "versions": [
+                "5.4.0",
+                "5.3.4",
                 "5.3.3",
                 "5.3.0",
                 "5.2.0",
@@ -20673,6 +21738,22 @@
                 "1.1.1"
             ]
         },
+        "thorvg": {
+            "description": "ThorVG is a platform-independent portable library that allows for drawing vector-based scenes and animations.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.13.8",
+                "0.13.7",
+                "0.13.6",
+                "0.13.5",
+                "0.13.4",
+                "0.13.2",
+                "0.13.0"
+            ]
+        },
         "threadpool": {
             "description": "A simple C++11 Thread Pool implementation.",
             "license": [
@@ -20697,6 +21778,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.20.0",
                 "0.18.1",
                 "0.17.0",
                 "0.16.0",
@@ -20715,6 +21797,16 @@
                 "1.16.0",
                 "1.17.0",
                 "1.17.2"
+            ]
+        },
+        "tidwall-neco": {
+            "description": "Concurrency library for C (coroutines)",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "0.3.2"
             ]
         },
         "tidy-html5": {
@@ -20846,6 +21938,16 @@
             "versions": [
                 "0.6.0",
                 "0.5.3"
+            ]
+        },
+        "tinycolormap": {
+            "description": "A header-only, single-file library for colormaps written in C++11",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "cci.20230223"
             ]
         },
         "tinycthread": {
@@ -21124,6 +22226,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.10.0",
                 "1.4.0"
             ]
         },
@@ -21188,6 +22291,16 @@
                 "1.3.3"
             ]
         },
+        "toon": {
+            "description": "TooN - Tom's Object Oriented Numerics library",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "3.2"
+            ]
+        },
         "tqdm-cpp": {
             "description": "Easily display progress in C++17. Inspired by python's awesome tqdm library.",
             "license": [
@@ -21240,6 +22353,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.5.19",
                 "1.5.16",
                 "1.5.15",
                 "1.5.14",
@@ -21261,6 +22375,17 @@
                 "cci.20230717"
             ]
         },
+        "tree-gen": {
+            "description": "C++ and Python code generator for tree-like structures common in parser and compiler codebases.",
+            "license": [
+                "Apache-2.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.0.7",
+                "1.0.6"
+            ]
+        },
         "tree-sitter": {
             "description": "Tree-sitter is a parser generator tool and an incremental parsing library. It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited.",
             "license": [
@@ -21268,6 +22393,10 @@
             ],
             "v2": true,
             "versions": [
+                "0.22.6",
+                "0.22.5",
+                "0.22.1",
+                "0.21.0",
                 "0.20.8",
                 "0.20.6",
                 "0.20.0",
@@ -21421,6 +22550,8 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.0",
+                "1.2.2",
                 "1.2.1",
                 "1.0.1",
                 "0.6.3",
@@ -21519,6 +22650,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.2.4",
                 "0.2.3",
                 "0.2.2",
                 "0.2.1"
@@ -21574,11 +22706,9 @@
             ],
             "v2": true,
             "versions": [
+                "0.79.0",
                 "0.78.1",
-                "0.78.0",
-                "0.77.1",
-                "0.75.1",
-                "0.74.0"
+                "0.77.1"
             ]
         },
         "uni-algo": {
@@ -21635,6 +22765,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.6.0",
                 "2.5.2"
             ]
         },
@@ -21656,9 +22787,9 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
-                "1.1.1"
+                "1.3.0"
             ]
         },
         "unordered_dense": {
@@ -21715,7 +22846,18 @@
             ],
             "v2": true,
             "versions": [
+                "4.0.0",
                 "3.1.1"
+            ]
+        },
+        "urdfdom_headers": {
+            "description": "Headers for URDF parsers",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.1"
             ]
         },
         "uriparser": {
@@ -21727,6 +22869,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.9.8",
                 "0.9.7",
                 "0.9.6",
                 "0.9.5",
@@ -21739,8 +22882,9 @@
             "license": [
                 "LGPL-2.1"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "0.14.0",
                 "0.11.4"
             ]
         },
@@ -21780,6 +22924,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20240202",
                 "cci.20210310"
             ]
         },
@@ -21851,6 +22996,7 @@
             ],
             "v2": true,
             "versions": [
+                "3.4.0",
                 "3.3.0",
                 "3.2.0",
                 "3.1.0",
@@ -21866,16 +23012,13 @@
             ],
             "v2": true,
             "versions": [
+                "20.62.0",
+                "20.60.0",
                 "20.58.0",
                 "20.57.0",
                 "20.56.0",
                 "20.55.0",
                 "20.53.0",
-                "20.51.0",
-                "20.49.0",
-                "20.48.0",
-                "20.47.0",
-                "20.45.0",
                 "19.3.0",
                 "18.3.0"
             ]
@@ -21996,6 +23139,18 @@
                 "cci.20190628"
             ]
         },
+        "velodyne_decoder": {
+            "cmake_file_name": "velodyne_decoder",
+            "cmake_target_name": "velodyne_decoder::velodyne_decoder",
+            "description": "A decoder library for raw Velodyne data and telemetry info",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "v2": true,
+            "versions": [
+                "3.0.0"
+            ]
+        },
         "veque": {
             "description": "Fast C++ container combining the best features of std::vector and std::deque",
             "license": [
@@ -22032,6 +23187,18 @@
                 "1.0.0"
             ]
         },
+        "vigra": {
+            "cmake_file_name": "Vigra",
+            "cmake_target_name": "vigraimpex",
+            "description": "A generic C++ library for image analysis",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.11.2"
+            ]
+        },
         "vincentlaucsb-csv-parser": {
             "description": "Vince's CSV Parser with simple and intuitive syntax",
             "license": [
@@ -22039,6 +23206,10 @@
             ],
             "v2": true,
             "versions": [
+                "2.3.0",
+                "2.2.3",
+                "2.2.2",
+                "2.2.0",
                 "2.1.3"
             ]
         },
@@ -22247,6 +23418,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.11.1",
                 "1.10.0",
                 "1.8.0"
             ]
@@ -22281,6 +23453,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.14.0",
                 "0.13.5",
                 "0.11.2",
                 "0.11.1",
@@ -22296,6 +23469,8 @@
             ],
             "v2": true,
             "versions": [
+                "4.3.0",
+                "4.2.7",
                 "4.2.5",
                 "4.2.0",
                 "4.1.1",
@@ -22315,17 +23490,15 @@
             ],
             "v2": true,
             "versions": [
+                "21.0.0",
+                "20.0.1",
+                "19.0.2",
+                "18.0.3",
                 "16.0.0",
                 "12.0.2",
                 "9.0.1",
                 "7.0.0",
-                "6.0.1",
-                "5.0.0",
-                "4.0.0",
-                "3.0.0",
-                "2.0.0",
-                "1.0.1",
-                "0.39.1"
+                "6.0.1"
             ]
         },
         "wasmtime-cpp": {
@@ -22335,6 +23508,7 @@
             ],
             "v2": true,
             "versions": [
+                "18.0.0",
                 "9.0.0",
                 "7.0.0",
                 "6.0.0",
@@ -22356,6 +23530,8 @@
             ],
             "v2": true,
             "versions": [
+                "0.10.1",
+                "0.10.0",
                 "0.9.5",
                 "0.9.2",
                 "0.8.8",
@@ -22470,6 +23646,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.6.2",
                 "1.5.2",
                 "1.4.3",
                 "1.2.1"
@@ -22501,6 +23678,16 @@
                 "1.0.230629.1",
                 "1.0.230411.1",
                 "1.0.230202.1"
+            ]
+        },
+        "wildcards": {
+            "description": "A simple C++ header-only template library implementing matching using wildcards",
+            "license": [
+                "BSL-1.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.4.0"
             ]
         },
         "wildmidi": {
@@ -22562,6 +23749,16 @@
                 "1.0.210629.2"
             ]
         },
+        "winreg": {
+            "description": "Convenient high-level C++ wrapper around the Windows Registry API.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "6.2.0"
+            ]
+        },
         "wiringpi": {
             "description": "GPIO Interface library for the Raspberry Pi",
             "license": [
@@ -22569,6 +23766,9 @@
             ],
             "v2": true,
             "versions": [
+                "3.6",
+                "3.4",
+                "3.2",
                 "2.61-1",
                 "cci.20210727",
                 "2.50"
@@ -22594,6 +23794,7 @@
             ],
             "v2": true,
             "versions": [
+                "5.7.0",
                 "5.6.6",
                 "5.6.4",
                 "5.6.3",
@@ -22658,6 +23859,7 @@
             ],
             "v2": true,
             "versions": [
+                "final4",
                 "cci.20221102"
             ]
         },
@@ -22682,6 +23884,8 @@
             ],
             "v2": true,
             "versions": [
+                "7.07",
+                "7.06",
                 "7.05",
                 "7.00",
                 "6.73",
@@ -22789,6 +23993,7 @@
             ],
             "v2": true,
             "versions": [
+                "1.3.4",
                 "1.3.3",
                 "1.3.2",
                 "1.2.38",
@@ -22805,6 +24010,7 @@
             ],
             "v2": true,
             "versions": [
+                "cci.20231026",
                 "cci.20230715",
                 "cci.20220801",
                 "cci.20220621",
@@ -22950,6 +24156,8 @@
             ],
             "v2": true,
             "versions": [
+                "13.0.0",
+                "12.1.1",
                 "12.1.0",
                 "12.0.0",
                 "11.2.0",
@@ -23006,13 +24214,12 @@
             "license": [
                 "MIT"
             ],
-            "v2": false,
+            "v2": true,
             "versions": [
+                "2.1.1",
                 "2.1.0",
                 "2.0.1",
-                "2.0.0",
-                "1.0.1",
-                "1.0.0"
+                "1.0.1"
             ]
         },
         "xtrans": {
@@ -23170,6 +24377,8 @@
             ],
             "v2": true,
             "versions": [
+                "3.0.4",
+                "3.0.2",
                 "2.0.1",
                 "2.0.0"
             ]
@@ -23184,6 +24393,19 @@
                 "1.2.1"
             ]
         },
+        "yomm2": {
+            "cmake_file_name": "YOMM2",
+            "cmake_target_name": "YOMM2::yomm2",
+            "description": "Fast, orthogonal, open multi-methods. Solve the Expression Problem in C++17",
+            "license": [
+                "BSL-1.0"
+            ],
+            "v2": true,
+            "versions": [
+                "1.5.2",
+                "1.5.1"
+            ]
+        },
         "yyjson": {
             "cmake_file_name": "yyjson",
             "cmake_target_name": "yyjson::yyjson",
@@ -23193,6 +24415,7 @@
             ],
             "v2": true,
             "versions": [
+                "0.9.0",
                 "0.8.0",
                 "0.7.0",
                 "0.6.0",
@@ -23216,6 +24439,7 @@
             ],
             "v2": true,
             "versions": [
+                "4.13.0",
                 "4.12.4",
                 "4.12.2",
                 "4.12.1",
@@ -23254,6 +24478,18 @@
                 "4.3.4",
                 "4.3.3",
                 "4.3.2"
+            ]
+        },
+        "zeus_expected": {
+            "cmake_target_name": "zeus::expected",
+            "description": "Backporting std::expected to C++17.",
+            "license": [
+                "MIT"
+            ],
+            "v2": true,
+            "versions": [
+                "1.1.1",
+                "1.1.0"
             ]
         },
         "zfp": {
@@ -23361,6 +24597,16 @@
                 "4.2.0"
             ]
         },
+        "zoe": {
+            "description": "A multi-protocol, multi-threaded, resumable, cross-platform, open source, C++ file download library.",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "v2": true,
+            "versions": [
+                "3.0"
+            ]
+        },
         "zookeeper-client-c": {
             "description": "ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.",
             "license": [
@@ -23425,6 +24671,7 @@
             ],
             "v2": true,
             "versions": [
+                "2.14.0",
                 "2.13.0"
             ]
         },
@@ -23442,19 +24689,10 @@
             ],
             "v2": true,
             "versions": [
+                "1.5.6",
                 "1.5.5",
-                "1.5.4",
                 "1.5.2",
-                "1.5.1",
-                "1.5.0",
-                "1.4.9",
-                "1.4.8",
-                "1.4.7",
-                "1.4.5",
-                "1.4.4",
-                "1.4.3",
-                "1.3.8",
-                "1.3.5"
+                "1.5.0"
             ]
         },
         "zstr": {
