@@ -42,6 +42,7 @@ namespace conan_vs_extension
 
                 var deserializer = new DeserializerBuilder()
                     .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                    .IgnoreUnmatchedProperties()
                     .Build();
 
                 var result = deserializer.Deserialize<Requirements>(string.Join(Environment.NewLine, conandataContents));
