@@ -268,8 +268,17 @@ namespace conan_vs_extension
                 string projectFilePath = startupProject.FullName;
                 string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
-                ConanFileManager.WriteNecessaryConanGuardedFiles(projectDirectory);
-                ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+                ConanFileManager.ReCreateConanfile(projectDirectory);
+
+                string conandataPath = Path.Combine(projectDirectory, "conandata.yml");
+                
+                if (!File.Exists(conandataPath)) {
+                    ConanFileManager.ReCreateConanData(projectDirectory);
+                }
+                
+                if (ConanFileManager.IsFileCommentGuarded(conandataPath)) {
+                    ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+                }
 
                 _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(startupProject);
                 VersionsComboBox.IsEnabled = false;
