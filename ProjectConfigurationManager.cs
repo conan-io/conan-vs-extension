@@ -123,13 +123,19 @@ REM Check for changes in conandata.yml and conanfile.py
 if exist "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" (
     echo Checking changes in conandata.yml
     fc ""conandata.yml"" "".conan\CONANDATA_%CONAN_BUILD_CONFIG%"" > nul
-    if %errorlevel% equ 1 set performInstall=1
+    if errorlevel 1 (
+        set performInstall=1
+        echo Changes detected in conandata.yml
+    )
 )
 
 if exist "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" (
     echo Checking changes in conanfile.py
     fc ""conanfile.py"" "".conan\CONANFILE_%CONAN_BUILD_CONFIG%"" > nul
-    if %errorlevel% equ 1 set performInstall=1
+    if errorlevel 1 (
+        set performInstall=1
+        echo Changes detected in conanfile.py
+    )
 )
 
 REM Check for the .runconan file that indicates changes in profiles
