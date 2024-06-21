@@ -254,11 +254,6 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            MessageBox.Show($"Requirement {selectedLibrary}/{selectedVersion} added to conandata.yml", "Conan C/C++ Package Manager");
-
-            InstallButton.Visibility = Visibility.Collapsed;
-            RemoveButton.Visibility = Visibility.Visible;
-
             ThreadHelper.ThrowIfNotOnUIThread();
 
             Project startupProject = ProjectConfigurationManager.GetStartupProject(_dte);
@@ -278,10 +273,20 @@ namespace conan_vs_extension
                 
                 if (ConanFileManager.IsFileCommentGuarded(conandataPath)) {
                     ConanFileManager.WriteNewRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+                    MessageBox.Show($"Requirement {selectedLibrary}/{selectedVersion} added to conandata.yml", "Conan C/C++ Package Manager");
+
+                    InstallButton.Visibility = Visibility.Collapsed;
+                    RemoveButton.Visibility = Visibility.Visible;
+                    VersionsComboBox.IsEnabled = false;
+                }
+                else {
+                    MessageBox.Show($"Requirement {selectedLibrary}/{selectedVersion} could not be added to conandata.yml because it was modified. Please, update the file manually.", 
+                                    "Conan C/C++ Package Manager", 
+                                    MessageBoxButton.OK, 
+                                    MessageBoxImage.Warning);
                 }
 
                 _ = ProjectConfigurationManager.SaveConanPrebuildEventsAllConfigAsync(startupProject);
-                VersionsComboBox.IsEnabled = false;
                 FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
             }
         }
@@ -291,11 +296,6 @@ namespace conan_vs_extension
             var selectedLibrary = LibraryNameLabel.Content.ToString();
             var selectedVersion = VersionsComboBox.SelectedItem.ToString();
 
-            MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}", "Conan C/C++ Package Manager");
-
-            InstallButton.Visibility = Visibility.Visible;
-            RemoveButton.Visibility = Visibility.Collapsed;
-
             ThreadHelper.ThrowIfNotOnUIThread();
 
             Array activeSolutionProjects = _dte.ActiveSolutionProjects as Array;
@@ -304,8 +304,23 @@ namespace conan_vs_extension
             string projectFilePath = activeProject.FullName;
             string projectDirectory = Path.GetDirectoryName(projectFilePath);
 
-            ConanFileManager.RemoveRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
-            VersionsComboBox.IsEnabled = true;
+            string conandataPath = Path.Combine(projectDirectory, "conandata.yml");
+
+            if (ConanFileManager.IsFileCommentGuarded(conandataPath)) {
+                ConanFileManager.RemoveRequirement(projectDirectory, selectedLibrary + "/" + selectedVersion);
+                MessageBox.Show($"Removing {selectedLibrary} version {selectedVersion}", "Conan C/C++ Package Manager");
+
+                InstallButton.Visibility = Visibility.Visible;
+                RemoveButton.Visibility = Visibility.Collapsed;
+                VersionsComboBox.IsEnabled = true;
+            }
+            else {
+                MessageBox.Show($"Requirement {selectedLibrary}/{selectedVersion} could not be removed from conandata.yml because it was modified. Please, update the file manually.", 
+                                "Conan C/C++ Package Manager", 
+                                MessageBoxButton.OK, 
+                                MessageBoxImage.Warning);
+            }
+
             FilterListView(LibrarySearchTextBox.Text, ShowPackagesCheckbox.IsChecked ?? false);
         }
 

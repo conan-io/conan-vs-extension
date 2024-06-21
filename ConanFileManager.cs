@@ -36,7 +36,7 @@ namespace conan_vs_extension
         public static string[] GetConandataRequirements(string projectDirectory)
         {
             string path = Path.Combine(projectDirectory, "conandata.yml");
-            if (IsFileCommentGuarded(path))
+            if (File.Exists(path))
             {
                 string[] conandataContents = File.ReadAllLines(path);
 
