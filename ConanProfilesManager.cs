@@ -31,8 +31,17 @@ namespace conan_vs_extension
             return archMap[platform];
         }
 
-        private string getConanCompilerVersion(string platformToolset)
+        private string getConanCompilerVersion(string platformToolset, string vsVersion)
         {
+            if (Version.TryParse(vsVersion, out Version parsedVersion))
+            {
+                // https://github.com/conan-io/conan/issues/16239
+                if (parsedVersion.Major == 17 && parsedVersion.Minor >= 10)
+                {
+                    return "194";
+                }
+            }
+
             var msvcVersionMap = new Dictionary<string, string>();
             msvcVersionMap["v143"] = "193";
             msvcVersionMap["v142"] = "192";
@@ -106,7 +115,8 @@ namespace conan_vs_extension
                             string profilePath = System.IO.Path.Combine(conanProjectDirectory, profileName);
 
                             string toolset = vcConfig.Evaluate("$(PlatformToolset)").ToString();
-                            string compilerVersion = getConanCompilerVersion(toolset);
+                            string vsVersion = vcConfig.Evaluate("$(MSBuildVersion)").ToString();
+                            string compilerVersion = getConanCompilerVersion(toolset, vsVersion);
                             string arch = getConanArch(vcConfig.Evaluate("$(PlatformName)").ToString());
                             IVCRulePropertyStorage generalRule = vcConfig.Rules.Item("ConfigurationGeneral") as IVCRulePropertyStorage;
                             string languageStandard = generalRule == null ? null : generalRule.GetEvaluatedPropertyValue("LanguageStandard");
