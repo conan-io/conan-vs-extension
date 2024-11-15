@@ -258,18 +258,54 @@ echo No changes detected, skipping conan install...
         public static Project GetStartupProject(DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            SolutionBuild solutionBuild = dte.Solution.SolutionBuild;
-            if (solutionBuild.StartupProjects != null)
+
+            // Access startup projects from SolutionBuild
+            var startupProjects = dte.Solution.SolutionBuild.StartupProjects as object[];
+
+            if (startupProjects != null && startupProjects.Length > 0)
             {
-                string startupProjectName = (string)((Array)solutionBuild.StartupProjects).GetValue(0);
+                // Get the name of the first startup project
+                string startupProjectName = (string)startupProjects[0];
+
+                // Iterate through all projects in the solution to find a matching project
                 foreach (Project project in dte.Solution.Projects)
                 {
-                    if (project.UniqueName == startupProjectName)
+                    Project result = FindProjectByNameRecursive(project, startupProjectName);
+                    if (result != null)
                     {
-                        return project;
+                        return result;
                     }
                 }
             }
+
+            return null; // No startup project found
+        }
+
+        // Helper function to find the project by name recursively
+        private static Project FindProjectByNameRecursive(Project project, string projectName)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (project.UniqueName.Equals(projectName, StringComparison.OrdinalIgnoreCase))
+            {
+                return project;
+            }
+
+            // Handle solution folders
+            if (project.Kind == EnvDTE.Constants.vsProjectKindSolutionItems)
+            {
+                foreach (ProjectItem item in project.ProjectItems)
+                {
+                    if (item.SubProject != null)
+                    {
+                        Project foundProject = FindProjectByNameRecursive(item.SubProject, projectName);
+                        if (foundProject != null)
+                        {
+                            return foundProject;
+                        }
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -278,9 +314,11 @@ echo No changes detected, skipping conan install...
             ThreadHelper.ThrowIfNotOnUIThread();
             foreach (Project project in dte.Solution.Projects)
             {
-                if (project.UniqueName == name)
+                Project result = FindProjectByNameRecursive(project, name);
+
+                if (result != null)
                 {
-                    return project;
+                    return result;
                 }
             }
 
