@@ -72,20 +72,16 @@ namespace conan_vs_extension
 
         private static void InjectConanDepsToConfig(VCConfiguration vcConfig, string propsFilePath)
         {
-            bool isAlreadyIncluded = false;
             IVCCollection propertySheets = vcConfig.PropertySheets as IVCCollection;
             foreach (VCPropertySheet sheet in propertySheets)
             {
                 if (sheet.PropertySheetFile.Equals(propsFilePath, StringComparison.OrdinalIgnoreCase))
                 {
-                    isAlreadyIncluded = true;
+                    vcConfig.RemovePropertySheet(sheet);
                     break;
                 }
             }
-            if (!isAlreadyIncluded)
-            {
-                vcConfig.AddPropertySheet(propsFilePath);
-            }
+            vcConfig.AddPropertySheet(propsFilePath);
         }
         
         private static string GetPropsFilePath(Project project)
