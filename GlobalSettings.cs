@@ -17,7 +17,7 @@ namespace conan_vs_extension{
             }
             set
             {
-                _conanExecutablePath = value.Trim();
+                _conanExecutablePath = value?.Trim();
             }
 
         }
