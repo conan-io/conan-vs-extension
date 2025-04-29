@@ -78,7 +78,6 @@ namespace conan_vs_extension
                 foreach (var imp in doc.Descendants(ns + "Import"))
                 {
                     var pj = (string)imp.Attribute("Project");
-                    // si referencia nuestro conandeps.props y no tiene aún Condition
                     if (!string.IsNullOrEmpty(pj)
                         && pj.EndsWith("conandeps.props", StringComparison.OrdinalIgnoreCase)
                         && imp.Attribute("Condition") == null)
