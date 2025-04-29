@@ -55,41 +55,40 @@ namespace conan_vs_extension
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            bool isAlreadyIncluded = false;
+            // Remove old conandeps.props property sheets
             IVCCollection propertySheets = vcConfig.PropertySheets as IVCCollection;
             foreach (VCPropertySheet sheet in propertySheets)
             {
                 if (sheet.PropertySheetFile.Equals(propsFilePath, StringComparison.OrdinalIgnoreCase))
                 {
-                    isAlreadyIncluded = true;
-                    break;
+                    vcConfig.RemovePropertySheet(sheet);
                 }
             }
-            if (!isAlreadyIncluded)
+
+            // Add conandeps.props property sheet
+            vcConfig.AddPropertySheet(propsFilePath);
+            project.Save();
+
+            // Make conandeps.props property sheet conditional to its existence
+            var projFile = project.FullName;
+            var doc      = XDocument.Load(projFile);
+            var ns       = doc.Root.Name.Namespace;
+            bool dirty   = false;
+
+            foreach (var imp in doc.Descendants(ns + "Import"))
             {
-                vcConfig.AddPropertySheet(propsFilePath);
-                project.Save();
-
-                var projFile = project.FullName;
-                var doc      = XDocument.Load(projFile);
-                var ns       = doc.Root.Name.Namespace;
-                bool dirty   = false;
-
-                foreach (var imp in doc.Descendants(ns + "Import"))
+                var pj = (string)imp.Attribute("Project");
+                if (!string.IsNullOrEmpty(pj)
+                    && pj.EndsWith("conandeps.props", StringComparison.OrdinalIgnoreCase)
+                    && imp.Attribute("Condition") == null)
                 {
-                    var pj = (string)imp.Attribute("Project");
-                    if (!string.IsNullOrEmpty(pj)
-                        && pj.EndsWith("conandeps.props", StringComparison.OrdinalIgnoreCase)
-                        && imp.Attribute("Condition") == null)
-                    {
-                        imp.SetAttributeValue("Condition", $"Exists('{pj}')");
-                        dirty = true;
-                    }
+                    imp.SetAttributeValue("Condition", $"Exists('{pj}')");
+                    dirty = true;
                 }
-                if (dirty)
-                    doc.Save(projFile);
-
             }
+            if (dirty)
+                doc.Save(projFile);
+
         }
         
         private static string GetPropsFilePath(Project project)
