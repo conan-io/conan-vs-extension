@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
+using System.Linq;
 using VSLangProj;
 
 namespace conan_vs_extension
@@ -28,26 +30,6 @@ namespace conan_vs_extension
             return File.Exists(path);
         }
 
-        public static async Task InjectConanDepsToAllConfigsAsync(Project project)
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            if (project.Object is VCProject vcProject)
-            {
-                string propsFilePath = GetPropsFilePath(project);
-                if (File.Exists(propsFilePath))
-                {
-                    foreach (VCConfiguration vcConfig in (IEnumerable)vcProject.Configurations)
-                    {
-                        InjectConanDepsToConfig(vcConfig, propsFilePath);
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine($"Properties file '{propsFilePath}' does not exist.");
-                }
-            }
-        }
-
         public static async Task InjectConanDepsAsync(Project project, VCConfiguration vcConfig)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -61,8 +43,7 @@ namespace conan_vs_extension
             string propsFilePath = GetPropsFilePath(project);
             if (File.Exists(propsFilePath))
             {
-                InjectConanDepsToConfig(vcConfig, propsFilePath);
-                project.Save();
+                InjectConanDepsToConfig(project, vcConfig, propsFilePath);
             }
             else
             {
@@ -70,8 +51,10 @@ namespace conan_vs_extension
             }
         }
 
-        private static void InjectConanDepsToConfig(VCConfiguration vcConfig, string propsFilePath)
+        private static void InjectConanDepsToConfig(Project project, VCConfiguration vcConfig, string propsFilePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             bool isAlreadyIncluded = false;
             IVCCollection propertySheets = vcConfig.PropertySheets as IVCCollection;
             foreach (VCPropertySheet sheet in propertySheets)
@@ -85,6 +68,28 @@ namespace conan_vs_extension
             if (!isAlreadyIncluded)
             {
                 vcConfig.AddPropertySheet(propsFilePath);
+                project.Save();
+
+                var projFile = project.FullName;
+                var doc      = XDocument.Load(projFile);
+                var ns       = doc.Root.Name.Namespace;
+                bool dirty   = false;
+
+                foreach (var imp in doc.Descendants(ns + "Import"))
+                {
+                    var pj = (string)imp.Attribute("Project");
+                    // si referencia nuestro conandeps.props y no tiene aún Condition
+                    if (!string.IsNullOrEmpty(pj)
+                        && pj.EndsWith("conandeps.props", StringComparison.OrdinalIgnoreCase)
+                        && imp.Attribute("Condition") == null)
+                    {
+                        imp.SetAttributeValue("Condition", $"Exists('{pj}')");
+                        dirty = true;
+                    }
+                }
+                if (dirty)
+                    doc.Save(projFile);
+
             }
         }
         
