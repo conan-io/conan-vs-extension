@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ develop2 ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -59,12 +62,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: conan-vs-extension.vsix
-          token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ needs.build.run_id }}
 
       - name: Remove old release drafts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           gh api repos/{owner}/{repo}/releases \
             --jq '.[] | select(.draft == true) | .id' \
@@ -80,7 +82,7 @@ jobs:
         uses: actions/create-release@v1
         id: create_release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           draft: true
           prerelease: false
@@ -90,7 +92,7 @@ jobs:
       - name: Upload extension artifact to new release draft
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: conan-vs-extension.vsix

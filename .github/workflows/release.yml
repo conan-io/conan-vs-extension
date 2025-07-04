@@ -1,9 +1,11 @@
 # GitHub Actions Workflow created for handling the release process based on the draft release prepared with the Build workflow.
-
 name: Release
 on:
   release:
     types: [prereleased, released]
+
+permissions:
+  contents: read
 
 jobs:
   release:
@@ -14,17 +16,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - name: Donwload extension from latest release assets
+
+      - name: Download extension from latest release assets
         uses: robinraju/release-downloader@v1.9
         with: 
           latest: true
           fileName: conan-vs-extension.vsix
           out-file-path: output
           extract: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
+
       - name: Visual Studio Marketplace Publisher
         uses: CalvinAllen/action-vs-marketplace-publish@v1
         with:
-          marketplace-pat: ${{ secrets.vs_marketplace_pat }}  # Personal Access Token to upload to the VS Marketplace
+          marketplace-pat: ${{ secrets.vs_marketplace_pat }}
           publish-manifest-path: vsixManifest.json
           vsix-path: output/conan-vs-extension.vsix
