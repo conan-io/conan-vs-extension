@@ -43,6 +43,7 @@ namespace conan_vs_extension
             }
 
             var msvcVersionMap = new Dictionary<string, string>();
+            msvcVersionMap["v145"] = "195";
             msvcVersionMap["v143"] = "193";
             msvcVersionMap["v142"] = "192";
             msvcVersionMap["v141"] = "191";
